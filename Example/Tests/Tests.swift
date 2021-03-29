@@ -1,5 +1,5 @@
 import XCTest
-import JMEpubReader
+//import JMEpubReader
 
 class Tests: XCTestCase {
     

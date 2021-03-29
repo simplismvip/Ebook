@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+电子书解析阅读器
                        DESC
 
   s.homepage         = 'https://github.com/simplismvip/JMEpubReader'
@@ -28,9 +28,20 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/simplismvip/JMEpubReader.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '9.0'
-
-  s.source_files = 'JMEpubReader/Classes/**/*'
+  s.ios.deployment_target = '10.0'
+  
+  s.source_files = [
+    'Classes/*.{h,swift}',
+#    'Classes/**/*.swift',
+    'Classes/CoreParser/*.{swift}',
+    'Classes/Menus/*.{swift}',
+  ]
+  
+  s.resources = [
+    'Classes/**/*.{js,css,html}',
+    'Classes/Resources/**/*.{js,css,html}',
+    'Classes/Resources/Fonts/**/*.{otf,ttf}'
+  ]
   
   # s.resource_bundles = {
   #   'JMEpubReader' => ['JMEpubReader/Assets/*.png']
@@ -38,5 +49,11 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'EPUBKit'
+  s.dependency 'FMDB'
+  s.dependency 'SnapKit'
+  s.dependency 'ZJMKit'
+  s.dependency 'RxSwift'
+  s.dependency 'RxCocoa'
+  
 end
