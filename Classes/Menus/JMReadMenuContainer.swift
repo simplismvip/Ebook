@@ -96,7 +96,7 @@ class JMReadMenuContainer: JMBaseView {
         addSubview(set)
         addSubview(light)
         addSubview(play)
-        
+
         topContainer.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
             make.height.equalTo(104)
@@ -111,14 +111,14 @@ class JMReadMenuContainer: JMBaseView {
         
         set.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
-            make.height.equalTo(270)
-            make.bottom.equalTo(snp.bottom).offset(270)
+            make.height.equalTo(320)
+            make.bottom.equalTo(snp.bottom).offset(320)
         }
         
         light.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
-            make.height.equalTo(150)
-            make.bottom.equalTo(snp.bottom).offset(150)
+            make.height.equalTo(160)
+            make.bottom.equalTo(snp.bottom).offset(160)
         }
         
         play.snp.makeConstraints { (make) in

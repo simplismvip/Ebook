@@ -8,6 +8,7 @@
 import UIKit
 import ZJMKit
 import SnapKit
+import RxSwift
 
 final class JMMenuSetView: JMBaseView {
     let bkgColor = BkgColorView()
@@ -22,32 +23,29 @@ final class JMMenuSetView: JMBaseView {
         addSubview(pageFlip)
         addSubview(fontType)
         backgroundColor = UIColor.jmRGB(31, 31, 31)
+        
         pageFlip.snp.makeConstraints({ (make) in
             make.width.equalTo(self)
             make.top.equalTo(self.snp.top).offset(8)
-            make.height.equalTo(54)
+            make.height.equalTo(64)
         })
         
         fontSize.snp.makeConstraints({ (make) in
             make.width.equalTo(self)
             make.top.equalTo(pageFlip.snp.bottom)
-            make.height.equalTo(54)
+            make.height.equalTo(64)
         })
         
         bkgColor.snp.makeConstraints({ (make) in
             make.width.equalTo(self)
             make.top.equalTo(fontSize.snp.bottom)
-            make.height.equalTo(54)
+            make.height.equalTo(64)
         })
         
         fontType.snp.makeConstraints({ (make) in
             make.top.equalTo(bkgColor.snp.bottom)
             make.width.equalTo(self)
-            if #available(iOS 11.0, *) {
-                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
-            }else {
-                make.bottom.equalTo(self)
-            }
+            make.height.equalTo(64)
         })
     }
     
@@ -71,17 +69,17 @@ final class BkgColorView: JMBaseView {
         name.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(10)
             make.width.equalTo(64)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
         }
         
         bkgView.snp.makeConstraints { (make) in
             make.left.equalTo(name.snp.right).offset(10)
             make.right.equalTo(self).offset(-10)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
         }
-            
+        bkgView.margin = 10
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
     }
     
@@ -94,13 +92,11 @@ final class FontSizeView: JMBaseView {
     private var nameSize = UILabel()
     private var callBack:((JMReadMenuItem)->Void)?
     private var model:JMReadMenuItem?
+    private let disposeBag = DisposeBag()
     private var slider:UISlider = {
         let slider = UISlider()
         slider.setThumbImage("green-marker".image, for: .normal)
         slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
-        slider.minimumValue = 10
-        slider.minimumValue = 30
-        slider.value = 20
         return slider
     }()
     
@@ -115,22 +111,23 @@ final class FontSizeView: JMBaseView {
         name.text = "字体大小"
         nameSize.text = "13"
         layoutViews()
-        slider.addTarget(self, action: #selector(startScroll(_:)), for: .touchUpInside)
+        
+        slider.rx.value.map({ Int($0 * 30 + 10) }).distinctUntilChanged().subscribe (onNext:{ [weak self] (value) in
+            self?.nameSize.text = String(format: "%d", value)
+            self?.jmRouterEvent(eventName: kEventNameMenuFontSizeSlider, info: value as MsgObjc)
+        }).disposed(by: disposeBag)
     }
     
     func layoutViews() {
-        name.translatesAutoresizingMaskIntoConstraints = false
-        nameSize.translatesAutoresizingMaskIntoConstraints = false
-        slider.translatesAutoresizingMaskIntoConstraints = false
         name.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(10)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.width.equalTo(64)
             make.centerY.equalTo(snp.centerY)
         }
         
         nameSize.snp.makeConstraints { (make) in
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
             make.left.equalTo(name.snp.right).offset(10)
         }
@@ -138,7 +135,7 @@ final class FontSizeView: JMBaseView {
         slider.snp.makeConstraints { (make) in
             make.left.equalTo(nameSize.snp.right).offset(20)
             make.right.equalTo(snp.right).offset(-10)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
         }
     }
@@ -168,17 +165,17 @@ final class PageFlipView: JMBaseView {
         name.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(10)
             make.width.equalTo(64)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
         }
         
         bkgView.snp.makeConstraints { (make) in
             make.left.equalTo(name.snp.right).offset(10)
-            make.width.equalTo(192)
-            make.height.equalTo(34)
+            make.width.equalTo(260)
+            make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
         }
-        
+        bkgView.margin = 10
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_flip_type"))
     }
     
@@ -203,17 +200,17 @@ final class FontTypeView: JMBaseView {
         name.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(10)
             make.width.equalTo(64)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.top.equalTo(self).offset(10)
         }
         
         bkgView.snp.makeConstraints { (make) in
             make.left.equalTo(name.snp.right).offset(10)
             make.right.equalTo(self).offset(-10)
-            make.height.equalTo(34)
+            make.height.equalTo(44)
             make.top.equalTo(name)
         }
-        
+        bkgView.margin = 10
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_font_type"))
     }
 

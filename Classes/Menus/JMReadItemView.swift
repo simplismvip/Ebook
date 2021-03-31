@@ -11,8 +11,8 @@ import RxSwift
 import RxCocoa
 
 final class JMReadItemView: JMBaseView {
+    public var margin: CGFloat = 5
     private var models = [JMReadMenuItem]()
-    private var margin: CGFloat = 5
     private let disposeBag = DisposeBag()
     
     final public func updateViews(_ items: [JMReadMenuItem]) {

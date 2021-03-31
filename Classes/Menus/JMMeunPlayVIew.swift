@@ -34,6 +34,7 @@ final class JMMeunPlayVIew: JMBaseView {
     }
 
     func setupSubViews() {
+        playControl.translatesAutoresizingMaskIntoConstraints = false
         rateName.translatesAutoresizingMaskIntoConstraints = false
         playRate.translatesAutoresizingMaskIntoConstraints = false
         styleName.translatesAutoresizingMaskIntoConstraints = false
@@ -73,8 +74,11 @@ final class JMMeunPlayVIew: JMBaseView {
     }
     
     func loadDatas() {
+        playControl.margin = 15
         playControl.updateViews(JMJsonParse.parseJson(name: "menu_play"))
+        playRate.margin = 15
         playRate.updateViews(JMJsonParse.parseJson(name: "menu_playrate"))
+        playStyle.margin = 15
         playStyle.updateViews(JMJsonParse.parseJson(name: "menu_playstyle"))
     }
     

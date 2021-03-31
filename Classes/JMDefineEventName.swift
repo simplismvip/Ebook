@@ -37,6 +37,8 @@ public let kEventNameMenuActionBookCatalog = "kEventNameMenuActionBookCatalog"
 public let kEventNameMenuActionDayOrNight = "kEventNameMenuActionDayOrNight"
 /// 亮度
 public let kEventNameMenuActionBrightness = "kEventNameMenuActionBrightness"
+/// 亮度滑杆
+public let kEventNameMenuActionBrightSliderValue = "kEventNameMenuActionBrightSliderValue"
 /// 设置更多
 public let kEventNameMenuActionSettingMore = "kEventNameMenuActionSettingMore"
 
@@ -45,6 +47,8 @@ public let kEventNameMenuPageFlipType = "kEventNameMenuPageFlipType"
 
 /// 字体类型
 public let kEventNameMenuFontType = "kEventNameMenuFontType"
+/// 字体大小滑杆
+public let kEventNameMenuFontSizeSlider = "kEventNameMenuFontSizeSlider"
 /// 颜色
 public let kEventNameMenuPageBkgColor = "kEventNameMenuPageBkgColor"
 /// 播放进度

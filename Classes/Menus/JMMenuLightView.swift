@@ -7,11 +7,13 @@
 
 import UIKit
 import ZJMKit
+import RxSwift
 
 final class JMMenuLightView: JMBaseView {
-    private let left = UIButton(type: .system)
-    private let right = UIButton(type: .system)
+    private let leftBtn = UIButton(type: .system)
+    private let rightBtn = UIButton(type: .system)
     private let bkgView = JMReadItemView()
+    private let disposeBag = DisposeBag()
     private var slider: UISlider = {
         let slider = UISlider()
         slider.setThumbImage("light-full".image, for: .normal)
@@ -26,57 +28,48 @@ final class JMMenuLightView: JMBaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.jmRGB(31, 31, 31)
-        addSubview(left)
-        addSubview(right)
+        addSubview(leftBtn)
+        addSubview(rightBtn)
         addSubview(slider)
         addSubview(bkgView)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
-        
-        left.setImage("light-null".image, for: .normal)
-        right.setImage("light-full".image, for: .normal)
-        left.tintColor = .white
-        right.tintColor = .white
-        
         layoutViews()
-        slider.addTarget(self, action: #selector(startScroll(_:)), for: .touchUpInside)
         
+        leftBtn.setImage("light-null".image, for: .normal)
+        rightBtn.setImage("light-full".image, for: .normal)
+        leftBtn.tintColor = .white
+        rightBtn.tintColor = .white
+        bkgView.margin = 30
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
-    }
-    
-    @objc func startScroll(_ slider: UISlider) {
-       
-    }
-    
-    func layoutViews() {
-        left.translatesAutoresizingMaskIntoConstraints = false
-        right.translatesAutoresizingMaskIntoConstraints = false
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        bkgView.translatesAutoresizingMaskIntoConstraints = false
         
-        left.snp.makeConstraints { (make) in
-            make.left.equalTo(self).offset(10)
+        slider.rx.value.subscribe (onNext:{ [weak self] (value) in
+            self?.jmRouterEvent(eventName: kEventNameMenuActionBrightSliderValue, info: value as MsgObjc)
+        }).disposed(by: disposeBag)
+    }
+    
+    func layoutViews() {        
+        leftBtn.snp.makeConstraints { (make) in
             make.width.height.equalTo(44)
+            make.left.equalTo(self).offset(10)
             make.top.equalTo(self).offset(8)
         }
         
-        right.snp.makeConstraints { (make) in
-            make.right.equalTo(self).offset(-10)
-            make.width.height.equalTo(left)
-            make.top.equalTo(left)
+        rightBtn.snp.makeConstraints { (make) in
+            make.right.equalTo(snp.right).offset(-10)
+            make.width.height.equalTo(leftBtn)
+            make.top.equalTo(leftBtn)
         }
         
         slider.snp.makeConstraints { (make) in
-            make.left.equalTo(left.snp.right).offset(10)
-            make.right.equalTo(right.snp.left).offset(-10)
+            make.left.equalTo(self).offset(64)
+            make.right.equalTo(snp.right).offset(-64)
             make.height.equalTo(34)
-            make.centerY.equalTo(left.snp.centerY)
+            make.centerY.equalTo(rightBtn.snp.centerY)
         }
         
         bkgView.snp.makeConstraints { (make) in
-            make.width.equalTo(self)
-            make.height.equalTo(34)
-            make.top.equalTo(left.snp.bottom).offset(8)
-            make.centerX.equalTo(snp.centerX)
+            make.left.width.equalTo(self)
+            make.height.equalTo(44)
+            make.top.equalTo(leftBtn.snp.bottom).offset(20)
         }
     }
     

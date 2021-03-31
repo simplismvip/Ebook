@@ -156,7 +156,7 @@ extension Reactive where Base: JMReadMenuContainer {
             case .ShowLight(let isHide):
                 if isHide {
                     view.light.snp.updateConstraints { (make) in
-                        make.bottom.equalTo(view.snp.bottom).offset(150)
+                        make.bottom.equalTo(view.snp.bottom).offset(160)
                     }
                 }else {
                     view.light.snp.updateConstraints { (make) in
@@ -170,7 +170,7 @@ extension Reactive where Base: JMReadMenuContainer {
             case .ShowSet(let isHide):
                 if isHide {
                     view.set.snp.updateConstraints { (make) in
-                        make.bottom.equalTo(view.snp.bottom).offset(270)
+                        make.bottom.equalTo(view.snp.bottom).offset(320)
                     }
                 }else {
                     view.set.snp.updateConstraints { (make) in
@@ -217,7 +217,6 @@ extension Reactive where Base: JMReadMenuContainer {
                             
                         }else {
                             view.showOrHide.onNext(JMMenuStatus.ShowSet(true))
-                            // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
                             view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
                         }
                     case .ShowLight(let isHide):
@@ -243,7 +242,6 @@ extension Reactive where Base: JMReadMenuContainer {
                     case .ShowSet(let isHide):
                         if !isHide {
                             view.showOrHide.onNext(JMMenuStatus.ShowSet(true))
-                            // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
                             view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
                         }
                     case .ShowLight(let isHide):
@@ -261,10 +259,9 @@ extension Reactive where Base: JMReadMenuContainer {
                     switch value {
                     case .HideOrShowAll(let isHide):
                         if isHide {
-                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                        }else {
-                            
                             print("点击右侧1/4翻页")
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
                         }
                     case .ShowSet(let isHide):
                         if isHide {
