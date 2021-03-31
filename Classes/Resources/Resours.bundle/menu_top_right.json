@@ -1,0 +1,27 @@
+[
+    {
+        "title":"分享",
+        "image":"整租",
+        "event":"kEventNameMenuActionShare",
+        "showTitie":false,
+        "identify":"zhengzu"
+    },{
+        "title":"听书",
+        "image":"合租",
+        "event":"kEventNameMenuActionListenBook",
+        "showTitie":false,
+        "identify":"hezu"
+    },{
+        "title":"分享",
+        "image":"月租",
+        "event":"kEventNameMenuActionShareWifi",
+        "showTitie":false,
+        "identify":"yuezu"
+    },{
+        "title":"更多",
+        "image":"月租",
+        "event":"kEventNameMenuActionMore",
+        "showTitie":false,
+        "identify":"yuezu"
+    }
+]

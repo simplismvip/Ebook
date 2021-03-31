@@ -1,0 +1,9 @@
+[
+    {
+        "title":"返回",
+        "image":"整租",
+        "event":"kEventNameMenuActionBack",
+        "showTitie":false,
+        "identify":"zhengzu"
+    }
+]
