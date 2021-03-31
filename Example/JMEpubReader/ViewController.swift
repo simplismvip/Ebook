@@ -32,6 +32,11 @@ class ViewController: UIViewController {
         view.transition(.kCATransitionPageCurl)
     }
     
+    @IBAction func openBooks(_ sender: Any) {
+        let vc = JMReadPageContrller()
+        push(vc)
+    }
+    
     func openDefault() {
         do{
             let path = "/Users/jl/Desktop/EPUB/TianXiaDaoZong.epub"

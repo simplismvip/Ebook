@@ -81,7 +81,13 @@
                             <constraint firstItem="ltx-jD-f8u" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="q1a-vk-Pfe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="EPUB" id="3Fe-cK-wXC"/>
+                    <navigationItem key="navigationItem" title="EPUB" id="3Fe-cK-wXC">
+                        <barButtonItem key="rightBarButtonItem" title="打开图书" id="vmu-gh-3rq">
+                            <connections>
+                                <action selector="openBooks:" destination="vXZ-lx-hvc" id="YHN-4P-iBo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="book1" destination="j2k-7w-Y8X" id="O3Y-xT-hb2"/>
                     </connections>

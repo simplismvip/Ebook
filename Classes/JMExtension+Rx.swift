@@ -44,6 +44,12 @@ extension Reactive where Base: UIView {
             view.frame = tFrame
         }
     }
+    
+    public var bkgColor: Binder<UIColor?> {
+        return Binder(self.base) { view, color in
+            view.backgroundColor = color
+        }
+    }
 }
 
 extension Reactive where Base: UIButton {
@@ -115,6 +121,122 @@ extension Reactive where Base: WKWebView {
                 Observer.onNext(JMWapper(item as? String, error))
             }
             return Disposables.create()
+        }
+    }
+}
+
+extension Reactive where Base: JMReadMenuContainer {
+    internal var hideOrShow: Binder<JMMenuStatus> {
+        return Binder(self.base) { view, menuStatus in
+            switch menuStatus {
+            case .HideOrShowAll(let isHide):
+                if isHide {
+                    view.topContainer.snp.updateConstraints { (make) in
+                        make.top.equalTo(view.snp.top).offset(-104)
+                    }
+                    
+                    view.bottomContainer.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom).offset(104)
+                    }
+                }else {
+                    view.topContainer.snp.updateConstraints { (make) in
+                        make.top.equalTo(view.snp.top)
+                    }
+                    
+                    view.bottomContainer.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom)
+                    }
+                    
+                }
+                
+                view.setNeedsUpdateConstraints()
+                UIView.animate(withDuration: 0.3) {
+                    view.layoutIfNeeded()
+                }
+            case .ShowLight(let isHide):
+                if isHide {
+                    view.light.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom).offset(120)
+                    }
+                }else {
+                    view.light.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom).offset(-120)
+                    }
+                }
+                view.setNeedsUpdateConstraints()
+                UIView.animate(withDuration: 0.3) {
+                    view.layoutIfNeeded()
+                }
+            case .ShowSet(let isHide):
+                if isHide {
+                    view.set.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom).offset(160)
+                    }
+                }else {
+                    view.set.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom).offset(-160)
+                    }
+                }
+                view.setNeedsUpdateConstraints()
+                UIView.animate(withDuration: 0.3) {
+                    view.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    internal var tapGesture: Binder<UITapGestureRecognizer> {
+        return Binder(self.base) { view, tapGes in
+            if let value = try? view.showOrHide.value() {
+                let point = tapGes.location(in: tapGes.view)
+                let width = UIScreen.main.bounds.size.width
+                if point.x < width/4 {
+                    switch value {
+                    case .HideOrShowAll(let isHide):
+                        if isHide {
+                            print("点击左侧1/4翻页")
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                        
+                    default:
+                        print("")
+                    }
+                }else if point.x > width/4 && point.x < width/4*3 {
+                    switch value {
+                    case .HideOrShowAll(let status):
+                        view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(!status))
+                    default:
+                        print("")
+                    }
+                }else {
+                    switch value {
+                    case .HideOrShowAll(let isHide):
+                        if isHide {
+                            print("点击右侧1/4翻页")
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                        
+                    default:
+                        print("")
+                    }
+                }
+            }
+        }
+    }
+    
+    internal var leftSwipe: Binder<UISwipeGestureRecognizer> {
+        return Binder(self.base) { view, tapGes in
+            print("左侧轻扫翻页")
+            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+        }
+    }
+    
+    internal var rightSwipe: Binder<UISwipeGestureRecognizer> {
+        return Binder(self.base) { view, tapGes in
+            print("右侧轻扫翻页")
+            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
         }
     }
 }

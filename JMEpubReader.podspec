@@ -38,8 +38,8 @@ Pod::Spec.new do |s|
   ]
   
   s.resources = [
-    'Classes/**/*.{js,css,html}',
-    'Classes/Resources/**/*.{js,css,html}',
+    'Classes/**/*.{bundle,js,css,html}',
+    'Classes/Resources/**/*.{bundle,js,css,html}',
     'Classes/Resources/Fonts/**/*.{otf,ttf}'
   ]
   
@@ -55,5 +55,6 @@ Pod::Spec.new do |s|
   s.dependency 'ZJMKit'
   s.dependency 'RxSwift'
   s.dependency 'RxCocoa'
+  s.dependency 'HandyJSON'
   
 end

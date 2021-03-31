@@ -28,3 +28,10 @@ public enum JMTransitionType: String {
         return titleArr[self.rawValue] ?? "oglFlip"
     }
 }
+
+/// 按钮显示、隐藏状态
+public enum JMMenuStatus {
+    case HideOrShowAll(_ isHide: Bool) // 打开成功
+    case ShowSet(_ isHide: Bool) // 打开失败
+    case ShowLight(_ isHide: Bool) // 初始状态
+}
