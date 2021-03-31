@@ -103,7 +103,11 @@ public extension String {
     }
     
     var image: UIImage? {
-        return UIImage(named: self)
+        if let bundle = Bundle.bundle {
+            return UIImage(named: self, in: bundle, compatibleWith: nil)
+        }else {
+            return nil
+        }
     }
     
     /// JSON字符串转字典

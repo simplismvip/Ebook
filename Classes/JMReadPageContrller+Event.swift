@@ -37,8 +37,9 @@ extension JMReadPageContrller {
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionListenBook, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionListenBook, block: { [weak self](_) in
+            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowPlay(false))
         }, next: false)
         
         
@@ -46,7 +47,7 @@ extension JMReadPageContrller {
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionMore, block: { (_) in
+        jmRegisterEvent(eventName: kEventNameMenuActionMore, block: { [weak self](_) in
             
         }, next: false)
         
@@ -54,16 +55,18 @@ extension JMReadPageContrller {
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { (_) in
+        jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { [weak self](_) in
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionBrightness, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionBrightness, block: { [weak self](_) in
+            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowLight(false))
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionSettingMore, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionSettingMore, block: { [weak self](_) in
+            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowSet(false))
         }, next: false)
     }
 }

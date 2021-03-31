@@ -1,0 +1,24 @@
+[
+    {
+        "event":"kEventNameMenuPageBkgColor",
+        "showTitie":false,
+        "color":"#66B3FF",
+        "identify":"#66B3FF"
+    },{
+        "event":"kEventNameMenuPageBkgColor",
+        "showTitie":false,
+        "color":"#FFFFFF",
+        "identify":"#FFFFFF"
+    },{
+        
+        "event":"kEventNameMenuPageBkgColor",
+        "showTitie":false,
+        "color":"#FFE4CA",
+        "identify":"#FFE4CA"
+    },{
+        "event":"kEventNameMenuPageBkgColor",
+        "showTitie":false,
+        "color":"#E1C4C4",
+        "identify":"#E1C4C4"
+    }
+]

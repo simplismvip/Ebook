@@ -1,0 +1,27 @@
+[
+    {
+        "title":"正常",
+        "image":"",
+        "event":"kEventNameMenuPageFlipType",
+        "showTitie":false,
+        "identify":"normal"
+    },{
+        "title":"覆盖",
+        "image":"",
+        "event":"kEventNameMenuPageFlipType",
+        "showTitie":false,
+        "identify":"cube"
+    },{
+        "title":"仿真",
+        "image":"",
+        "event":"kEventNameMenuPageFlipType",
+        "showTitie":false,
+        "identify":"pageCurl"
+    },{
+        "title":"翻转",
+        "image":"",
+        "event":"kEventNameMenuPageFlipType",
+        "showTitie":false,
+        "identify":"oglFlip"
+    }
+]

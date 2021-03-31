@@ -42,7 +42,7 @@ final class JMReadItemView: JMBaseView {
         let count = CGFloat(self.subviews.count)
         let width = (self.bounds.size.width - (count+1) * margin) / count
         for (index, view) in self.subviews.enumerated() {
-            view.frame = CGRect.Rect( margin + (margin + width) * CGFloat(index), 0, width, 44)
+            view.frame = CGRect.Rect( margin + (margin + width) * CGFloat(index), 0, width, self.jmHeight)
             (view as? UIButton)?.jmImagePosition(style: .top, spacing: 10)
         }
     }

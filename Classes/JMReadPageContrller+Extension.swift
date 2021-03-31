@@ -85,7 +85,7 @@ extension JMReadPageContrller {
         }.disposed(by: disposeBag)
         
         rx.viewWillDisappear.asObservable().subscribe { [weak self](_) in
-            self?.navigationController?.setNavigationBarHidden(true, animated: false)
+            self?.navigationController?.setNavigationBarHidden(false, animated: false)
         }.disposed(by: disposeBag)
     }
 }

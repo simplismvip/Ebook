@@ -15,23 +15,21 @@ public enum JMEpubStatus {
 }
 
 public enum JMTransitionType: String {
-    case kCATransitionMoveIn = "moveIn" // 移入效果
-    case kCATransitionReveal  = "reveal" // 截开效果
-    case kCATransitionCube = "cube" // 方块
-    
-    case kCATransitionOglFlip = "oglFlip" // 上下翻转
-    case kCATransitionPageCurl = "pageCurl" // 上翻页
-    case kCATransitionPageUnCurl = "pageUnCurl" // 下翻页
+    case kCATransitionPageNormal = "normal" // 正常
+    case kCATransitionCube = "cube" // 覆盖
+    case kCATransitionOglFlip = "oglFlip" // 翻转
+    case kCATransitionPageCurl = "pageCurl" // 仿真
     
     func title() -> String {
-        let titleArr = ["moveIn":"滑入效果", "reveal":"滑出效果", "cube":"立方体效果", "oglFlip":"翻转效果", "pageCurl":"波纹效果", "pageUnCurl":"反翻页效果"]
-        return titleArr[self.rawValue] ?? "oglFlip"
+        let titleArr = ["normal":"正常", "cube":"覆盖", "oglFlip":"翻转", "pageCurl":"仿真"]
+        return titleArr[self.rawValue] ?? "normal"
     }
 }
 
 /// 按钮显示、隐藏状态
 public enum JMMenuStatus {
-    case HideOrShowAll(_ isHide: Bool) // 打开成功
-    case ShowSet(_ isHide: Bool) // 打开失败
-    case ShowLight(_ isHide: Bool) // 初始状态
+    case HideOrShowAll(_ isHide: Bool) // 上下
+    case ShowSet(_ isHide: Bool) // 设置
+    case ShowLight(_ isHide: Bool) // 亮度
+    case ShowPlay(_ isHide: Bool) // 播放
 }

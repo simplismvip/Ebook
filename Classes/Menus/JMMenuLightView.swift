@@ -30,6 +30,7 @@ final class JMMenuLightView: JMBaseView {
         addSubview(right)
         addSubview(slider)
         addSubview(bkgView)
+        backgroundColor = UIColor.jmRGB(31, 31, 31)
         
         left.setImage("light-null".image, for: .normal)
         right.setImage("light-full".image, for: .normal)
@@ -38,6 +39,8 @@ final class JMMenuLightView: JMBaseView {
         
         layoutViews()
         slider.addTarget(self, action: #selector(startScroll(_:)), for: .touchUpInside)
+        
+        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
     }
     
     @objc func startScroll(_ slider: UISlider) {
@@ -53,13 +56,13 @@ final class JMMenuLightView: JMBaseView {
         left.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(10)
             make.width.height.equalTo(44)
-            make.top.equalTo(self).offset(10)
+            make.top.equalTo(self).offset(8)
         }
         
         right.snp.makeConstraints { (make) in
             make.right.equalTo(self).offset(-10)
-            make.width.height.equalTo(44)
-            make.top.equalTo(self).offset(10)
+            make.width.height.equalTo(left)
+            make.top.equalTo(left)
         }
         
         slider.snp.makeConstraints { (make) in
@@ -72,7 +75,7 @@ final class JMMenuLightView: JMBaseView {
         bkgView.snp.makeConstraints { (make) in
             make.width.equalTo(self)
             make.height.equalTo(34)
-            make.top.equalTo(left.snp.bottom).offset(25)
+            make.top.equalTo(left.snp.bottom).offset(8)
             make.centerX.equalTo(snp.centerX)
         }
     }

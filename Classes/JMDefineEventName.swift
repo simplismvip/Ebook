@@ -39,3 +39,28 @@ public let kEventNameMenuActionDayOrNight = "kEventNameMenuActionDayOrNight"
 public let kEventNameMenuActionBrightness = "kEventNameMenuActionBrightness"
 /// 设置更多
 public let kEventNameMenuActionSettingMore = "kEventNameMenuActionSettingMore"
+
+/// 翻页类型
+public let kEventNameMenuPageFlipType = "kEventNameMenuPageFlipType"
+
+/// 字体类型
+public let kEventNameMenuFontType = "kEventNameMenuFontType"
+/// 颜色
+public let kEventNameMenuPageBkgColor = "kEventNameMenuPageBkgColor"
+/// 播放进度
+public let kEventNameMenuPlayBookRate = "kEventNameMenuPlayBookRate"
+/// 播放暂停
+public let kEventNameMenuPlayBookPlay = "kEventNameMenuPlayBookPlay"
+/// 播放开始
+public let kEventNameMenuPlayBookPrev = "kEventNameMenuPlayBookPrev"
+/// 播放停止
+public let kEventNameMenuPlayBookNext = "kEventNameMenuPlayBookNext"
+/// 设置播放风格
+public let kEventNameMenuPlayBookStyle = "kEventNameMenuPlayBookStyle"
+
+/// 覆盖
+public let kEventNameMenuPageFlipCube = "kEventNameMenuPageFlipCube"
+/// 仿真
+public let kEventNameMenuPageFlipPageCurl = "kEventNameMenuPageFlipPageCurl"
+/// 翻转
+public let kEventNameMenuPageFlipOglFlip = "kEventNameMenuPageFlipOglFlip"

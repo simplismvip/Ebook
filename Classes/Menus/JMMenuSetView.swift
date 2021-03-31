@@ -14,13 +14,43 @@ final class JMMenuSetView: JMBaseView {
     let fontSize = FontSizeView()
     let pageFlip = PageFlipView()
     let fontType = FontTypeView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(bkgColor)
         addSubview(fontSize)
         addSubview(pageFlip)
         addSubview(fontType)
+        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        pageFlip.snp.makeConstraints({ (make) in
+            make.width.equalTo(self)
+            make.top.equalTo(self.snp.top).offset(8)
+            make.height.equalTo(54)
+        })
+        
+        fontSize.snp.makeConstraints({ (make) in
+            make.width.equalTo(self)
+            make.top.equalTo(pageFlip.snp.bottom)
+            make.height.equalTo(54)
+        })
+        
+        bkgColor.snp.makeConstraints({ (make) in
+            make.width.equalTo(self)
+            make.top.equalTo(fontSize.snp.bottom)
+            make.height.equalTo(54)
+        })
+        
+        fontType.snp.makeConstraints({ (make) in
+            make.top.equalTo(bkgColor.snp.bottom)
+            make.width.equalTo(self)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+            }else {
+                make.bottom.equalTo(self)
+            }
+        })
     }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
@@ -51,15 +81,10 @@ final class BkgColorView: JMBaseView {
             make.height.equalTo(34)
             make.centerY.equalTo(snp.centerY)
         }
+            
+        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
     }
     
-    func updateDataSource(callBlock:@escaping (JMReadMenuItem)->Void) {
-//        let items = FRDataManager.share[.SET_BkgColor]
-//        let width = 64
-//        let count = items.count
-//        let margin = (UIScreen.main.bounds.size.width - 84 - CGFloat(width * count)) / CGFloat(count+1)
-//        bkgView.updateViews(items: items, margin:margin) { callBlock($0) }
-    }
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
@@ -118,16 +143,9 @@ final class FontSizeView: JMBaseView {
         }
     }
     
-    @objc func startScroll(_ slider:UISlider) {
+    @objc func startScroll(_ slider: UISlider) {
         nameSize.text = String(format: "%.0f", slider.value)
         if let mo = model { callBack?(mo) }
-    }
-    
-    func updateDataSource(callBlock:@escaping (JMReadMenuItem)->Void) {
-//        guard let mo = FRDataManager.share[.SET_Flip].first,let value = mo.value else { return }
-//        model = mo
-//        slider.value = value
-//        callBack = callBlock
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -160,11 +178,10 @@ final class PageFlipView: JMBaseView {
             make.height.equalTo(34)
             make.centerY.equalTo(snp.centerY)
         }
+        
+        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_flip_type"))
     }
-
-    func updateDataSource(callBlock:@escaping (JMReadMenuItem)->Void) {
-//        bkgView.updateViews(items: FRDataManager.share[.SET_Flip], margin:0) { callBlock($0) }
-    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
@@ -196,10 +213,9 @@ final class FontTypeView: JMBaseView {
             make.height.equalTo(34)
             make.top.equalTo(name)
         }
+        
+        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_font_type"))
     }
 
-    func updateDataSource(callBlock:@escaping (JMReadMenuItem)->Void) {
-//        bkgView.updateViews(items: FRDataManager.share[.SET_FontType], margin:0) { callBlock($0) }
-    }
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }

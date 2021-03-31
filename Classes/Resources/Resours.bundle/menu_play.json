@@ -1,0 +1,18 @@
+[
+    {
+        "image":"prev-icon",
+        "event":"kEventNameMenuPlayBookPrev",
+        "showTitie":false,
+        "identify":"prev"
+    },{
+        "image":"play-icon",
+        "event":"kEventNameMenuPlayBookPlay",
+        "showTitie":false,
+        "identify":"curr"
+    },{
+        "image":"next-icon",
+        "event":"kEventNameMenuPlayBookNext",
+        "showTitie":false,
+        "identify":"next"
+    }
+]

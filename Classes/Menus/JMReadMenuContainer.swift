@@ -17,6 +17,8 @@ class JMReadMenuContainer: JMBaseView {
     let bottom = JMReadItemView()
     let set = JMMenuSetView() // 设置
     let light = JMMenuLightView() // 亮度
+    let play = JMMeunPlayVIew() // 播放
+    
     let topContainer = UIView() // 亮度
     let bottomContainer = UIView() // 亮度
     let margin: CGFloat = 10
@@ -93,6 +95,7 @@ class JMReadMenuContainer: JMBaseView {
         
         addSubview(set)
         addSubview(light)
+        addSubview(play)
         
         topContainer.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
@@ -108,14 +111,20 @@ class JMReadMenuContainer: JMBaseView {
         
         set.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
-            make.height.equalTo(160)
-            make.bottom.equalTo(snp.bottom).offset(160)
+            make.height.equalTo(270)
+            make.bottom.equalTo(snp.bottom).offset(270)
         }
         
         light.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
-            make.height.equalTo(120)
-            make.bottom.equalTo(snp.bottom).offset(120)
+            make.height.equalTo(150)
+            make.bottom.equalTo(snp.bottom).offset(150)
+        }
+        
+        play.snp.makeConstraints { (make) in
+            make.left.width.equalTo(self)
+            make.height.equalTo(230)
+            make.bottom.equalTo(snp.bottom).offset(230)
         }
     }
     

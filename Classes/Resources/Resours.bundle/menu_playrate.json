@@ -1,0 +1,23 @@
+[
+    {
+        "title":"0.5X",
+        "event":"kEventNameMenuPlayBookRate",
+        "showTitie":false,
+        "identify":"0.5"
+    },{
+        "title":"1X",
+        "event":"kEventNameMenuPlayBookRate",
+        "showTitie":false,
+        "identify":"1.0"
+    },{
+        "title":".5X",
+        "event":"kEventNameMenuPlayBookRate",
+        "showTitie":false,
+        "identify":"1.5"
+    },{
+        "title":"2.0X",
+        "event":"kEventNameMenuPlayBookRate",
+        "showTitie":false,
+        "identify":"2.0"
+    }
+]

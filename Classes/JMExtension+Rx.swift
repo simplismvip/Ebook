@@ -156,11 +156,11 @@ extension Reactive where Base: JMReadMenuContainer {
             case .ShowLight(let isHide):
                 if isHide {
                     view.light.snp.updateConstraints { (make) in
-                        make.bottom.equalTo(view.snp.bottom).offset(120)
+                        make.bottom.equalTo(view.snp.bottom).offset(150)
                     }
                 }else {
                     view.light.snp.updateConstraints { (make) in
-                        make.bottom.equalTo(view.snp.bottom).offset(-120)
+                        make.bottom.equalTo(view.snp.bottom)
                     }
                 }
                 view.setNeedsUpdateConstraints()
@@ -170,11 +170,25 @@ extension Reactive where Base: JMReadMenuContainer {
             case .ShowSet(let isHide):
                 if isHide {
                     view.set.snp.updateConstraints { (make) in
-                        make.bottom.equalTo(view.snp.bottom).offset(160)
+                        make.bottom.equalTo(view.snp.bottom).offset(270)
                     }
                 }else {
                     view.set.snp.updateConstraints { (make) in
-                        make.bottom.equalTo(view.snp.bottom).offset(-160)
+                        make.bottom.equalTo(view.snp.bottom)
+                    }
+                }
+                view.setNeedsUpdateConstraints()
+                UIView.animate(withDuration: 0.3) {
+                    view.layoutIfNeeded()
+                }
+            case .ShowPlay(let isHide):
+                if isHide {
+                    view.play.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom).offset(230)
+                    }
+                }else {
+                    view.play.snp.updateConstraints { (make) in
+                        make.bottom.equalTo(view.snp.bottom)
                     }
                 }
                 view.setNeedsUpdateConstraints()
@@ -198,28 +212,82 @@ extension Reactive where Base: JMReadMenuContainer {
                         }else {
                             view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
                         }
-                        
-                    default:
-                        print("")
+                    case .ShowSet(let isHide):
+                        if isHide {
+                            
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.ShowSet(true))
+                            // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                    case .ShowLight(let isHide):
+                        if isHide {
+                            
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.ShowLight(true))
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                    case .ShowPlay(let isHide):
+                        if isHide {
+                            
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
                     }
+                    
                 }else if point.x > width/4 && point.x < width/4*3 {
                     switch value {
-                    case .HideOrShowAll(let status):
-                        view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(!status))
-                    default:
-                        print("")
+                    case .HideOrShowAll(let isHide):
+                        view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(!isHide))
+                    case .ShowSet(let isHide):
+                        if !isHide {
+                            view.showOrHide.onNext(JMMenuStatus.ShowSet(true))
+                            // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                    case .ShowLight(let isHide):
+                        if !isHide {
+                            view.showOrHide.onNext(JMMenuStatus.ShowLight(true))
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                    case .ShowPlay(let isHide):
+                        if !isHide {
+                            view.showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
                     }
                 }else {
                     switch value {
                     case .HideOrShowAll(let isHide):
                         if isHide {
-                            print("点击右侧1/4翻页")
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
                         }else {
+                            
+                            print("点击右侧1/4翻页")
+                        }
+                    case .ShowSet(let isHide):
+                        if isHide {
+                            
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.ShowSet(true))
+                            // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
                             view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
                         }
-                        
-                    default:
-                        print("")
+                    case .ShowLight(let isHide):
+                        if isHide {
+                            
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.ShowLight(true))
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
+                    case .ShowPlay(let isHide):
+                        if isHide {
+                            
+                        }else {
+                            view.showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+                            view.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                        }
                     }
                 }
             }

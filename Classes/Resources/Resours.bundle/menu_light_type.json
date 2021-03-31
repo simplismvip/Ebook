@@ -1,0 +1,13 @@
+[
+    {
+        "title":"系统亮度",
+        "event":"kEventNameMenuActionBack",
+        "showTitie":false,
+        "identify":"zhengzu"
+    },{
+        "title":"护眼模式",
+        "event":"kEventNameMenuActionBack",
+        "showTitie":false,
+        "identify":"zhengzu"
+    }
+]
