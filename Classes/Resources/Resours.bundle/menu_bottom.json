@@ -1,27 +1,31 @@
 [
     {
         "title":"目录",
-        "image":"整租",
+        "image":"icon-sun",
         "event":"kEventNameMenuActionBookCatalog",
-        "showTitie":true,
-        "identify":"zhengzu"
+        "border":false,
+        "type":"bottom",
+        "identify":"bookCatalog"
     },{
         "title":"夜间模式",
-        "image":"合租",
+        "image":"icon-moon",
         "event":"kEventNameMenuActionDayOrNight",
-        "showTitie":true,
-        "identify":"hezu"
+        "border":false,
+        "type":"bottom",
+        "identify":"dayornight"
     },{
         "title":"亮度",
-        "image":"月租",
+        "image":"icon-sun",
         "event":"kEventNameMenuActionBrightness",
-        "showTitie":true,
-        "identify":"yuezu"
+        "border":false,
+        "type":"bottom",
+        "identify":"brightness"
     },{
         "title":"设置",
-        "image":"通勤找房",
+        "image":"book_set",
         "event":"kEventNameMenuActionSettingMore",
-        "showTitie":true,
-        "identify":"tongqinzhaofang"
+        "border":false,
+        "type":"bottom",
+        "identify":"settingMore"
     }
 ]

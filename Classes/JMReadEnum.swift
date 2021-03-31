@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import HandyJSON
 
 public enum JMEpubStatus {
     case Opening(_ text: String) // 正在打开
@@ -32,4 +33,19 @@ public enum JMMenuStatus {
     case ShowSet(_ isHide: Bool) // 设置
     case ShowLight(_ isHide: Bool) // 亮度
     case ShowPlay(_ isHide: Bool) // 播放
+}
+
+/// 按钮类型
+public enum JMMenuType: String, HandyJSONEnum {
+    case BkgColor = "color" // 背景色
+    case MainBottom = "bottom" // 主页底部
+    case TopLeft = "topleft"// 主页顶部左侧
+    case TopRight = "topright"// 主页顶部右侧
+    case PageFlip = "pageflip"// 翻页
+    case PageFont = "pagefont"// 字体
+    case PageLight = "pagelight"// 亮度
+    case PlayRate = "playrate"// 播放速率
+    case PlayStyle = "playstyle"// 播放风格
+    case PlayOrPause = "playpause"// 播放或暂停
+    case nonetype = "nonetype"// 播放或暂停
 }

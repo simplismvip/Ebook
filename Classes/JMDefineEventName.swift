@@ -37,6 +37,10 @@ public let kEventNameMenuActionBookCatalog = "kEventNameMenuActionBookCatalog"
 public let kEventNameMenuActionDayOrNight = "kEventNameMenuActionDayOrNight"
 /// 亮度
 public let kEventNameMenuActionBrightness = "kEventNameMenuActionBrightness"
+/// 亮度系统亮度
+public let kEventNameMenuBrightnessSystem = "kEventNameMenuBrightnessSystem"
+/// 亮度护眼模式
+public let kEventNameMenuBrightnessCareEye = "kEventNameMenuBrightnessCareEye"
 /// 亮度滑杆
 public let kEventNameMenuActionBrightSliderValue = "kEventNameMenuActionBrightSliderValue"
 /// 设置更多

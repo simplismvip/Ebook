@@ -1,27 +1,27 @@
 [
     {
         "title":"Andada",
-        "image":"",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
+        "type":"pagefont",
         "identify":"Andada"
     },{
         "title":"Lato",
-        "image":"",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
+        "type":"pagefont",
         "identify":"Lato"
     },{
         "title":"Lora",
-        "image":"",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
+        "type":"pagefont",
         "identify":"Lora"
     },{
         "title":"Raleway",
-        "image":"",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
+        "type":"pagefont",
         "identify":"Raleway"
     }
 ]

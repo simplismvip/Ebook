@@ -1,9 +1,9 @@
 [
     {
-        "title":"返回",
-        "image":"整租",
+        "image":"ebook_back",
         "event":"kEventNameMenuActionBack",
-        "showTitie":false,
-        "identify":"zhengzu"
+        "border":false,
+        "type":"topleft",
+        "identify":"back"
     }
 ]

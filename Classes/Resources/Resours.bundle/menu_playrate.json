@@ -3,21 +3,25 @@
         "title":"0.5X",
         "event":"kEventNameMenuPlayBookRate",
         "showTitie":false,
+        "type":"playrate",
         "identify":"0.5"
     },{
         "title":"1X",
         "event":"kEventNameMenuPlayBookRate",
         "showTitie":false,
+        "type":"playrate",
         "identify":"1.0"
     },{
-        "title":".5X",
+        "title":"1.5X",
         "event":"kEventNameMenuPlayBookRate",
         "showTitie":false,
+        "type":"playrate",
         "identify":"1.5"
     },{
         "title":"2.0X",
         "event":"kEventNameMenuPlayBookRate",
         "showTitie":false,
+        "type":"playrate",
         "identify":"2.0"
     }
 ]

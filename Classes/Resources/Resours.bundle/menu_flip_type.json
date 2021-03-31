@@ -4,24 +4,28 @@
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
+        "type":"pageflip",
         "identify":"normal"
     },{
         "title":"覆盖",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
+        "type":"pageflip",
         "identify":"cube"
     },{
         "title":"仿真",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
+        "type":"pageflip",
         "identify":"pageCurl"
     },{
         "title":"翻转",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
+        "type":"pageflip",
         "identify":"oglFlip"
     }
 ]

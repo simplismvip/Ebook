@@ -76,5 +76,14 @@ extension JMReadPageContrller {
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
             print(value as Any)
         }, next: false)
+        
+        jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](value) in
+            print(value as Any)
+        }, next: false)
+        
+        jmRegisterEvent(eventName: kEventNameMenuBrightnessCareEye, block: { [weak self](value) in
+            print(value as Any)
+        }, next: false)
+        
     }
 }

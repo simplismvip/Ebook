@@ -3,16 +3,19 @@
         "image":"prev-icon",
         "event":"kEventNameMenuPlayBookPrev",
         "showTitie":false,
+        "type":"playpause",
         "identify":"prev"
     },{
         "image":"play-icon",
         "event":"kEventNameMenuPlayBookPlay",
         "showTitie":false,
+        "type":"playpause",
         "identify":"curr"
     },{
         "image":"next-icon",
         "event":"kEventNameMenuPlayBookNext",
         "showTitie":false,
+        "type":"playpause",
         "identify":"next"
     }
 ]

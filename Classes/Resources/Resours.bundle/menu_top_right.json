@@ -1,27 +1,23 @@
 [
     {
-        "title":"分享",
-        "image":"整租",
+        "image":"share_book",
         "event":"kEventNameMenuActionShare",
-        "showTitie":false,
-        "identify":"zhengzu"
+        "type":"topright",
+        "identify":"sharebook"
     },{
-        "title":"听书",
-        "image":"合租",
+        "image":"icon-listen_voice",
+        "type":"topright",
         "event":"kEventNameMenuActionListenBook",
-        "showTitie":false,
-        "identify":"hezu"
+        "identify":"listenBook"
     },{
-        "title":"分享",
-        "image":"月租",
+        "image":"wifi_send_book",
         "event":"kEventNameMenuActionShareWifi",
-        "showTitie":false,
-        "identify":"yuezu"
+        "type":"topright",
+        "identify":"sharewifi"
     },{
-        "title":"更多",
-        "image":"月租",
+        "image":"man-speech-icon",
         "event":"kEventNameMenuActionMore",
-        "showTitie":false,
-        "identify":"yuezu"
+        "type":"topright",
+        "identify":"actionmore"
     }
 ]

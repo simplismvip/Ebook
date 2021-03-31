@@ -90,10 +90,8 @@ final class BkgColorView: JMBaseView {
 final class FontSizeView: JMBaseView {
     private var name = UILabel()
     private var nameSize = UILabel()
-    private var callBack:((JMReadMenuItem)->Void)?
-    private var model:JMReadMenuItem?
     private let disposeBag = DisposeBag()
-    private var slider:UISlider = {
+    private var slider: UISlider = {
         let slider = UISlider()
         slider.setThumbImage("green-marker".image, for: .normal)
         slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
@@ -109,7 +107,7 @@ final class FontSizeView: JMBaseView {
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
         nameSize.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
         name.text = "字体大小"
-        nameSize.text = "13"
+        nameSize.text = "10"
         layoutViews()
         
         slider.rx.value.map({ Int($0 * 30 + 10) }).distinctUntilChanged().subscribe (onNext:{ [weak self] (value) in
@@ -139,12 +137,6 @@ final class FontSizeView: JMBaseView {
             make.centerY.equalTo(snp.centerY)
         }
     }
-    
-    @objc func startScroll(_ slider: UISlider) {
-        nameSize.text = String(format: "%.0f", slider.value)
-        if let mo = model { callBack?(mo) }
-    }
-    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
