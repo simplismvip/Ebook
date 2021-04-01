@@ -7,7 +7,7 @@
 
 import UIKit
 
-class JMHtmlParse: NSObject {
+struct JMHtmlParse {
     static func html(_ fullHref: String) -> String {
         guard var html = try? String(contentsOfFile: fullHref, encoding: .utf8) else {
             return ""
