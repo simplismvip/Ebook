@@ -8,18 +8,20 @@
 import Foundation
 
 extension Bundle {
-    static var bundle: Bundle? {
-        if let budl = Bundle(for: JMReadPageContrller.self).path(forResource: "Resours", ofType: "bundle") {
-            return Bundle(path: budl)
-        }else {
-            return nil
-        }
+    /// 当前项目bundle
+    static var bundle: Bundle {
+        return Bundle(for: JMReadPageContrller.self)
     }
-
-    // 定义一个静态变量arrowImage，用于获取图片文件：“arrow.png”。
-    static var arrowImage: UIImage? {
-        if let bundle = bundle?.path(forResource: "arrow@2x", ofType: "png") {
-            return UIImage(contentsOfFile: bundle)?.withRenderingMode(.alwaysTemplate)
+    
+    /// 获取bundle中文件路径
+    static func path(resource: String, ofType: String) -> String? {
+        return Bundle.bundle.path(forResource: resource, ofType: ofType)
+    }
+    
+    /// Resours文件bundle
+    static var resouseBundle: Bundle? {
+        if let budl = Bundle.path(resource: "Resours", ofType: "bundle") {
+            return Bundle(path: budl)
         }else {
             return nil
         }
@@ -42,11 +44,19 @@ extension Bundle {
             language = "en"
         }
 
-        if let bundle = bundle?.path(forResource: language, ofType: "lproj") {
-            let v = Bundle(path: bundle)?.localizedString(forKey: key, value: value, table: nil)
+        if let path = Bundle.path(resource: language!, ofType: "lproj") {
+            let v = Bundle(path: path)?.localizedString(forKey: key, value: value, table: nil)
             return Bundle.main.localizedString(forKey: key, value: v, table: nil)
         }else {
             return nil
         }
     }
+    
+//    class func frameworkBundle() -> Bundle {
+//        return Bundle(for: JMReadManager.self)
+//    }
+//
+//    class func path(resource: String, type: String) -> String? {
+//        return frameworkBundle().path(forResource: resource, ofType: type)
+//    }
 }

@@ -32,7 +32,7 @@ public class JMReadPageContrller: JMBaseController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.decelerationRate = UIScrollView.DecelerationRate(10)
-        collectionView.backgroundColor = UIColor.red
+        collectionView.backgroundColor = UIColor.white
         return collectionView
     }()
     
@@ -41,20 +41,5 @@ public class JMReadPageContrller: JMBaseController {
         setupUI()
         binder()
         registerMenuEvent()
-    }
-}
-
-extension JMReadPageContrller: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var size = CGSize(width: collectionView.jmWidth, height: collectionView.jmHeight)
-        if #available(iOS 11.0, *) {
-            let orientation = UIDevice.current.orientation
-            if orientation == .portrait || orientation == .portraitUpsideDown {
-                if JMReadConfig.share.scrollDirection == .horizontal {
-                    size.height = size.height - view.safeAreaInsets.bottom
-                }
-            }
-        }
-        return size
     }
 }

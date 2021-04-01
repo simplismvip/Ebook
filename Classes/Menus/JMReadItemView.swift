@@ -12,7 +12,7 @@ import RxCocoa
 
 final class JMReadItemView: JMBaseView {
     public var margin: CGFloat = 5
-    private var models = [JMReadMenuItem]()
+    internal var models = [JMReadMenuItem]()
     private let disposeBag = DisposeBag()
     
     final public func updateViews(_ items: [JMReadMenuItem]) {
@@ -80,7 +80,7 @@ final class JMReadItemView: JMBaseView {
             }).disposed(by: disposeBag)
         
         case .PlayOrPause:
-            if model.identify == "curr" {
+            if model.identify == .PlayOrPause {
                 model.isSelect.asObserver()
                     .map { $0 ? "pause-icon" : "play-icon" }
                     .map { $0.image?.origin }

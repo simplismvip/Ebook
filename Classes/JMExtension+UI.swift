@@ -103,7 +103,7 @@ public extension String {
     }
     
     var image: UIImage? {
-        if let bundle = Bundle.bundle {
+        if let bundle = Bundle.resouseBundle {
             return UIImage(named: self, in: bundle, compatibleWith: nil)
         }else {
             return nil
@@ -312,16 +312,6 @@ extension Array {
 
 func delay(_ delay:Double, closure:@escaping ()->()) {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
-}
-
-extension Bundle {
-    class func frameworkBundle() -> Bundle {
-        return Bundle(for: JMReadManager.self)
-    }
-    
-    class func path(resource: String, type: String) -> String? {
-        return frameworkBundle().path(forResource: resource, ofType: type)
-    }
 }
 
 public extension UIView {

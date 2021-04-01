@@ -25,7 +25,7 @@ class JMReadMenuItem: HandyJSON {
     var cornerRadius: CGFloat?
     var borderColor: UIColor?
     var titleColor: UIColor?
-    var identify: String? // id
+    var identify: JMMenuStyle = .nonetype 
     var isSelect = BehaviorSubject<Bool>(value: false)
     required init () { }
 }

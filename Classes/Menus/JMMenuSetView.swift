@@ -49,13 +49,18 @@ final class JMMenuSetView: JMBaseView {
         })
     }
     
+    /// 获取所有显示的Items
+    func allItems() -> [JMReadMenuItem] {
+        return [bkgColor.bkgView.models, pageFlip.bkgView.models, fontType.bkgView.models].flatMap { $0 }
+    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
 // MARK: -- 背景设置 --
 final class BkgColorView: JMBaseView {
     private let name = UILabel()
-    private let bkgView = JMReadItemView()
+    internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.jmRGB(31, 31, 31)
@@ -143,7 +148,7 @@ final class FontSizeView: JMBaseView {
 // MARK: -- 翻页模式 --
 final class PageFlipView: JMBaseView {
     private let name = UILabel()
-    private let bkgView = JMReadItemView()
+    internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.jmRGB(31, 31, 31)
@@ -177,7 +182,7 @@ final class PageFlipView: JMBaseView {
 // MARK: -- 字体类型 --
 final class FontTypeView: JMBaseView {
     private var name = UILabel()
-    private let bkgView = JMReadItemView()
+    internal let bkgView = JMReadItemView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -11,7 +11,7 @@ import HandyJSON
 public struct JMJsonParse {
     /// 解析本地[model,model,model,]结构json
     static public func parseJson<T: HandyJSON>(name: String, ofType: String = "json") -> [T] {
-        guard let path = Bundle.bundle?.path(forResource: name, ofType: ofType) else { return [T]() }
+        guard let path = Bundle.resouseBundle?.path(forResource: name, ofType: ofType) else { return [T]() }
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: path),options: .mappedIfSafe) else { return [T]() }
         guard let obj = try? JSONSerialization.jsonObject(with:data, options: JSONSerialization.ReadingOptions()) else { return [T]() }
         return parseJson(obj:obj)
@@ -27,7 +27,7 @@ public struct JMJsonParse {
     
     /// 解析本地[[model],[model],[model],]结构json
     static public func parseJsonItems<T: HandyJSON>(name: String, ofType: String = "json") -> [[T]] {
-        guard let path = Bundle.bundle?.path(forResource: name, ofType: ofType) else { return [[T]]() }
+        guard let path = Bundle.resouseBundle?.path(forResource: name, ofType: ofType) else { return [[T]]() }
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: path),options: .mappedIfSafe) else { return [[T]]() }
         guard let obj = try? JSONSerialization.jsonObject(with:data, options: JSONSerialization.ReadingOptions()) else { return [[T]]() }
         guard let bookInfoDic = obj as? [[Dictionary<String, Any>]] else { return [[T]]() }

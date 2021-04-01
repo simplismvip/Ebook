@@ -49,3 +49,52 @@ public enum JMMenuType: String, HandyJSONEnum {
     case PlayOrPause = "playpause"// 播放或暂停
     case nonetype = "nonetype"// 播放或暂停
 }
+
+/// 按钮类型
+public enum JMMenuStyle: String, HandyJSONEnum {
+    case BkgColor = "color1" // 背景色
+    case BkgColor1 = "color2" // 背景色
+    case BkgColor2 = "color3" // 背景色
+    case BkgColor3 = "color4" // 背景色
+    
+    case MainBotCatalog = "bookCatalog" // 主页底部
+    case MainBotDayNight = "dayornight" // 主页底部
+    case MainBotBright = "brightness" // 主页底部
+    case MainBotSetting = "settingMore" // 主页底部
+    
+    case TopLeft = "back"// 主页顶部左侧
+    
+    case TRightShare = "sharebook"// 主页顶部右侧
+    case TRightListen = "listenBook"// 主页顶部右侧
+    case TRightWifi = "sharewifi"// 主页顶部右侧
+    case TRightMore = "actionmore"// 主页顶部右侧
+    
+    case PFlipNormal = "normal"// 翻页
+    case PFlipCube = "cube"// 翻页
+    case PFlipCurl = "pageCurl"// 翻页
+    case PFlipOgl = "oglFlip"// 翻页
+    
+    case PFont = "Andada"// 字体
+    case PFont1 = "Lato"// 字体
+    case PFont2 = "Lora"// 字体
+    case PFont3 = "Raleway"// 字体
+    
+    case PLightSys = "system"// 亮度
+    case PLightCus = "custom"// 亮度
+    
+    case PlayRate = "0.5"// 播放速率
+    case PlayRate1 = "1.0"// 播放速率
+    case PlayRate2 = "1.5"// 播放速率
+    case PlayRate3 = "2.0"// 播放速率
+    
+    case PlayStyle = "style1"// 播放风格
+    case PlayStyle1 = "style2"// 播放风格
+    case PlayStyle2 = "style3"// 播放风格
+    
+    case PlayOrPause = "curr"// 播放或暂停
+    case PlayPrev = "prev"// 播放或暂停
+    case PlayNext = "next"// 播放或暂停
+    
+    case nonetype = "nonetype"// 播放或暂停
+}
+

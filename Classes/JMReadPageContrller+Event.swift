@@ -69,21 +69,8 @@ extension JMReadPageContrller {
             self?.menuView.showOrHide.onNext(JMMenuStatus.ShowSet(false))
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionBrightSliderValue, block: { [weak self](value) in
-            print(value as Any)
-        }, next: false)
-        
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
             print(value as Any)
         }, next: false)
-        
-        jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](value) in
-            print(value as Any)
-        }, next: false)
-        
-        jmRegisterEvent(eventName: kEventNameMenuBrightnessCareEye, block: { [weak self](value) in
-            print(value as Any)
-        }, next: false)
-        
     }
 }

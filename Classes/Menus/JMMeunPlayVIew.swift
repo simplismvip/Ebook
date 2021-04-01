@@ -32,6 +32,11 @@ final class JMMeunPlayVIew: JMBaseView {
         setupSubViews()
         loadDatas()
     }
+    
+    /// 获取所有显示的Items
+    func allItems() -> [JMReadMenuItem] {
+        return [playControl.models,playRate.models,playStyle.models].flatMap { $0 }
+    }
 
     func setupSubViews() {
         playControl.translatesAutoresizingMaskIntoConstraints = false

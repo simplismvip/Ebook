@@ -41,9 +41,24 @@ final class JMMenuLightView: JMBaseView {
         bkgView.margin = 30
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
         
-        slider.rx.value.subscribe (onNext:{ [weak self] (value) in
-            self?.jmRouterEvent(eventName: kEventNameMenuActionBrightSliderValue, info: value as MsgObjc)
+        slider.rx.value.subscribe (onNext:{ (value) in
+            UIScreen.main.brightness = CGFloat(value)
         }).disposed(by: disposeBag)
+        
+        jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](_) in
+            UIScreen.main.brightness = 0.5
+            self?.slider.value = 0.5
+        }, next: false)
+        
+        jmRegisterEvent(eventName: kEventNameMenuBrightnessCareEye, block: { [weak self](_) in
+            UIScreen.main.brightness = 0.3
+            self?.slider.value = 0.3
+        }, next: false)
+    }
+    
+    /// 获取所有显示的Items
+    func allItems() -> [JMReadMenuItem] {
+        return bkgView.models
     }
     
     func layoutViews() {        

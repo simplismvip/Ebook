@@ -70,7 +70,7 @@ extension JMReadPageContrller {
 extension JMReadPageContrller {
     
     func binder() {
-        let input = JMEpubVModel.JMInput(path: "/Users/jl/Desktop/EPUB/TianXiaDaoZong.epub")
+        let input = JMEpubVModel.JMInput(path: Bundle.resouseBundle!.path(forResource: "TianXiaDaoZong", ofType: "epub")!)
         let output = vmodel.transform(input: input)
         output.refresh.bind(to: rx.isLoading).disposed(by: disposeBag)
         output.items.asObservable()

@@ -15,6 +15,7 @@ final class JMReadMenuContainer: JMBaseView {
     private let topLeft = JMReadItemView()
     private let topRight = JMReadItemView()
     private let bottom = JMReadItemView()
+    
     internal let set = JMMenuSetView() // 设置
     internal let light = JMMenuLightView() // 亮度
     internal let play = JMMeunPlayVIew() // 播放
@@ -34,7 +35,15 @@ final class JMReadMenuContainer: JMBaseView {
         loadDats()
     }
     
-    func addGesture() {
+    /// 通过style获取目标Item模型
+    public func findItem(_ menuStyle: JMMenuStyle) -> JMReadMenuItem? {
+        return [set.allItems(),light.allItems(),play.allItems(),bottom.models,topRight.models]
+            .flatMap { $0 }
+            .filter({ $0.identify == menuStyle })
+            .first
+    }
+    
+    private func addGesture() {
         let swipLeft = UISwipeGestureRecognizer()
         swipLeft.direction = .left
         addGestureRecognizer(swipLeft)
