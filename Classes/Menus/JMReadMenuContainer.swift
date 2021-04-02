@@ -31,8 +31,8 @@ final class JMReadMenuContainer: JMBaseView {
         super.init(frame: frame)
 //        backgroundColor = UIColor.gray
         setupviews()
-        addGesture()
         loadDats()
+        showOrHide.bind(to: rx.hideOrShow).disposed(by: disposeBag)
     }
     
     /// 通过style获取目标Item模型
@@ -43,23 +43,93 @@ final class JMReadMenuContainer: JMBaseView {
             .first
     }
     
-    private func addGesture() {
-        let swipLeft = UISwipeGestureRecognizer()
-        swipLeft.direction = .left
-        addGestureRecognizer(swipLeft)
-        swipLeft.rx.event.bind(to: rx.leftSwipe).disposed(by: disposeBag)
-        
-        let swipRight = UISwipeGestureRecognizer()
-        swipRight.direction = .right
-        addGestureRecognizer(swipRight)
-        swipRight.rx.event.bind(to: rx.rightSwipe).disposed(by: disposeBag)
-        
-        let tapGes = UITapGestureRecognizer()
-        tapGes.delegate = self
-        tapGes.numberOfTapsRequired = 1
-        addGestureRecognizer(tapGes)
-        tapGes.rx.event.bind(to: rx.tapGesture).disposed(by: disposeBag)
-        showOrHide.bind(to: rx.hideOrShow).disposed(by: disposeBag)
+    public func tapActionSwitchMenu(_ x: CGFloat) {
+        if let value = try? showOrHide.value() {
+            let width = UIScreen.main.bounds.size.width
+            if x < width/4 {
+                switch value {
+                case .HideOrShowAll(let isHide):
+                    if isHide {
+                        print("点击左侧1/4翻页")
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowSet(let isHide):
+                    if isHide {
+                        
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowLight(let isHide):
+                    if isHide {
+                        
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowPlay(let isHide):
+                    if isHide {
+                        
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                }
+                
+            }else if x > width/4 && x < width/4*3 {
+                switch value {
+                case .HideOrShowAll(let isHide):
+                    showOrHide.onNext(JMMenuStatus.HideOrShowAll(!isHide))
+                case .ShowSet(let isHide):
+                    if !isHide {
+                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowLight(let isHide):
+                    if !isHide {
+                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowPlay(let isHide):
+                    if !isHide {
+                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                }
+            }else {
+                switch value {
+                case .HideOrShowAll(let isHide):
+                    if isHide {
+                        print("点击右侧1/4翻页")
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowSet(let isHide):
+                    if isHide {
+                        
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
+                        // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowLight(let isHide):
+                    if isHide {
+                        
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                case .ShowPlay(let isHide):
+                    if isHide {
+                        
+                    }else {
+                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+                    }
+                }
+            }
+        }
     }
     
     private func loadDats() {
@@ -137,16 +207,49 @@ final class JMReadMenuContainer: JMBaseView {
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        for view in subviews {
+            let convertPoint = convert(point, from: self)
+            if view.bounds.contains(convertPoint) {
+                return super.hitTest(point, with: event)
+            }
+        }
+        return nil
     }
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        return super.hitTest(point, with: event)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
 extension JMReadMenuContainer: UIGestureRecognizerDelegate {
+    private func addGesture() {
+        let swipLeft = UISwipeGestureRecognizer()
+        swipLeft.direction = .left
+        addGestureRecognizer(swipLeft)
+        swipLeft.rx.event.bind(to: rx.leftSwipe).disposed(by: disposeBag)
+
+        let swipRight = UISwipeGestureRecognizer()
+        swipRight.direction = .right
+        addGestureRecognizer(swipRight)
+        swipRight.rx.event.bind(to: rx.rightSwipe).disposed(by: disposeBag)
+        
+        let tapGes = UITapGestureRecognizer()
+        tapGes.delegate = self
+        tapGes.numberOfTapsRequired = 1
+        addGestureRecognizer(tapGes)
+//        tapGes.rx.event.bind(to: rx.tapGesture).disposed(by: disposeBag)
+        showOrHide.bind(to: rx.hideOrShow).disposed(by: disposeBag)
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
+            return true
+        }else {
+            return false
+        }
+    }
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }

@@ -9,6 +9,7 @@ import UIKit
 import WebKit
 import RxCocoa
 import RxSwift
+import ZJMKit
 
 class JMWebPage: WKWebView {
     let config: JMReadConfig
@@ -16,7 +17,6 @@ class JMWebPage: WKWebView {
         self.config = config
         let config = WKWebViewConfiguration()
         super.init(frame: frame, configuration: config)
-        
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false

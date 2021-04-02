@@ -138,7 +138,9 @@ extension Reactive where Base: JMReadMenuContainer {
                     view.bottomContainer.snp.updateConstraints { (make) in
                         make.bottom.equalTo(view.snp.bottom).offset(104)
                     }
+
                 }else {
+                    view.isHidden = false
                     view.topContainer.snp.updateConstraints { (make) in
                         make.top.equalTo(view.snp.top)
                     }
@@ -146,13 +148,13 @@ extension Reactive where Base: JMReadMenuContainer {
                     view.bottomContainer.snp.updateConstraints { (make) in
                         make.bottom.equalTo(view.snp.bottom)
                     }
-                    
                 }
                 
                 view.setNeedsUpdateConstraints()
                 UIView.animate(withDuration: 0.3) {
                     view.layoutIfNeeded()
                 }
+                
             case .ShowLight(let isHide):
                 if isHide {
                     view.light.snp.updateConstraints { (make) in

@@ -1,8 +1,8 @@
 //
-//  JMReadPageContrller+Extension.swift
+//  JMReadPageContrller+UI.swift
 //  JMEpubReader
 //
-//  Created by JunMing on 2021/3/30.
+//  Created by JunMing on 2021/4/2.
 //
 
 import UIKit
@@ -78,7 +78,11 @@ extension JMReadPageContrller {
                 self?.bookTitle.text = row.description
             }
             .disposed(by: disposeBag)
+        
         colleView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        colleView.rx.didScroll
+            .map { JMMenuStatus.HideOrShowAll(true) }.bind(to: menuView.showOrHide).disposed(by: disposeBag)
         
         rx.viewWillAppear.asObservable().subscribe { [weak self](_) in
             self?.navigationController?.setNavigationBarHidden(true, animated: false)

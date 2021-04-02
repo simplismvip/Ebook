@@ -19,11 +19,22 @@ public class JMReadPageView: JMBaseCollectionCell {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(webPage)
-        if let htmlPath = Bundle.path(resource: "test", ofType: "html") {
-            let hemlContent = JMHtmlParse.html(htmlPath)
-            loadHTMLString(hemlContent, baseURL: URL(fileURLWithPath: htmlPath))
-        }
+//        contentView.addSubview(webPage)
+//        if let htmlPath = Bundle.path(resource: "test", ofType: "html") {
+//            let hemlContent = JMHtmlParse.html(htmlPath)
+//            loadHTMLString(hemlContent, baseURL: URL(fileURLWithPath: htmlPath))
+//        }
+        
+        let tapGes = UITapGestureRecognizer()
+        tapGes.delegate = self
+        tapGes.numberOfTapsRequired = 1
+        addGestureRecognizer(tapGes)
+        tapGes.addTarget(self, action: #selector(topgesture(_:)))
+    }
+    
+    @objc func topgesture(_ gesture: UITapGestureRecognizer) {
+        let point = gesture.location(in: gesture.view)
+        jmRouterEvent(eventName: kEventNameWebTapGestureAction, info: point.x as MsgObjc)
     }
     
     func refash(_ model: EPUBSpineItem) {
@@ -70,5 +81,19 @@ extension JMReadPageView: WKNavigationDelegate {
     
     private func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print(error.localizedDescription)
+    }
+}
+
+extension JMReadPageView: UIGestureRecognizerDelegate {
+//    private func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        if gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
+//            return true
+//        }else {
+//            return false
+//        }
+//    }
+    
+    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

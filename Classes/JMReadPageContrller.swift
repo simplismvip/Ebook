@@ -40,6 +40,50 @@ public class JMReadPageContrller: JMBaseController {
         super.viewDidLoad()
         setupUI()
         binder()
+        addGesture()
         registerMenuEvent()
+    }
+
+}
+
+extension JMReadPageContrller {
+    func addGesture() {
+//        let swipLeft = UISwipeGestureRecognizer()
+//        swipLeft.direction = .left
+//        view.addGestureRecognizer(swipLeft)
+//        swipLeft.rx.event.bind(to: menuView.rx.leftSwipe).disposed(by: disposeBag)
+//
+//        let swipRight = UISwipeGestureRecognizer()
+//        swipRight.direction = .right
+//        view.addGestureRecognizer(swipRight)
+//        swipRight.rx.event.bind(to: menuView.rx.rightSwipe).disposed(by: disposeBag)
+        
+//        let tapGes = UITapGestureRecognizer()
+//        tapGes.delegate = self
+//        tapGes.numberOfTapsRequired = 1
+//        view.addGestureRecognizer(tapGes)
+//        tapGes.rx.event.bind(to: menuView.rx.tapGesture).disposed(by: disposeBag)
+//        menuView.showOrHide.bind(to: menuView.rx.hideOrShow).disposed(by: disposeBag)
+        
+        jmRegisterEvent(eventName: kEventNameWebTapGestureAction, block: { [weak self](x) in
+            if let x = x as? CGFloat {
+                self?.menuView.tapActionSwitchMenu(x)
+                print(x)
+            }
+        }, next: false)
+    }
+}
+
+extension JMReadPageContrller: UIGestureRecognizerDelegate {
+    private func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
+            return true
+        }else {
+            return false
+        }
+    }
+    
+    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

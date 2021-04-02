@@ -10,6 +10,8 @@ import UIKit
 let kReuseCellIdentifier = "com.folioreader.Cell.ReuseIdentifier"
 let kReadMenuEventNameNone = "com.folioreader.Cell.ReuseIdentifier"
 
+public let kEventNameWebTapGestureAction = "kEventNameWebTapGestureAction"
+
 // TODO: ----- menuView上基本消息名称
 /// 点击中部1/2切换显示隐藏状态
 public let kEventNameMenuActionTapAction = "kEventNameMenuActionTapAction"
