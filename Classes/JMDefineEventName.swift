@@ -74,3 +74,11 @@ public let kEventNameMenuPageFlipCube = "kEventNameMenuPageFlipCube"
 public let kEventNameMenuPageFlipPageCurl = "kEventNameMenuPageFlipPageCurl"
 /// 翻转
 public let kEventNameMenuPageFlipOglFlip = "kEventNameMenuPageFlipOglFlip"
+
+// MARK: ----- Msg
+/// 开始解析
+public let kMsgNameStartOpeningBook = "kMsgNameStartOpeningBook"
+/// 打开成功
+public let kMsgNameOpenBookSuccess = "kMsgNameOpenBookSuccess"
+/// 打开失败
+public let kMsgNameOpenBookFail = "kMsgNameOpenBookFail"

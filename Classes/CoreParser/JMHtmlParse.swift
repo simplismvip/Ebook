@@ -8,7 +8,7 @@
 import UIKit
 
 struct JMHtmlParse {
-    static func html(_ fullHref: String) -> String {
-        return "html"
+    static func convertingHTMLToPlainText(_ htmlStr: NSString) -> String {
+        return htmlStr.stringByConvertingHTMLToPlainText()
     }
 }

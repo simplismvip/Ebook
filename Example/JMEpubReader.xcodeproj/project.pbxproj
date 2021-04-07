@@ -13,6 +13,9 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		68FAF72F261D96ED0067BA45 /* 没有你，什么都不甜蜜.epub in Resources */ = {isa = PBXBuildFile; fileRef = 68FAF72C261D96ED0067BA45 /* 没有你，什么都不甜蜜.epub */; };
+		68FAF730261D96ED0067BA45 /* mdjyml.txt in Resources */ = {isa = PBXBuildFile; fileRef = 68FAF72D261D96ED0067BA45 /* mdjyml.txt */; };
+		68FAF731261D96ED0067BA45 /* TianXiaDaoZong.epub in Resources */ = {isa = PBXBuildFile; fileRef = 68FAF72E261D96ED0067BA45 /* TianXiaDaoZong.epub */; };
 		E837E4EED4461DC116D5D33F /* Pods_JMEpubReader_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6C7CA0C0A45AB211C62369 /* Pods_JMEpubReader_Example.framework */; };
 		FE5FB3E84CFC9430E94ED1E0 /* Pods_JMEpubReader_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E04C09BC00FF0C78A678AE7 /* Pods_JMEpubReader_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -39,6 +42,9 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		61741632C0F5D96E08BC6EB8 /* Pods-JMEpubReader_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JMEpubReader_Example.release.xcconfig"; path = "Target Support Files/Pods-JMEpubReader_Example/Pods-JMEpubReader_Example.release.xcconfig"; sourceTree = "<group>"; };
+		68FAF72C261D96ED0067BA45 /* 没有你，什么都不甜蜜.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "没有你，什么都不甜蜜.epub"; sourceTree = "<group>"; };
+		68FAF72D261D96ED0067BA45 /* mdjyml.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mdjyml.txt; sourceTree = "<group>"; };
+		68FAF72E261D96ED0067BA45 /* TianXiaDaoZong.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = TianXiaDaoZong.epub; sourceTree = "<group>"; };
 		6A6F6A9C8FCCB5ED78072270 /* Pods-JMEpubReader_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JMEpubReader_Tests.release.xcconfig"; path = "Target Support Files/Pods-JMEpubReader_Tests/Pods-JMEpubReader_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		79ED8154B48537131A64F7A8 /* Pods-JMEpubReader_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JMEpubReader_Example.debug.xcconfig"; path = "Target Support Files/Pods-JMEpubReader_Example/Pods-JMEpubReader_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7D0A8520CFE86E52BABC3AAF /* JMEpubReader.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JMEpubReader.podspec; path = ../JMEpubReader.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -101,6 +107,7 @@
 		607FACD21AFB9204008FA782 /* Example for JMEpubReader */ = {
 			isa = PBXGroup;
 			children = (
+				68FAF72B261D96ED0067BA45 /* Sources */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -144,6 +151,16 @@
 				8FF3219AF227E1090D621DD8 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		68FAF72B261D96ED0067BA45 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				68FAF72C261D96ED0067BA45 /* 没有你，什么都不甜蜜.epub */,
+				68FAF72D261D96ED0067BA45 /* mdjyml.txt */,
+				68FAF72E261D96ED0067BA45 /* TianXiaDaoZong.epub */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		EAAD09095972160A915BC4BC /* Pods */ = {
@@ -248,6 +265,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				68FAF72F261D96ED0067BA45 /* 没有你，什么都不甜蜜.epub in Resources */,
+				68FAF730261D96ED0067BA45 /* mdjyml.txt in Resources */,
+				68FAF731261D96ED0067BA45 /* TianXiaDaoZong.epub in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);

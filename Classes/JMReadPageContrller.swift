@@ -13,16 +13,26 @@ import RxSwift
 
 public class JMReadPageContrller: JMBaseController {
     let menuView = JMReadMenuContainer()
-    let vmodel = JMEpubVModel()
+    let bookModel: JMBookModel
     let disposeBag = DisposeBag()
     
-    lazy var pageViewController: UIPageViewController = {
+    private lazy var pageViewController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .horizontal, options: nil)
         pageVC.dataSource = self
         pageVC.delegate = self
         pageVC.isDoubleSided = true
         return pageVC
     }()
+    
+    /// 调用初始化
+    public init (_ bookModel: JMBookModel) {
+        self.bookModel = bookModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()

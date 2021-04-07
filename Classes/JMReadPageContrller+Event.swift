@@ -79,9 +79,9 @@ extension JMReadPageContrller {
 // TODO: -- RxSwift Method --
 extension JMReadPageContrller {
     func binder() {
-        let input = JMEpubVModel.JMInput(path: Bundle.resouseBundle!.path(forResource: "TianXiaDaoZong", ofType: "epub")!)
-        let output = vmodel.transform(input: input)
-        output.refresh.bind(to: rx.isLoading).disposed(by: disposeBag)
+//        let input = JMEpubVModel.JMInput(path: Bundle.resouseBundle!.path(forResource: "TianXiaDaoZong", ofType: "epub")!)
+//        let output = vmodel.transform(input: input)
+//        output.refresh.bind(to: rx.isLoading).disposed(by: disposeBag)
         
         rx.viewWillAppear.asObservable().subscribe { [weak self](_) in
             self?.navigationController?.setNavigationBarHidden(true, animated: false)

@@ -10,13 +10,41 @@ import UIKit
 import EPUBKit
 import JMEpubReader
 import SnapKit
+import ZJMKit
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var book1: UIImageView!
+    var bookModel: JMBookParse?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let router = JMRouter()
+        jmSetAssociatedMsgRouter(router: router)
+        
+        jmReciverMsg(msgName: kMsgNameStartOpeningBook) { (msg) -> MsgObjc? in
+            if let text = msg as? String {
+                Toast.toast(text)
+            }
+            return nil
+        }
+        
+        jmReciverMsg(msgName: kMsgNameOpenBookSuccess) { [weak self](bookModel) -> MsgObjc? in
+            if let model = bookModel as? JMBookModel {
+                Toast.toast("😀😀😀打开 \(model.title)成功")
+                let vc = JMReadPageContrller(model)
+                self?.push(vc)
+            }
+            return nil
+        }
+        
+        jmReciverMsg(msgName: kMsgNameOpenBookFail) { (msg) -> MsgObjc? in
+            if let text = msg as? String {
+                Toast.toast(text)
+            }
+            return nil
+        }
     }
 
     @IBAction func openDefault(_ sender: Any) {
@@ -33,8 +61,14 @@ class ViewController: UIViewController {
     }
     
     @IBAction func openBooks(_ sender: Any) {
-        let vc = JMReadPageContrller()
-        push(vc)
+        if let path = Bundle.main.path(forResource: "TianXiaDaoZong", ofType: "epub") {
+            bookModel = JMBookParse(path)
+            
+            if let router = self.msgRouter {
+                bookModel?.jmSetAssociatedMsgRouter(router: router)
+                bookModel?.startRead()
+            }
+        }
     }
     
     func openDefault() {
@@ -60,4 +94,8 @@ class JMEpubViewController: UIViewController {
 
 }
 
-
+struct Toast {
+    static func toast(_ text: String) {
+        JMTextToast.share.jmShowString(text: text, seconds: 2)
+    }
+}
