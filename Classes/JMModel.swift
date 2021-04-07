@@ -69,4 +69,3 @@ class JMEpubVModel: NSObject, VMProtocol {
 extension JMEpubVModel {
     
 }
-

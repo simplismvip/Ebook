@@ -12,70 +12,63 @@ import RxCocoa
 import RxSwift
 
 public class JMReadPageContrller: JMBaseController {
-    internal let menuView = JMReadMenuContainer()
-    public let bookTitle = UILabel()
-    public let page = UILabel()
-    public let activity = UIActivityIndicatorView()
+    let menuView = JMReadMenuContainer()
     let vmodel = JMEpubVModel()
     let disposeBag = DisposeBag()
     
-    lazy var colleView: JMBaseCollectionView = {
-        let collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.sectionInset = UIEdgeInsets.zero
-        collectionViewLayout.minimumLineSpacing = 0
-        collectionViewLayout.minimumInteritemSpacing = 0
-        collectionViewLayout.scrollDirection = JMReadConfig.share.scrollDirection.scrollDirection()
-        let collectionView = JMBaseCollectionView(frame: self.view.bounds, collectionViewLayout: collectionViewLayout)
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.register(JMReadPageView.self, forCellWithReuseIdentifier: kReuseCellIdentifier)
-        collectionView.isPagingEnabled = true
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.decelerationRate = UIScrollView.DecelerationRate(10)
-        collectionView.backgroundColor = UIColor.white
-        return collectionView
+    lazy var pageViewController: UIPageViewController = {
+        let pageVC = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .horizontal, options: nil)
+        pageVC.dataSource = self
+        pageVC.delegate = self
+        pageVC.isDoubleSided = true
+        return pageVC
     }()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        view.addSubview(pageViewController.view)
+        addChildViewController(pageViewController)
+        
+        view.backgroundColor = UIColor.white
+        view.addSubview(menuView)
+        menuView.snp.makeConstraints {
+            $0.edges.equalTo(view)
+        }
+        
         binder()
-        addGesture()
         registerMenuEvent()
+        
+        let tapGes = UITapGestureRecognizer()
+        tapGes.delegate = self
+        tapGes.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGes)
+        tapGes.addTarget(self, action: #selector(topgesture(_:)))
     }
-
-}
-
-extension JMReadPageContrller {
-    func addGesture() {
-//        let swipLeft = UISwipeGestureRecognizer()
-//        swipLeft.direction = .left
-//        view.addGestureRecognizer(swipLeft)
-//        swipLeft.rx.event.bind(to: menuView.rx.leftSwipe).disposed(by: disposeBag)
-//
-//        let swipRight = UISwipeGestureRecognizer()
-//        swipRight.direction = .right
-//        view.addGestureRecognizer(swipRight)
-//        swipRight.rx.event.bind(to: menuView.rx.rightSwipe).disposed(by: disposeBag)
-        
-//        let tapGes = UITapGestureRecognizer()
-//        tapGes.delegate = self
-//        tapGes.numberOfTapsRequired = 1
-//        view.addGestureRecognizer(tapGes)
-//        tapGes.rx.event.bind(to: menuView.rx.tapGesture).disposed(by: disposeBag)
-//        menuView.showOrHide.bind(to: menuView.rx.hideOrShow).disposed(by: disposeBag)
-        
-        jmRegisterEvent(eventName: kEventNameWebTapGestureAction, block: { [weak self](x) in
-            if let x = x as? CGFloat {
-                self?.menuView.tapActionSwitchMenu(x)
-                print(x)
-            }
-        }, next: false)
+    
+    @objc func topgesture(_ gesture: UITapGestureRecognizer) {
+        let point = gesture.location(in: gesture.view)
+        menuView.tapActionSwitchMenu(point.x)
     }
 }
+
+// TODO: -- PageView Delegate --
+extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        return JMReadController()
+    }
+    
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        return JMReadController()
+    }
+    
+    public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        
+    }
+}
+
 
 extension JMReadPageContrller: UIGestureRecognizerDelegate {
-    private func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
             return true
         }else {
@@ -83,7 +76,10 @@ extension JMReadPageContrller: UIGestureRecognizerDelegate {
         }
     }
     
-    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.view === view, gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
+            return true
+        }
+        return false
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 
+// TODO: -- Register Event --
 extension JMReadPageContrller {
     func registerMenuEvent() {
         jmRegisterEvent(eventName: kEventNameMenuActionTapAction, block: { (_) in
@@ -72,5 +73,22 @@ extension JMReadPageContrller {
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
             print(value as Any)
         }, next: false)
+    }
+}
+
+// TODO: -- RxSwift Method --
+extension JMReadPageContrller {
+    func binder() {
+        let input = JMEpubVModel.JMInput(path: Bundle.resouseBundle!.path(forResource: "TianXiaDaoZong", ofType: "epub")!)
+        let output = vmodel.transform(input: input)
+        output.refresh.bind(to: rx.isLoading).disposed(by: disposeBag)
+        
+        rx.viewWillAppear.asObservable().subscribe { [weak self](_) in
+            self?.navigationController?.setNavigationBarHidden(true, animated: false)
+        }.disposed(by: disposeBag)
+        
+        rx.viewWillDisappear.asObservable().subscribe { [weak self](_) in
+            self?.navigationController?.setNavigationBarHidden(false, animated: false)
+        }.disposed(by: disposeBag)
     }
 }

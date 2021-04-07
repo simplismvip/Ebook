@@ -56,5 +56,7 @@ Pod::Spec.new do |s|
   s.dependency 'RxSwift'
   s.dependency 'RxCocoa'
   s.dependency 'HandyJSON'
+  s.dependency 'BSText'
+  s.dependency 'YYText'
   
 end

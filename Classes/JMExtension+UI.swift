@@ -68,11 +68,11 @@ public extension UIView {
 
 public extension JMReadPageContrller {
     func showLoading() {
-        activity.startAnimating()
+        
     }
     
     func hideLoading() {
-        activity.stopAnimating()
+        
     }
     
     func showToast(text: String) {
