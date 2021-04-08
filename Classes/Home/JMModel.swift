@@ -18,6 +18,14 @@ public class JMEpubWapper<T> {
 }
 
 // MARK: -- 按钮显示、隐藏状态
+public enum JMDataType {
+    case Image // 图片
+    case Txt // 文本
+    case Link // 链接
+    case UnKnow // 未知累
+}
+
+// MARK: -- 按钮显示、隐藏状态
 public enum JMBookType {
     case Epub // 上下
     case Txt // 设置
@@ -77,9 +85,47 @@ public struct JMBookCharpterItem {
     public var chapterpath: String?
     public var epubImagePath: String?
     
-    var bookName: String?
-    var author: String?
-    var bookId: String?
+    public var iamItems: [JMBookImaItem]?
+    public var textItems: [JMBookTextItem]?
+    public var linkItems: [JMBookLinkItem]?
+}
+
+// MARK: -- 文本数据
+public struct JMBookTextItem {
+    /// 文本绘制区域高度
+    public var content: String
+    /// 文本绘制区域高度
+    var attributeString: NSAttributedString?
+    
+    init(_ content: String) {
+        self.content = content
+    }
+}
+
+// MARK: -- 图片数据
+public struct JMBookImaItem {
+    public var imaUrl: String
+    public var imaRect: CGRect
+    public var postion: Int
+    
+    init(imaUrl: String, imaRect: CGRect, postion: Int) {
+        self.imaUrl = imaUrl
+        self.imaRect = imaRect
+        self.postion = postion
+    }
+}
+
+// MARK: -- 链接数据
+public struct JMBookLinkItem {
+    /// String类型url链接地址
+    public var link: String
+    /// 文字在属性文字中的范围
+    public let range: NSRange
+    
+    init(link: String, range: NSRange) {
+        self.link = link
+        self.range = range
+    }
 }
 
 // MARK: -- 数据模型
@@ -87,7 +133,7 @@ final public class JMBookModel {
     public var bookId: String
     public var title: String
     public var author: String
-    public var coverImg: String?
+    public var coverImg: URL?
     public var category: String?
     public var word: String?
     public var charpter: String?    //最近更新的章节
@@ -105,10 +151,28 @@ final public class JMBookModel {
     public var currPage = 0 // 当前阅读进度
     public var currCharpter: JMBookCharpterItem? // 当前章节
     public var share: JMBookShareItem? // 分享模型
+    public var toc: [JMBookChapter] // 分享模型
     
-    init(bookId: String, title: String, author: String) {
-        self.bookId = bookId
-        self.title = title
-        self.author = author
+    init(metaData: EPUBMetadata, cover: URL?, toc: [JMBookChapter]) {
+        self.bookId = metaData.identifier ?? ""
+        self.title = metaData.title ?? ""
+        self.author = metaData.creator?.name ?? ""
+        self.toc = toc
+        self.coverImg = cover
+    }
+}
+
+// MARK: -- 目录, ncx中读取的目录
+public struct JMBookChapter {
+    public var title: String
+    public var id: String
+    public var src: String?
+    public var subTable: [JMBookChapter]?
+    
+    init(_ tableOfContents: EPUBTableOfContents) {
+        self.id = tableOfContents.id
+        self.title = tableOfContents.label
+        self.src = tableOfContents.item
+        self.subTable = tableOfContents.subTable?.compactMap({ $0 }).map({ JMBookChapter($0) })
     }
 }

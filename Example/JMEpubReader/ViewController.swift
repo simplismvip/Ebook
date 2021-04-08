@@ -61,7 +61,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func openBooks(_ sender: Any) {
-        if let path = Bundle.main.path(forResource: "TianXiaDaoZong", ofType: "epub") {
+        if let path = Bundle.main.path(forResource: "每天懂一点好玩心理学", ofType: "epub") {
             bookModel = JMBookParse(path)
             
             if let router = self.msgRouter {

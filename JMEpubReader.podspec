@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
     'Classes/*.{h,swift}',
     'Classes/Comps/*.swift',
     'Classes/Extension/*.swift',
-    'Classes/Config/*.swift',
+    'Classes/Config/*.{swift,h}',
     'Classes/Home/*.swift',
     'Classes/CoreParser/*.{swift,h,m}',
     'Classes/MenView/*.{swift}'

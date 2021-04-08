@@ -22,8 +22,10 @@ final class JMReadMenuContainer: JMBaseView {
     
     internal let topContainer = UIView() // 亮度
     internal let bottomContainer = UIView() // 亮度
-    private let margin: CGFloat = 10
     private let disposeBag = DisposeBag()
+    private let chapter = JMChapterView() // 左侧目录
+    
+    private let margin: CGFloat = 10
     
     /// 状态
     internal let showOrHide = BehaviorSubject<JMMenuStatus>(value: .HideOrShowAll(true))
@@ -41,6 +43,14 @@ final class JMReadMenuContainer: JMBaseView {
             .flatMap { $0 }
             .filter({ $0.identify == menuStyle })
             .first
+    }
+    
+    /// 显示左侧目录
+    public func showChapter(items: [JMBookChapter]) {
+        if chapter.dataSource.isEmpty {
+            chapter.dataSource = items
+        }
+        
     }
     
     public func tapActionSwitchMenu(_ x: CGFloat) {
@@ -132,81 +142,6 @@ final class JMReadMenuContainer: JMBaseView {
         }
     }
     
-    private func loadDats() {
-        let bottomItems: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
-        let top_left: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
-        let top_right: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_right")
-        
-        bottom.updateViews(bottomItems)
-        topLeft.updateViews(top_left)
-        topRight.updateViews(top_right)
-        
-        topLeft.snp.makeConstraints { (make) in
-            make.left.equalTo(topContainer).offset(10)
-            make.width.equalTo((44.0 + margin) * CGFloat(top_left.count))
-            make.height.equalTo(44)
-            make.bottom.equalTo(topContainer.snp.bottom).offset(-10)
-        }
-        
-        topRight.snp.makeConstraints { (make) in
-            make.right.equalTo(topContainer.snp.right).offset(-10)
-            make.width.equalTo((44.0 + margin) * CGFloat(top_right.count))
-            make.height.equalTo(topLeft)
-            make.bottom.equalTo(topLeft.snp.bottom)
-        }
-
-        bottom.snp.makeConstraints { (make) in
-            make.left.width.equalTo(bottomContainer)
-            make.height.equalTo(44)
-            make.top.equalTo(bottomContainer.snp.top).offset(10)
-        }
-    }
-    
-    private func setupviews()  {
-        topContainer.backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
-        addSubview(topContainer)
-        topContainer.addSubview(topLeft)
-        topContainer.addSubview(topRight)
-        
-        bottomContainer.backgroundColor = topContainer.backgroundColor
-        addSubview(bottomContainer)
-        bottomContainer.addSubview(bottom)
-        
-        addSubview(set)
-        addSubview(light)
-        addSubview(play)
-
-        topContainer.snp.makeConstraints { (make) in
-            make.left.width.equalTo(self)
-            make.height.equalTo(104)
-            make.top.equalTo(snp.top).offset(-104)
-        }
-        
-        bottomContainer.snp.makeConstraints { (make) in
-            make.left.width.equalTo(self)
-            make.height.equalTo(104)
-            make.bottom.equalTo(snp.bottom).offset(104)
-        }
-        
-        set.snp.makeConstraints { (make) in
-            make.left.width.equalTo(self)
-            make.height.equalTo(320)
-            make.bottom.equalTo(snp.bottom).offset(320)
-        }
-        
-        light.snp.makeConstraints { (make) in
-            make.left.width.equalTo(self)
-            make.height.equalTo(160)
-            make.bottom.equalTo(snp.bottom).offset(160)
-        }
-        
-        play.snp.makeConstraints { (make) in
-            make.left.width.equalTo(self)
-            make.height.equalTo(230)
-            make.bottom.equalTo(snp.bottom).offset(230)
-        }
-    }
-    
     override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         for view in subviews {
             let convertPoint = convert(point, from: self)
@@ -252,5 +187,91 @@ extension JMReadMenuContainer: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+}
+
+// MARK: -- Private Method, Setup views
+extension JMReadMenuContainer {
+    private func loadDats() {
+        let bottomItems: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
+        let top_left: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
+        let top_right: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_right")
+        
+        bottom.updateViews(bottomItems)
+        topLeft.updateViews(top_left)
+        topRight.updateViews(top_right)
+        
+        topLeft.snp.makeConstraints { (make) in
+            make.left.equalTo(topContainer).offset(10)
+            make.width.equalTo((44.0 + margin) * CGFloat(top_left.count))
+            make.height.equalTo(44)
+            make.bottom.equalTo(topContainer.snp.bottom).offset(-10)
+        }
+        
+        topRight.snp.makeConstraints { (make) in
+            make.right.equalTo(topContainer.snp.right).offset(-10)
+            make.width.equalTo((44.0 + margin) * CGFloat(top_right.count))
+            make.height.equalTo(topLeft)
+            make.bottom.equalTo(topLeft.snp.bottom)
+        }
+
+        bottom.snp.makeConstraints { (make) in
+            make.left.width.equalTo(bottomContainer)
+            make.height.equalTo(44)
+            make.top.equalTo(bottomContainer.snp.top).offset(10)
+        }
+    }
+    
+    private func setupviews()  {
+        topContainer.backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        addSubview(topContainer)
+        topContainer.addSubview(topLeft)
+        topContainer.addSubview(topRight)
+        
+        bottomContainer.backgroundColor = topContainer.backgroundColor
+        addSubview(bottomContainer)
+        bottomContainer.addSubview(bottom)
+        
+        addSubview(chapter)
+        addSubview(set)
+        addSubview(light)
+        addSubview(play)
+
+        chapter.snp.makeConstraints { (make) in
+            let width = UIScreen.main.bounds.size.width * 0.7
+            make.left.equalTo(self).offset(-width)
+            make.width.equalTo(width)
+            make.top.height.equalTo(self)
+        }
+        
+        topContainer.snp.makeConstraints { (make) in
+            make.left.width.equalTo(self)
+            make.height.equalTo(104)
+            make.top.equalTo(snp.top).offset(-104)
+        }
+        
+        bottomContainer.snp.makeConstraints { (make) in
+            make.left.width.equalTo(self)
+            make.height.equalTo(104)
+            make.bottom.equalTo(snp.bottom).offset(104)
+        }
+        
+        set.snp.makeConstraints { (make) in
+            make.left.width.equalTo(self)
+            make.height.equalTo(320)
+            make.bottom.equalTo(snp.bottom).offset(320)
+        }
+        
+        light.snp.makeConstraints { (make) in
+            make.left.width.equalTo(self)
+            make.height.equalTo(160)
+            make.bottom.equalTo(snp.bottom).offset(160)
+        }
+        
+        play.snp.makeConstraints { (make) in
+            make.left.width.equalTo(self)
+            make.height.equalTo(230)
+            make.bottom.equalTo(snp.bottom).offset(230)
+        }
     }
 }

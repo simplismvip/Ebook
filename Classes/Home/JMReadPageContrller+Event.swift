@@ -52,8 +52,10 @@ extension JMReadPageContrller {
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { [weak self](_) in
+            if let tocItems = self?.bookModel.toc {
+                self?.menuView.showChapter(items: tocItems)
+            }
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { [weak self](_) in

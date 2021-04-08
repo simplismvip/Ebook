@@ -37,13 +37,18 @@ public class JMBookParse: NSObject {
     // Epub
     private func parseEpubBook() {
         do{
+            // 读取目录
             let document = try EPUBParser().parse(documentAt: pathUrl)
-            let spineItems = document.spine.items.map { return JMEpubWapper($0) }
-            DispatchQueue.main.async {
-                let metadata = document.metadata
-                
-                let bookModel = JMBookModel(bookId: metadata.identifier!, title: document.title!, author: document.author!)
-                self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)
+            if let tocItems = document.tableOfContents.subTable {
+                let ncx = tocItems.map { JMBookChapter($0) }
+                let bookModel = JMBookModel(metaData: document.metadata, cover: document.cover, toc: ncx)
+                DispatchQueue.main.async {
+                    self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)
+                }
+            }else {
+                DispatchQueue.main.async {
+                    self.jmSendMsg(msgName: kMsgNameOpenBookFail, info: "🆘🆘🆘打开失败" as MsgObjc)
+                }
             }
         }catch {
             DispatchQueue.main.async {
@@ -54,17 +59,15 @@ public class JMBookParse: NSObject {
     
     // Txt
     private func parseTxtBook() {
-        do{
-            let document = try EPUBParser().parse(documentAt: pathUrl)
-            let spineItems = document.spine.items.map { return JMEpubWapper($0) }
-            DispatchQueue.main.async {
-                self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: "😀😀😀打开 \(document.title)成功" as MsgObjc)
-            }
-        }catch {
-            DispatchQueue.main.async {
-                self.jmSendMsg(msgName: kMsgNameOpenBookFail, info: "🆘🆘🆘打开 \(error.localizedDescription)失败" as MsgObjc)
-            }
-        }
+//        do{
+//            DispatchQueue.main.async {
+//                self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: "😀😀😀打开 \("document.title")成功" as MsgObjc)
+//            }
+//        }catch {
+//            DispatchQueue.main.async {
+//                self.jmSendMsg(msgName: kMsgNameOpenBookFail, info: "🆘🆘🆘打开 \(error.localizedDescription)失败" as MsgObjc)
+//            }
+//        }
     }
 }
 
