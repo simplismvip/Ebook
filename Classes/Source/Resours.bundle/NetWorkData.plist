@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>color</key>
+		<string>blue</string>
+		<key>content</key>
+		<string>	在学习iOS以来一直想要研究即时聊天方面的技术，无奈因工作原因此计划一直搁浅，近日偷得时闲开始着手XMPP的学习。
+</string>
+		<key>size</key>
+		<string>10</string>
+		<key>type</key>
+		<string>txt</string>
+	</dict>
+	<dict>
+		<key>content</key>
+		<string>xmpp.png</string>
+		<key>type</key>
+		<string>image</string>
+		<key>width</key>
+		<string>320</string>
+		<key>height</key>
+		<string>140</string>
+	</dict>
+	<dict>
+		<key>color</key>
+		<string>red</string>
+		<key>content</key>
+		<string>
+	在学习之前我一直认为XMPP对我来说是一个很有技术的挑战，在了解协议的具体形式后才发现技术的难度只跟你底层代码掌握的熟练程度有关。</string>
+		<key>size</key>
+		<string>20</string>
+		<key>type</key>
+		<string>txt</string>
+	</dict>
+	<dict>
+		<key>content</key>
+		<string>feichuan.png</string>
+		<key>type</key>
+		<string>image</string>
+		<key>width</key>
+		<string>100</string>
+		<key>height</key>
+		<string>50</string>
+	</dict>
+	<dict>
+		<key>color</key>
+		<string>black</string>
+		<key>content</key>
+		<string>	简单来说很多东西我们都会，知识在各个框架或技术中我们没有考虑到的东西别人都考虑周到！比如你若对socket有一定的了解并懂得xml数据解析那你就可以看懂大部分的XMPP文档!</string>
+		<key>size</key>
+		<string>16</string>
+		<key>type</key>
+		<string>txt</string>
+	</dict>
+	<dict>
+		<key>color</key>
+		<string>blue</string>
+		<key>content</key>
+		<string>http://www.cnblogs.com/purple-sweet-pottoes/p/5090374.html</string>
+		<key>size</key>
+		<string>17</string>
+		<key>type</key>
+		<string>link</string>
+	</dict>
+	<dict>
+		<key>color</key>
+		<string>default</string>
+		<key>content</key>
+		<string>所以只要掌握了相对来说底层的一些技术，那么对于学习与此技术相关的东西都会变得轻松起来！
+</string>
+		<key>type</key>
+		<string>txt</string>
+	</dict>
+</array>
+</plist>

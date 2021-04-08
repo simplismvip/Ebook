@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        "htmlStr".decodingHTMLEntities()
         let router = JMRouter()
         jmSetAssociatedMsgRouter(router: router)
         

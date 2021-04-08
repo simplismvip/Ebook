@@ -29,18 +29,20 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
-  
+  s.public_header_files = 'Pod/Classes/Config/*.h'
   s.source_files = [
     'Classes/*.{h,swift}',
-#    'Classes/**/*.swift',
-    'Classes/CoreParser/*.{swift}',
-    'Classes/Menus/*.{swift}',
+    'Classes/Comps/*.swift',
+    'Classes/Extension/*.swift',
+    'Classes/Config/*.swift',
+    'Classes/Home/*.swift',
+    'Classes/CoreParser/*.{swift,h,m}',
+    'Classes/MenView/*.{swift}'
   ]
   
   s.resources = [
-    'Classes/**/*.{bundle,js,css,html}',
-    'Classes/Resources/**/*.{bundle,js,css,html}',
-    'Classes/Resources/Fonts/**/*.{otf,ttf}'
+    'Classes/Source/*.{bundle,html,md}',
+    'Classes/Source/Fonts/**/*.{otf,ttf}'
   ]
   
   # s.resource_bundles = {

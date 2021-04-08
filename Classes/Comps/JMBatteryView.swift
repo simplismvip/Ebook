@@ -9,7 +9,6 @@ import UIKit
 import ZJMKit
 
 class JMBatteryView: JMBaseView {
-    
     private var b_width: CGFloat = 10
     private var b_height: CGFloat = 10
     private var b_lineW: CGFloat = 10
@@ -31,9 +30,9 @@ class JMBatteryView: JMBaseView {
         super.init(frame: frame)
         addSubview(batteryView)
         
-        ///x坐标
+        // x坐标
         let b_x: CGFloat = 1
-        ///y坐标
+        // y坐标
         let b_y: CGFloat = 1
         
         b_height = bounds.size.height - 2;
@@ -47,7 +46,7 @@ class JMBatteryView: JMBaseView {
         batteryLayer.path = pathLeft.cgPath
         layer.addSublayer(batteryLayer)
         
-        //画电池【右边电池箭头】
+        // 画电池【右边电池箭头】
         let pathRight = UIBezierPath()
         pathRight.move(to: CGPoint(x: b_x + b_width+1, y: b_y + b_height/3))
         pathRight.addLine(to: CGPoint(x: b_x + b_width+1, y: b_y + b_height * 2/3))
@@ -57,7 +56,7 @@ class JMBatteryView: JMBaseView {
         layerRight.path = pathRight.cgPath
         layer.addSublayer(layerRight)
         
-        ///电池内填充
+        // 电池内填充
         batteryView.frame = CGRect.Rect(b_x + 1.5,b_y + b_lineW+0.5, 0, b_height - (b_lineW+0.5) * 2);
         batteryView.layer.cornerRadius = 1;
     }

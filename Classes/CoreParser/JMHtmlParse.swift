@@ -9,6 +9,6 @@ import UIKit
 
 struct JMHtmlParse {
     static func convertingHTMLToPlainText(_ htmlStr: NSString) -> String {
-        return htmlStr.stringByConvertingHTMLToPlainText()
+        return htmlStr.decodingHTMLEntities()
     }
 }
