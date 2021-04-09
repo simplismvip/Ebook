@@ -16,11 +16,9 @@ final public class JMReadController: JMBaseController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         view.addSubview(pageView)
         pageView.snp.makeConstraints { make in
-            make.left.equalTo(view).offset(20)
-            make.right.equalTo(view).offset(-20)
+            make.left.width.equalTo(view)
             if #available(iOS 11.0, *) {
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)

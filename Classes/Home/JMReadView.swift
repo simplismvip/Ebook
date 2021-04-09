@@ -10,9 +10,13 @@ import ZJMKit
 
 class JMReadView: JMBaseView {
 
+    var content: NSAttributedString?
     let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
     var pageItem: JMCoreTextData? {
         willSet {
+            content = newValue?.attributeString
+        }
+        didSet {
             setNeedsDisplay()
         }
     }
@@ -20,12 +24,13 @@ class JMReadView: JMBaseView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         magnifier.pageView = self
+        magnifier.isHidden = true
         addSubview(magnifier)
     }
     
     public override func draw(_ rect: CGRect) {
-        if let ctx = UIGraphicsGetCurrentContext() {
-            let frameSetter = CTFramesetterCreateWithAttributedString(pageItem!.attributeString!)
+        if let arrtiStr = content, let ctx = UIGraphicsGetCurrentContext() {
+            let frameSetter = CTFramesetterCreateWithAttributedString(arrtiStr)
             ctx.textMatrix = .identity
             ctx.translateBy(x: 0, y: bounds.size.height);
             ctx.scaleBy(x: 1.0, y: -1.0);
@@ -33,6 +38,11 @@ class JMReadView: JMBaseView {
             let frameRef = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), pathRef, nil);
             CTFrameDraw(frameRef, ctx);
         }
+    }
+    
+    func reDrewText(content: NSAttributedString?) {
+        self.content = content
+        setNeedsDisplay()
     }
     
     required init?(coder: NSCoder) {

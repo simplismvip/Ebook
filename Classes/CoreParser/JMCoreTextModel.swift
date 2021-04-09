@@ -121,13 +121,19 @@ public class JMCoreTextImageData {
 }
 
 // TODO: -- CTFrame配置信息类
-public struct JMCTFrameParserConfig {
+public class JMCTFrameParserConfig {
     /// 文本宽度
     var width: CGFloat = 200.0
     /// 字体大小
     var fontSize: CGFloat = 16.0
+    /// 字体名称
+    var fontName = ""
+    /// 是否系统字体
+    var sysFont = true
     /// 字体行间距
     var lineSpace: CGFloat = 8.0
     /// 字体颜色
-    var textColor: UIColor = UIColor.black
+    var textColor = UIColor.darkGray
+    /// 选中字体颜色
+    var selectColor = UIColor.darkGray
 }

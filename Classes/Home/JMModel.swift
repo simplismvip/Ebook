@@ -17,51 +17,41 @@ public class JMEpubWapper<T> {
     }
 }
 
-// MARK: -- 按钮显示、隐藏状态
-public enum JMDataType {
-    case Image // 图片
-    case Txt // 文本
-    case Link // 链接
-    case UnKnow // 未知累
-}
-
-// MARK: -- 按钮显示、隐藏状态
-public enum JMBookType {
-    case Epub // 上下
-    case Txt // 设置
-    case Pdf // 亮度
-    case Mobi // 播放
-    case NoneType // 播放
+// 第几章，第几小章
+public struct JMBookIndexPath {
+    var section = 0 // 第几章
+    var row = 0 // 第几小章
     
-    /// 返回图书的类型
-    static func bookSuffix(_ type: JMBookType) -> String {
-        switch type {
-        case .Epub:
-            return "epub"
-        case .Txt:
-            return "txt"
-        case .Pdf:
-            return "pad"
-        case .Mobi:
-            return "mobi"
-        case .NoneType:
-            return "none"
-        }
+    mutating func sectionAdd() {
+        section += 1
     }
     
-    /// 返回图书的类型
-    static func bookType(_ suffix: String) -> JMBookType {
-        if suffix == "epub" {
-            return .Epub
-        }else if suffix == "txt" {
-            return .Txt
-        }else if suffix == "pdf" {
-            return .Pdf
-        }else if suffix == "mobi" {
-            return .Mobi
-        }else {
-            return NoneType
-        }
+    mutating func rowAdd() {
+        row += 1
+    }
+    
+    mutating func sectionJian() {
+        section -= 1
+    }
+    
+    mutating func rowJian() {
+        row -= 1
+    }
+    
+    mutating func rowZero() {
+        row = 0
+    }
+    
+    mutating func secZero() {
+        section = 0
+    }
+    
+    mutating func rowSet(_ n: Int) {
+        row = n
+    }
+    
+    mutating func sectionSet(_ n: Int) {
+        section = n
     }
 }
 
@@ -73,58 +63,79 @@ public struct JMBookShareItem {
     public var desc: String?
 }
 
-// MARK: -- 章节模型
-public struct JMBookCharpterItem {
-    public var primaryId: String?
-    public var name: String?
-    public var content: String?
-    public var charpterId: String?
-    public var pageCount: Int?
-    
-    public var html: String?
-    public var chapterpath: String?
-    public var epubImagePath: String?
-    
-    public var iamItems: [JMBookImaItem]?
-    public var textItems: [JMBookTextItem]?
-    public var linkItems: [JMBookLinkItem]?
-}
-
 // MARK: -- 文本数据
-public struct JMBookTextItem {
+public struct JMBookContentItem {
     /// 文本绘制区域高度
-    public var content: String
-    /// 文本绘制区域高度
-    var attributeString: NSAttributedString?
+    public var attribute: NSAttributedString?
     
-    init(_ content: String) {
-        self.content = content
+    /// String类型url链接地址
+    public var link: String?
+    /// 文字在属性文字中的范围
+    public var range: NSRange?
+    
+    /// 图片地址
+    public var imaUrl: String?
+    /// 图片大小
+    public var imaRect: CGRect?
+    /// 图片位置
+    public var postion: Int?
+    
+    public var pageType: JMDataType = .UnKnow
+    
+    /// 文本类型
+    init(_ attribute: NSAttributedString) {
+        self.attribute = attribute
+        self.pageType = .Txt
     }
-}
-
-// MARK: -- 图片数据
-public struct JMBookImaItem {
-    public var imaUrl: String
-    public var imaRect: CGRect
-    public var postion: Int
     
-    init(imaUrl: String, imaRect: CGRect, postion: Int) {
+    /// 图片类型
+    init(_ imaUrl: String, _ imaRect: CGRect, _ postion: Int) {
         self.imaUrl = imaUrl
         self.imaRect = imaRect
         self.postion = postion
+        self.pageType = .Image
+    }
+    
+    /// 链接类型
+    init(_ link: String, _ range: NSRange) {
+        self.link = link
+        self.range = range
+        self.pageType = .Link
     }
 }
 
-// MARK: -- 链接数据
-public struct JMBookLinkItem {
-    /// String类型url链接地址
-    public var link: String
-    /// 文字在属性文字中的范围
-    public let range: NSRange
+// MARK: -- 章节模型
+public struct JMBookCharpterItem {
+    public var primaryId: String?
+    public var idref: String
+    public var linear: Bool
+    public let fullHref: URL
+
+    public var pageCount = 0
+    public var pages: [Int] = [0]
+    public var mediaType: JMReadMediaType = .xHTML
+    // 分解后的章节，每一个元素表示1页
+    public var contentItems: [JMBookContentItem]?
+    /// 文本绘制区域高度
+    public var attribute: NSMutableAttributedString
     
-    init(link: String, range: NSRange) {
-        self.link = link
-        self.range = range
+    init(spine: EPUBSpineItem, fullHref: URL) {
+        self.idref = spine.idref
+        self.primaryId = spine.id
+        self.linear = spine.linear
+        self.fullHref = fullHref
+        
+        if let html = try? String(contentsOf: fullHref, encoding: .utf8),
+           let content = html.convertingHTMLToPlainText() {
+            print(content)
+            let attrDic = JMCTFrameParser.attributes(JMCTFrameParserConfig())
+            self.attribute = NSMutableAttributedString(string: content,attributes: attrDic)
+            let height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight
+            self.pages = JMCTFrameParser.pageWithContent(content: attribute, bounds: CGRect.Rect(0, 0, UIScreen.main.bounds.width, height))
+        }else {
+            self.attribute = NSMutableAttributedString(string: "🆘🆘🆘解析失败！")
+            print("🆘🆘🆘解析失败！")
+        }
     }
 }
 
@@ -141,24 +152,78 @@ final public class JMBookModel {
 
     public var updateTime: TimeInterval? // 更新时间
     public var readTime: TimeInterval? //阅读的最后时间
-    
-    public var end = false // 是否完结
+    public var indexPath = JMBookIndexPath(section: 0, row: 0)
+    public var end = true // 是否完结
     public var updateEnd = false // 是否更新
     public var updateCharpterId = "" // 更新章节ID
     public var onBookshelf = false // 是否在书架上
     public var isDownload = false // 是否已下载
     public var total = 0 // 总章节数
     public var currPage = 0 // 当前阅读进度
-    public var currCharpter: JMBookCharpterItem? // 当前章节
     public var share: JMBookShareItem? // 分享模型
-    public var toc: [JMBookChapter] // 分享模型
     
-    init(metaData: EPUBMetadata, cover: URL?, toc: [JMBookChapter]) {
-        self.bookId = metaData.identifier ?? ""
-        self.title = metaData.title ?? ""
-        self.author = metaData.creator?.name ?? ""
-        self.toc = toc
-        self.coverImg = cover
+//    public var currCharpter: JMBookCharpterItem // 当前章节
+    public var spineChapters: [JMBookCharpterItem] // 所有当前章节
+    public let chapters: [JMBookChapter] // 左侧章节目录
+    public let directory: URL
+    public let contentDirectory: URL
+    
+    init(document: EPUBDocument, chapters: [JMBookChapter]) {
+        self.bookId = document.metadata.identifier ?? ""
+        self.title = document.title ?? ""
+        self.author = document.author ?? ""
+        self.chapters = chapters
+        self.coverImg = document.cover
+        self.directory = document.directory
+        self.contentDirectory = document.contentDirectory
+        self.desc = document.metadata.description
+        self.spineChapters = document.spine.items.map({
+            if let href = document.manifest.items[$0.idref]?.path {
+                let fullHref = document.contentDirectory.appendingPathComponent(href)
+                return JMBookCharpterItem(spine: $0, fullHref: fullHref)
+            }else {
+                return nil
+            }
+        }).compactMap({ $0 })
+    }
+    
+    subscript(indexPath: JMBookIndexPath) -> NSAttributedString? {
+        get {
+            if indexPath.section < spineChapters.count && indexPath.row < spineChapters[indexPath.section].pages.count {
+                let content = spineChapters[indexPath.section].attribute
+                let pages = spineChapters[indexPath.section].pages
+                return JMCTFrameParser.currentPage(content: content, currPage: indexPath.row, pages: pages)
+            }
+            return nil
+        }
+    }
+    
+    /// 下一页
+    func nextPage() -> NSAttributedString? {
+        // 小章节还有，获取小章节
+        if indexPath.row < spineChapters[indexPath.section].pages.count {
+            indexPath.rowAdd()
+            return self[indexPath]
+        }else if indexPath.section < spineChapters.count {
+            indexPath.sectionAdd()
+            indexPath.rowZero()
+            return self[indexPath]
+        }
+        return nil
+    }
+    
+    /// 上一页
+    func prevPage() -> NSAttributedString? {
+        // 小章节还有，获取小章节
+        if indexPath.row > 0 {
+            indexPath.rowJian()
+            return self[indexPath]
+        }else if indexPath.section > 0 {
+            indexPath.sectionJian()
+            indexPath.rowSet(spineChapters[indexPath.section].pages.count-1)
+            return self[indexPath]
+        }
+        return nil
     }
 }
 
@@ -166,13 +231,12 @@ final public class JMBookModel {
 public struct JMBookChapter {
     public var title: String
     public var id: String
-    public var src: String?
+    public let src: String
     public var subTable: [JMBookChapter]?
-    
     init(_ tableOfContents: EPUBTableOfContents) {
         self.id = tableOfContents.id
         self.title = tableOfContents.label
-        self.src = tableOfContents.item
+        self.src = tableOfContents.item!
         self.subTable = tableOfContents.subTable?.compactMap({ $0 }).map({ JMBookChapter($0) })
     }
 }

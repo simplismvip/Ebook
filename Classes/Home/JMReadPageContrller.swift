@@ -31,7 +31,7 @@ public class JMReadPageContrller: JMBaseController {
     var currType = JMMenuViewType.ViewType_NONE
     
     private lazy var pageViewController: UIPageViewController = {
-        let pageVC = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .horizontal, options: nil)
+        let pageVC = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .vertical, options: nil)
         pageVC.dataSource = self
         pageVC.delegate = self
         pageVC.isDoubleSided = true
@@ -74,22 +74,36 @@ public class JMReadPageContrller: JMBaseController {
         tapGes.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGes)
         tapGes.addTarget(self, action: #selector(topgesture(_:)))
+        pageViewController.setViewControllers([getCurrentReadView()], direction: .forward, animated: true, completion: nil)
     }
     
     @objc func topgesture(_ gesture: UITapGestureRecognizer) {
         let point = gesture.location(in: gesture.view)
         tapActionSwitchMenu(point.x)
     }
+    
+    func getCurrentReadView() -> JMReadController {
+        let page = JMReadController()
+        let pagrAttr = bookModel[bookModel.indexPath]
+        page.pageView.reDrewText(content: pagrAttr)
+        return page
+    }
 }
 
 // TODO: -- PageView Delegate --
 extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return JMReadController()
+        let page = JMReadController()
+        let pagrAttr = bookModel.nextPage()
+        page.pageView.reDrewText(content: pagrAttr)
+        return page
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return JMReadController()
+        let page = JMReadController()
+        let pagrAttr = bookModel.prevPage()
+        page.pageView.reDrewText(content: pagrAttr)
+        return page
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
@@ -99,16 +113,8 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
 
 
 extension JMReadPageContrller: UIGestureRecognizerDelegate {
-    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
-            return true
-        }else {
-            return false
-        }
-    }
-    
     private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.view === view, gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
+        if gestureRecognizer.view === view {
             return true
         }
         return false

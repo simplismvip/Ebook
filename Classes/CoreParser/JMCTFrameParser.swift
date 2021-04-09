@@ -6,9 +6,9 @@
 //
 
 import UIKit
+import BSText
 
 public struct JMCTFrameParser {
-    
     static public func parseAttributed(linkDic: Dictionary<String, String>, config: JMCTFrameParserConfig) ->NSAttributedString? {
         if let attri = parseAttributed(dic: linkDic, config: config) {
             let mutabAttr = NSMutableAttributedString(attributedString: attri)
@@ -98,11 +98,11 @@ public struct JMCTFrameParser {
      */
     static public func attributes(_ config: JMCTFrameParserConfig) -> [NSAttributedString.Key: Any] {
         let fontSize = config.fontSize
-        let ctfont = CTFontCreateWithName("ArialMT" as CFString, fontSize, nil)
+        let ctfont = CTFontCreateWithName(config.fontName as CFString, fontSize, nil)
 
         // 设置行间距
         let lineSpace = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
-        lineSpace.pointee = 5.0
+        lineSpace.pointee = config.lineSpace
         let sizeOf = MemoryLayout<CGFloat>.size
         let settings = [CTParagraphStyleSetting(spec: .lineSpacingAdjustment, valueSize: sizeOf, value: lineSpace),
                         CTParagraphStyleSetting(spec: .maximumLineSpacing, valueSize: sizeOf, value: lineSpace),
@@ -124,5 +124,37 @@ public struct JMCTFrameParser {
         } else {
             return UIColor.black
         }
+    }
+    
+    /// 文本内容分页
+    static public func pageWithContent(content: NSMutableAttributedString, bounds: CGRect) -> [Int]{
+        var pageArray = [Int]()
+        
+        let cfPath = CGPath(rect: bounds, transform: nil);
+        let ctFrameSetter = CTFramesetterCreateWithAttributedString(content as CFAttributedString)
+        
+        // 当前偏移
+        var curOffset = 0
+        var ctRange = CFRangeMake(0, 0)
+        repeat {
+            let ctFrame = CTFramesetterCreateFrame(ctFrameSetter, CFRangeMake(curOffset, 0), cfPath, nil)
+            ctRange = CTFrameGetVisibleStringRange(ctFrame)
+            curOffset += ctRange.length
+            pageArray.append(curOffset)
+        }while( ctRange.location + ctRange.length < content.length )
+        
+        return pageArray
+    }
+    
+    /// 获取当页文本内容
+    static public func currentPage(content: NSAttributedString, currPage: Int, pages: [Int]) ->NSAttributedString {
+        let loction = pages[currPage]
+        var length = 0
+        if currPage < pages.count - 1 {
+            length = pages[currPage + 1] - loction
+        }else {
+            length = content.length - loction
+        }
+        return content.attributedSubstring(from: NSMakeRange(loction, length))
     }
 }

@@ -48,16 +48,15 @@ class ViewController: UIViewController {
     }
 
     @IBAction func openDefault(_ sender: Any) {
-//        push(JMReadPageContrller())
-        view.transition(.kCATransitionOglFlip)
+
     }
     
     @IBAction func test1(_ sender: Any) {
-        view.transition(.kCATransitionCube)
+        
     }
     
     @IBAction func test2(_ sender: Any) {
-        view.transition(.kCATransitionPageCurl)
+        
     }
     
     @IBAction func openBooks(_ sender: Any) {

@@ -27,6 +27,55 @@ public enum JMTransitionType: String {
     }
 }
 
+// MARK: -- 章节分解图书后每一页内容类型
+public enum JMDataType {
+    case Image // 图片
+    case Txt // 文本
+    case Link // 链接
+    case UnKnow // 未知累
+}
+
+// MARK: -- 按钮显示、隐藏状态
+public enum JMBookType {
+    case Epub // 上下
+    case Txt // 设置
+    case Pdf // 亮度
+    case Mobi // 播放
+    case NoneType // 播放
+    
+    /// 返回图书的类型
+    static func bookSuffix(_ type: JMBookType) -> String {
+        switch type {
+        case .Epub:
+            return "epub"
+        case .Txt:
+            return "txt"
+        case .Pdf:
+            return "pad"
+        case .Mobi:
+            return "mobi"
+        case .NoneType:
+            return "none"
+        }
+    }
+    
+    /// 返回图书的类型
+    static func bookType(_ suffix: String) -> JMBookType {
+        if suffix == "epub" {
+            return .Epub
+        }else if suffix == "txt" {
+            return .Txt
+        }else if suffix == "pdf" {
+            return .Pdf
+        }else if suffix == "mobi" {
+            return .Mobi
+        }else {
+            return NoneType
+        }
+    }
+}
+
+
 /// 按钮显示、隐藏状态
 public enum JMMenuStatus {
     case HideOrShowAll(_ isHide: Bool) // 上下
@@ -108,3 +157,22 @@ public enum JMMenuStyle: String, HandyJSONEnum {
     case nonetype = "nonetype"// 播放或暂停
 }
 
+// MARK: -- epub资源类型
+public enum JMReadMediaType: String {
+    case gif = "image/gif"
+    case jpeg = "image/jpeg"
+    case png = "image/png"
+    case svg = "image/svg+xml"
+    case xHTML = "application/xhtml+xml"
+    case rfc4329 = "application/javascript"
+    case opf2 = "application/x-dtbncx+xml"
+    case openType = "application/font-sfnt"
+    case woff = "application/font-woff"
+    case mediaOverlays = "application/smil+xml"
+    case pls = "application/pls+xml"
+    case mp3 = "audio/mpeg"
+    case mp4 = "audio/mp4"
+    case css = "text/css"
+    case woff2 = "font/woff2"
+    case unknown
+}
