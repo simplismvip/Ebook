@@ -23,11 +23,13 @@ final class JMReadMenuContainer: JMBaseView {
     internal let topContainer = UIView() // 亮度
     internal let bottomContainer = UIView() // 亮度
     private let disposeBag = DisposeBag()
-    private let chapter = JMChapterView() // 左侧目录
+    let chapter = JMChapterView() // 左侧目录
     
     private let margin: CGFloat = 10
-    
+    private let s_width = UIScreen.main.bounds.size.width
     /// 状态
+    var currType = JMMenuViewType.ViewType_NONE
+    
     internal let showOrHide = BehaviorSubject<JMMenuStatus>(value: .HideOrShowAll(true))
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,97 +51,118 @@ final class JMReadMenuContainer: JMBaseView {
     public func showChapter(items: [JMBookChapter]) {
         if chapter.dataSource.isEmpty {
             chapter.dataSource = items
+            showWithType(type: .ViewType_CHAPTER)
         }
-        
     }
     
-    public func tapActionSwitchMenu(_ x: CGFloat) {
-        if let value = try? showOrHide.value() {
-            let width = UIScreen.main.bounds.size.width
-            if x < width/4 {
-                switch value {
-                case .HideOrShowAll(let isHide):
-                    if isHide {
-                        print("点击左侧1/4翻页")
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowSet(let isHide):
-                    if isHide {
-                        
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowLight(let isHide):
-                    if isHide {
-                        
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowPlay(let isHide):
-                    if isHide {
-                        
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                }
-                
-            }else if x > width/4 && x < width/4*3 {
-                switch value {
-                case .HideOrShowAll(let isHide):
-                    showOrHide.onNext(JMMenuStatus.HideOrShowAll(!isHide))
-                case .ShowSet(let isHide):
-                    if !isHide {
-                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowLight(let isHide):
-                    if !isHide {
-                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowPlay(let isHide):
-                    if !isHide {
-                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                }
+    func tapActionSwitchMenu(_ x: CGFloat) {
+        if x < s_width/4 {
+            if currType == .ViewType_NONE {
+                print("点击左侧1/4翻页")
             }else {
-                switch value {
-                case .HideOrShowAll(let isHide):
-                    if isHide {
-                        print("点击右侧1/4翻页")
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowSet(let isHide):
-                    if isHide {
-                        
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
-                        // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowLight(let isHide):
-                    if isHide {
-                        
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                case .ShowPlay(let isHide):
-                    if isHide {
-                        
-                    }else {
-                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
-                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-                    }
-                }
+                hideWithType()
+            }
+        }else if x > s_width/4 && x < s_width/4*3 {
+            if currType == .ViewType_NONE {
+                showWithType(type: .ViewType_TOP_BOTTOM)
+            }else {
+                hideWithType()
+            }
+        }else {
+            if currType == .ViewType_NONE {
+                print("点击右侧1/4翻页")
+            }else {
+                hideWithType()
             }
         }
+        
+        
+//        if let value = try? showOrHide.value() {
+//            let width = UIScreen.main.bounds.size.width
+//            if x < width/4 {
+//                switch value {
+//                case .HideOrShowAll(let isHide):
+//                    if isHide {
+//                        print("点击左侧1/4翻页")
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowSet(let isHide):
+//                    if isHide {
+//
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowLight(let isHide):
+//                    if isHide {
+//
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowPlay(let isHide):
+//                    if isHide {
+//
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                }
+//
+//            }else if x > width/4 && x < width/4*3 {
+//                switch value {
+//                case .HideOrShowAll(let isHide):
+//                    showOrHide.onNext(JMMenuStatus.HideOrShowAll(!isHide))
+//                case .ShowSet(let isHide):
+//                    if !isHide {
+//                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowLight(let isHide):
+//                    if !isHide {
+//                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowPlay(let isHide):
+//                    if !isHide {
+//                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                }
+//            }else {
+//                switch value {
+//                case .HideOrShowAll(let isHide):
+//                    if isHide {
+//                        print("点击右侧1/4翻页")
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowSet(let isHide):
+//                    if isHide {
+//
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
+//                        // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowLight(let isHide):
+//                    if isHide {
+//
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                case .ShowPlay(let isHide):
+//                    if isHide {
+//
+//                    }else {
+//                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
+//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//                    }
+//                }
+//            }
+//        }
     }
     
     override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -154,39 +177,6 @@ final class JMReadMenuContainer: JMBaseView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension JMReadMenuContainer: UIGestureRecognizerDelegate {
-    private func addGesture() {
-        let swipLeft = UISwipeGestureRecognizer()
-        swipLeft.direction = .left
-        addGestureRecognizer(swipLeft)
-        swipLeft.rx.event.bind(to: rx.leftSwipe).disposed(by: disposeBag)
-
-        let swipRight = UISwipeGestureRecognizer()
-        swipRight.direction = .right
-        addGestureRecognizer(swipRight)
-        swipRight.rx.event.bind(to: rx.rightSwipe).disposed(by: disposeBag)
-        
-        let tapGes = UITapGestureRecognizer()
-        tapGes.delegate = self
-        tapGes.numberOfTapsRequired = 1
-        addGestureRecognizer(tapGes)
-//        tapGes.rx.event.bind(to: rx.tapGesture).disposed(by: disposeBag)
-        showOrHide.bind(to: rx.hideOrShow).disposed(by: disposeBag)
-    }
-    
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.isKind(of: UITapGestureRecognizer.self) {
-            return true
-        }else {
-            return false
-        }
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }
 
@@ -238,9 +228,8 @@ extension JMReadMenuContainer {
         addSubview(play)
 
         chapter.snp.makeConstraints { (make) in
-            let width = UIScreen.main.bounds.size.width * 0.7
-            make.left.equalTo(self).offset(-width)
-            make.width.equalTo(width)
+            make.left.equalTo(self).offset(-s_width*0.7)
+            make.width.equalTo(s_width*0.7)
             make.top.height.equalTo(self)
         }
         

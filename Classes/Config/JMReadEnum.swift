@@ -35,6 +35,16 @@ public enum JMMenuStatus {
     case ShowPlay(_ isHide: Bool) // 播放
 }
 
+/// 按钮显示、隐藏状态
+public enum JMMenuViewType {
+    case ViewType_TOP_BOTTOM // 隐藏所有
+    case ViewType_LIGHT // 显示亮度
+    case ViewType_PLAY // 显示播放
+    case ViewType_SET // 显示设置
+    case ViewType_CHAPTER // 显示目录
+    case ViewType_NONE // 没有显示任何项目
+}
+
 /// 按钮类型
 public enum JMMenuType: String, HandyJSONEnum {
     case BkgColor = "color" // 背景色

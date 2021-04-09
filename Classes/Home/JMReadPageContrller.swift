@@ -8,13 +8,27 @@
 import UIKit
 import ZJMKit
 import SnapKit
-import RxCocoa
-import RxSwift
 
 public class JMReadPageContrller: JMBaseController {
-    let menuView = JMReadMenuContainer()
     let bookModel: JMBookModel
-    let disposeBag = DisposeBag()
+    
+    let topLeft = JMReadItemView()
+    let topRight = JMReadItemView()
+    let bottom = JMReadItemView()
+    
+    let set = JMMenuSetView() // 设置
+    let light = JMMenuLightView() // 亮度
+    let play = JMMeunPlayVIew() // 播放
+    
+    let topContainer = UIView() // 亮度
+    let bottomContainer = UIView() // 亮度
+    let chapter = JMChapterView() // 左侧目录
+    
+    let margin: CGFloat = 10
+    let s_width = UIScreen.main.bounds.size.width
+    
+    /// 状态
+    var currType = JMMenuViewType.ViewType_NONE
     
     private lazy var pageViewController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .horizontal, options: nil)
@@ -34,18 +48,25 @@ public class JMReadPageContrller: JMBaseController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(pageViewController.view)
         addChildViewController(pageViewController)
         
         view.backgroundColor = UIColor.white
-        view.addSubview(menuView)
-        menuView.snp.makeConstraints {
-            $0.edges.equalTo(view)
-        }
         
-        binder()
+        setupviews()
+        loadDats()
         registerMenuEvent()
         
         let tapGes = UITapGestureRecognizer()
@@ -57,7 +78,7 @@ public class JMReadPageContrller: JMBaseController {
     
     @objc func topgesture(_ gesture: UITapGestureRecognizer) {
         let point = gesture.location(in: gesture.view)
-        menuView.tapActionSwitchMenu(point.x)
+        tapActionSwitchMenu(point.x)
     }
 }
 

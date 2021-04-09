@@ -38,12 +38,6 @@ extension JMReadPageContrller {
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionListenBook, block: { [weak self](_) in
-            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowPlay(false))
-        }, next: false)
-        
-        
         jmRegisterEvent(eventName: kEventNameMenuActionShareWifi, block: { (_) in
             
         }, next: false)
@@ -54,7 +48,7 @@ extension JMReadPageContrller {
         
         jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { [weak self](_) in
             if let tocItems = self?.bookModel.toc {
-                self?.menuView.showChapter(items: tocItems)
+                self?.showChapter(items: tocItems)
             }
         }, next: false)
         
@@ -62,35 +56,28 @@ extension JMReadPageContrller {
             
         }, next: false)
         
+        jmRegisterEvent(eventName: kEventNameMenuActionListenBook, block: { [weak self](_) in
+//            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowPlay(false))
+        }, next: false)
+        
         jmRegisterEvent(eventName: kEventNameMenuActionBrightness, block: { [weak self](_) in
-            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowLight(false))
+//            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowLight(false))
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionSettingMore, block: { [weak self](_) in
-            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowSet(false))
+//            self?.menuView.showWithType(type: .ViewType_SET)
+//            self?.menuView.showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
+//            self?.menuView.showOrHide.onNext(JMMenuStatus.ShowSet(false))
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
             print(value as Any)
         }, next: false)
-    }
-}
-
-// TODO: -- RxSwift Method --
-extension JMReadPageContrller {
-    func binder() {
-//        let input = JMEpubVModel.JMInput(path: Bundle.resouseBundle!.path(forResource: "TianXiaDaoZong", ofType: "epub")!)
-//        let output = vmodel.transform(input: input)
-//        output.refresh.bind(to: rx.isLoading).disposed(by: disposeBag)
         
-        rx.viewWillAppear.asObservable().subscribe { [weak self](_) in
-            self?.navigationController?.setNavigationBarHidden(true, animated: false)
-        }.disposed(by: disposeBag)
-        
-        rx.viewWillDisappear.asObservable().subscribe { [weak self](_) in
-            self?.navigationController?.setNavigationBarHidden(false, animated: false)
-        }.disposed(by: disposeBag)
+        jmRegisterEvent(eventName: kEventNameDidSelectChapter, block: { [weak self](value) in
+            print(value as Any)
+        }, next: false)
     }
 }

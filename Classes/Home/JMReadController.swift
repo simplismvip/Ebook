@@ -29,11 +29,7 @@ final public class JMReadController: JMBaseController {
                 make.bottom.equalTo(view.snp.bottom)
             }
         }
-        
-        
     }
-    
-    
 }
 
 

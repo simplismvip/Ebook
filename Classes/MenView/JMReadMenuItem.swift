@@ -9,10 +9,9 @@ import UIKit
 import RxSwift
 import HandyJSON
 
-class JMReadMenuItem: HandyJSON {
+public class JMReadMenuItem: HandyJSON {
     var title: String?
     var image: String?
-    
     
     var border = false // 选中是否显示border
     var event = kReadMenuEventNameNone
@@ -27,5 +26,5 @@ class JMReadMenuItem: HandyJSON {
     var titleColor: UIColor?
     var identify: JMMenuStyle = .nonetype 
     var isSelect = BehaviorSubject<Bool>(value: false)
-    required init () { }
+    required public init () { }
 }

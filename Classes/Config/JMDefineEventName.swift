@@ -74,6 +74,8 @@ public let kEventNameMenuPageFlipCube = "kEventNameMenuPageFlipCube"
 public let kEventNameMenuPageFlipPageCurl = "kEventNameMenuPageFlipPageCurl"
 /// 翻转
 public let kEventNameMenuPageFlipOglFlip = "kEventNameMenuPageFlipOglFlip"
+/// 点击目录
+public let kEventNameDidSelectChapter = "kEventNameDidSelectChapter"
 
 // MARK: ----- Msg
 /// 开始解析
