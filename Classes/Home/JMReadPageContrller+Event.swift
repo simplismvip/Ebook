@@ -47,7 +47,7 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { [weak self](_) in
-            if let tocItems = self?.bookModel.chapters {
+            if let tocItems = self?.bookModel.catalogs {
                 self?.showChapter(items: tocItems)
             }
         }, next: false)

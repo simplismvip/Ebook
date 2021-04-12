@@ -126,6 +126,36 @@ public struct JMCTFrameParser {
         }
     }
     
+    /// 文本内容分页 [JMBookCatalog] 小节
+    static public func sectionContent(content: String, catalogs: [JMBookCatalog]) -> [JMBookSection] {
+        var pageArray = [JMBookSection]()
+        let section = JMBookSection(content,catalogs.first!)
+        pageArray.append(section)
+        return pageArray
+    }
+    
+    /// 文本内容分页 Page
+    static public func pageContent(content: NSMutableAttributedString, bounds: CGRect) -> [JMBookPage]{
+        var pageArray = [JMBookPage]()
+        let cfPath = CGPath(rect: bounds, transform: nil);
+        let ctFrameSetter = CTFramesetterCreateWithAttributedString(content as CFAttributedString)
+        
+        // 当前偏移
+        var curOffset = 0
+        var ctRange = CFRangeMake(0, 0)
+        repeat {
+            let ctFrame = CTFramesetterCreateFrame(ctFrameSetter, CFRangeMake(curOffset, 0), cfPath, nil)
+            ctRange = CTFrameGetVisibleStringRange(ctFrame)
+            
+            let pageStr = content.attributedSubstring(from: NSMakeRange(ctRange.location, ctRange.length))
+            let item = JMBookPage(pageStr)
+            pageArray.append(item)
+            curOffset += ctRange.length
+        }while( ctRange.location + ctRange.length < content.length )
+        
+        return pageArray
+    }
+    
     /// 文本内容分页
     static public func pageWithContent(content: NSMutableAttributedString, bounds: CGRect) -> [Int]{
         var pageArray = [Int]()
@@ -135,6 +165,7 @@ public struct JMCTFrameParser {
         
         // 当前偏移
         var curOffset = 0
+        pageArray.append(curOffset)
         var ctRange = CFRangeMake(0, 0)
         repeat {
             let ctFrame = CTFramesetterCreateFrame(ctFrameSetter, CFRangeMake(curOffset, 0), cfPath, nil)

@@ -31,7 +31,7 @@ public class JMReadPageContrller: JMBaseController {
     var currType = JMMenuViewType.ViewType_NONE
     
     private lazy var pageViewController: UIPageViewController = {
-        let pageVC = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .vertical, options: nil)
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageVC.dataSource = self
         pageVC.delegate = self
         pageVC.isDoubleSided = true
@@ -74,7 +74,7 @@ public class JMReadPageContrller: JMBaseController {
         tapGes.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGes)
         tapGes.addTarget(self, action: #selector(topgesture(_:)))
-        pageViewController.setViewControllers([getCurrentReadView()], direction: .forward, animated: true, completion: nil)
+        pageViewController.setViewControllers([getCurrentReadView()], direction: .reverse, animated: true, completion: nil)
     }
     
     @objc func topgesture(_ gesture: UITapGestureRecognizer) {
@@ -92,17 +92,27 @@ public class JMReadPageContrller: JMBaseController {
 
 // TODO: -- PageView Delegate --
 extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+    // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let page = JMReadController()
-        let pagrAttr = bookModel.nextPage()
-        page.pageView.reDrewText(content: pagrAttr)
-        return page
-    }
-    
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let page = JMReadController()
         let pagrAttr = bookModel.prevPage()
         page.pageView.reDrewText(content: pagrAttr)
+        print("😀😀😀Before")
+        if pagrAttr?.length ?? 0 < 10 {
+            print("😀😀😀Before 字符长度为空")
+        }
+        return page
+    }
+    
+    // 往后翻页时触发
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        let page = JMReadController()
+        let pagrAttr = bookModel.nextPage()
+        page.pageView.reDrewText(content: pagrAttr)
+        print("😀😀😀After")
+        if pagrAttr?.length ?? 0 < 10 {
+            print("😀😀😀After 字符长度为空")
+        }
         return page
     }
     

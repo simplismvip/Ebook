@@ -40,8 +40,8 @@ public class JMBookParse: NSObject {
             // 读取目录
             let document = try EPUBParser().parse(documentAt: pathUrl)
             if let tocItems = document.tableOfContents.subTable {
-                let ncx = tocItems.map { JMBookChapter($0) }
-                let bookModel = JMBookModel(document: document, chapters: ncx)
+                let ncx = tocItems.map { JMBookCatalog($0) }
+                let bookModel = JMBookModel(document: document, catalog: ncx)
                 
                 DispatchQueue.main.async {
                     self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)

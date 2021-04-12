@@ -9,7 +9,6 @@ import UIKit
 import ZJMKit
 
 class JMReadView: JMBaseView {
-
     var content: NSAttributedString?
     let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
     var pageItem: JMCoreTextData? {
@@ -26,6 +25,7 @@ class JMReadView: JMBaseView {
         magnifier.pageView = self
         magnifier.isHidden = true
         addSubview(magnifier)
+        backgroundColor = UIColor.clear
     }
     
     public override func draw(_ rect: CGRect) {
@@ -41,8 +41,10 @@ class JMReadView: JMBaseView {
     }
     
     func reDrewText(content: NSAttributedString?) {
-        self.content = content
-        setNeedsDisplay()
+        if let arrtiStr = content {
+            self.content = arrtiStr
+            setNeedsDisplay()
+        }
     }
     
     required init?(coder: NSCoder) {

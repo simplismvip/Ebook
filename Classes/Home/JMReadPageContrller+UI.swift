@@ -198,7 +198,7 @@ extension JMReadPageContrller {
     }
     
     /// 显示左侧目录
-    public func showChapter(items: [JMBookChapter]) {
+    public func showChapter(items: [JMBookCatalog]) {
         if chapter.dataSource.isEmpty {
             chapter.dataSource = items
         }

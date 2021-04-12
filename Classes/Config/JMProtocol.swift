@@ -7,6 +7,15 @@
 
 import Foundation
 
+// MARK: -- 图书数据模型
+public class JMEpubWapper<T> {
+    let item: T
+    init(_ item: T) {
+        self.item = item
+    }
+}
+
+
 public protocol VMProtocol {
     associatedtype Input
     associatedtype Output
