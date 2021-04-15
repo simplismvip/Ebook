@@ -113,9 +113,9 @@ public class JMBookConfig: Codable {
     public init(){
         self.width = UIScreen.main.bounds.size.width - 40
         self.height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight
-        self.fontSize = 20.0
+        self.fontSize = 17.0
         self.lineSpace = 4.0
-        self.fontName = "Times New Roman"
+        self.fontName = "PingFangSC-Regular"
         self.textColor = "#131313"
         self.selectColor = "#131313"
         self.bkgColor = "#131313"

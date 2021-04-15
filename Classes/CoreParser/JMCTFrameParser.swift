@@ -128,9 +128,9 @@ public struct JMCTFrameParser {
     }
     
     /// 文本内容分页 [JMBookCatalog] 小节
-    static public func sectionContent(content: String, catalogs: [JMBookCatalog]) -> [JMBookSection] {
+    static public func sectionContent(content: String, catalogs: [JMBookCatalog], href: URL) -> [JMBookSection] {
         var pageArray = [JMBookSection]()
-        let section = JMBookSection(content,catalogs.first!)
+        let section = JMBookSection(content, catalogs.first!, href: href)
         pageArray.append(section)
         return pageArray
     }

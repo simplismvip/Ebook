@@ -11,7 +11,7 @@
 
 @implementation NSString (CoreParser)
 
-- (NSMutableAttributedString *)parserEpub:(NSString *)basePath spacing:(CGFloat)spacing font:(UIFont *)font {
+- (NSMutableAttributedString *)parserEpub:(NSURL *)baseUrl spacing:(CGFloat)spacing font:(UIFont *)font {
     NSScanner *scanner = [NSScanner scannerWithString:self];
     NSMutableAttributedString *text = [NSMutableAttributedString new];
     
@@ -19,10 +19,9 @@
         if ([scanner scanString:@"<img>" intoString:NULL]) {
             NSString *img;
             [scanner scanUpToString:@"</img>" intoString:&img];
-            NSLog(@"⚠️⚠️⚠️-img:%@",img);
-            
-//            NSString *imaStr = [basePath stringByAppendingPathComponent:@"epubtestpng.png"];
-            UIImage *image = [UIImage imageWithContentsOfFile:basePath];
+            // 需要先进行一次解码
+            NSURL *imaUrl = [baseUrl URLByAppendingPathComponent:img];
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imaUrl]];
             CGFloat width = [UIScreen mainScreen].bounds.size.width - 40;
             if (image.size.width > width) {
                 CGFloat rate = image.size.width / width;

@@ -6,8 +6,56 @@
 //
 
 import UIKit
+import YYText
+import BSText
 
 struct JMHtmlParse {
+    
+    static func parseEpub(content: String, config: JMBookConfig, href: URL) -> NSMutableAttributedString {
+        let scanner = Scanner(string: content)
+        let text = NSMutableAttributedString()
+        while !scanner.isAtEnd {
+            if scanner.scanString("<img>", into: nil) {
+                let uPoint = UnsafeMutablePointer<NSString?>.allocate(capacity: 1)
+                let aPointer = AutoreleasingUnsafeMutablePointer<NSString?>(uPoint)
+                if scanner.scanUpTo("</img>", into: aPointer), let imaName = uPoint.pointee as String? {
+                    let path = href.appendingPathComponent(imaName)
+                    if let data = try? Data(contentsOf: path), let image = UIImage(data: data) {
+                        if image.size.width > config.width, let cgimage = image.cgImage {
+                            let rate = image.size.width / config.width
+                            let tempIma = UIImage(cgImage: cgimage, scale: rate, orientation: .up)
+                            let attachText = attachMent(image: tempIma, font: config.font())
+                            text.append(attachText)
+                            text.append(NSAttributedString(string: "\n"))
+                        }else {
+                            let attachText = attachMent(image: image, font: config.font())
+                            text.append(attachText)
+                            text.append(NSAttributedString(string: "\n"))
+                        }
+                    }
+                    scanner.scanString("</img>", into: nil)
+                }else {
+                    let uPoint = UnsafeMutablePointer<NSString?>.allocate(capacity: 1)
+                    let aPointer = AutoreleasingUnsafeMutablePointer<NSString?>(uPoint)
+                    if scanner.scanUpTo("</img>", into: aPointer), let content = uPoint.pointee as String? {
+                        let conText = NSMutableAttributedString(string: content)
+                        conText.yy_lineSpacing = config.lineSpace
+                        conText.yy_font = config.font()
+                        conText.yy_firstLineHeadIndent = 20
+                        text.append(conText)
+                    }
+                }
+            }
+        }
+        
+        return text
+    }
+    
+    static func attachMent(image: UIImage, font: UIFont) -> NSMutableAttributedString {
+        return NSMutableAttributedString.yy_attachmentString(withContent: image, contentMode: .center, attachmentSize: image.size, alignTo: font, alignment: .center)
+    }
+    
+    
     static func paginateWithContent(content: String, bounds: CGRect) {
         var pageArray = [Int]()
         let cfPath = CGPath(rect: bounds, transform: nil);
@@ -56,41 +104,4 @@ struct JMHtmlParse {
             }
         }
     }
-    
-    
-//    static func convertHTML(_ htmlStr: String, imaPath: String) -> [JMBookContentItem]? {
-//        let scanner = Scanner(string: htmlStr)
-//
-//        while !scanner.isAtEnd {
-//            if scanner.scanString("<img>", into: nil) {
-//                let uPoint = UnsafeMutablePointer<NSString?>.allocate(capacity: 1)
-//                let aPointer = AutoreleasingUnsafeMutablePointer<NSString?>(uPoint)
-//                if scanner.scanUpTo("</img>", into: aPointer), let imaName = uPoint.pointee as String? {
-//                    if let image = UIImage(contentsOfFile: "" + imaPath + imaName) {
-//
-//                    }
-//
-//                }else{
-//                    print("没有匹配到")
-//                }
-//            }
-//        }
-//
-//        return nil
-//    }
-//
-//    static func convertHTMLToText(_ htmlStr: NSString) -> [JMBookContentItem]? {
-//
-//        return nil
-//    }
-//
-//    static func convertHTMLToImage(_ htmlStr: NSString) -> [JMBookContentItem]? {
-//        
-//        return nil
-//    }
-//
-//    static func convertHTMLToLink(_ htmlStr: NSString) -> [JMBookContentItem]? {
-//
-//        return nil
-//    }
 }

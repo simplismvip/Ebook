@@ -205,7 +205,7 @@ public class JMBookCharpter {
     func content() {
         if let html = try? String(contentsOf: fullHref, encoding: .utf8),
            let content = html.convertingHTMLToPlainText() {
-            self.sections = JMCTFrameParser.sectionContent(content: content, catalogs: catalogs)
+            self.sections = JMCTFrameParser.sectionContent(content: content, catalogs: catalogs, href: fullHref)
         }else {
             print("🆘🆘🆘解析失败！")
         }
@@ -229,7 +229,7 @@ public class JMBookCharpter {
 // MARK: -- 小节模型
 public class JMBookSection {
     /// 分解后的章节，每一个元素表示1页
-//    public let href: URL
+    public let href: URL
     
     public var title: String
 
@@ -240,12 +240,13 @@ public class JMBookSection {
     /// 分解后的章节，每一个元素表示1页
     public var pages: [JMBookPage]
     
-    init(_ content: String, _ catalog: JMBookCatalog) {
+    init(_ content: String, _ catalog: JMBookCatalog, href: URL) {
         self.title = catalog.title
         self.idef = catalog.id
         self.item = catalog.src
-        let path = Bundle.resouseBundle?.path(forResource: "epubtestpng", ofType: "png")
-        let attributeStr = (content as NSString).parserEpub(path!, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
+        self.href = href
+        let path = href.deletingLastPathComponent()
+        let attributeStr = (content as NSString).parserEpub(path, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
         self.pages = JMCTFrameParser.pageContent(content: attributeStr, bounds: JMBookConfig.share.bounds())
     }
     
