@@ -7,50 +7,36 @@
 
 import UIKit
 import ZJMKit
+import YYText
 
 class JMReadView: JMBaseView {
-    var content: NSAttributedString?
+    let contentL = YYLabel()
     let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
-    var pageItem: JMCoreTextData? {
-        willSet {
-            content = newValue?.attributeString
-        }
-        didSet {
-            setNeedsDisplay()
-        }
-    }
-        
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = UIColor.clear
         magnifier.pageView = self
         magnifier.isHidden = true
         addSubview(magnifier)
-        backgroundColor = UIColor.clear
-    }
-    
-    public override func draw(_ rect: CGRect) {
-        if let arrtiStr = content, let ctx = UIGraphicsGetCurrentContext() {
-            let frameSetter = CTFramesetterCreateWithAttributedString(arrtiStr)
-            ctx.textMatrix = .identity
-            ctx.translateBy(x: 0, y: bounds.size.height);
-            ctx.scaleBy(x: 1.0, y: -1.0);
-            let pathRef = CGPath(rect: bounds, transform: nil);
-            let frameRef = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), pathRef, nil);
-            CTFrameDraw(frameRef, ctx);
+        addSubview(contentL)
+        contentL.isUserInteractionEnabled = true
+        contentL.numberOfLines = 0;
+        contentL.textVerticalAlignment = .top;
+        contentL.snp.makeConstraints { (make) in
+            make.edges.equalTo(self)
         }
     }
     
     func reDrewText(content: NSAttributedString?) {
-        if let arrtiStr = content {
-            self.content = arrtiStr
-            setNeedsDisplay()
+        if let content = content {
+            contentL.attributedText = content
         }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 extension JMReadView: UIGestureRecognizerDelegate {

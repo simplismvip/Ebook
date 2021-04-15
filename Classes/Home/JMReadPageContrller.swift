@@ -26,6 +26,8 @@ public class JMReadPageContrller: JMBaseController {
     
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
+    // 第N章-N小节-N页，表示当前读到的位置
+    public let indexPath = JMBookIndex(0, 0, 0)
     
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
@@ -84,7 +86,7 @@ public class JMReadPageContrller: JMBaseController {
     
     func getCurrentReadView() -> JMReadController {
         let page = JMReadController()
-        let pagrAttr = bookModel[bookModel.indexPath]
+        let pagrAttr = bookModel.currPage()
         page.pageView.reDrewText(content: pagrAttr)
         return page
     }
@@ -95,29 +97,33 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let page = JMReadController()
-        let pagrAttr = bookModel.prevPage()
-        page.pageView.reDrewText(content: pagrAttr)
+        page.view.backgroundColor = UIColor.jmRandColor
+//        let pagrAttr = bookModel.prevPage()
+//        page.pageView.reDrewText(content: pagrAttr)
         print("😀😀😀Before")
-        if pagrAttr?.length ?? 0 < 10 {
-            print("😀😀😀Before 字符长度为空")
-        }
+//        if pagrAttr?.length ?? 0 < 10 {
+//            print("😀😀😀Before 字符长度为空")
+//        }
         return page
     }
     
     // 往后翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let page = JMReadController()
-        let pagrAttr = bookModel.nextPage()
-        page.pageView.reDrewText(content: pagrAttr)
+        page.view.backgroundColor = UIColor.jmRandColor
+        
+//        let pagrAttr = bookModel.nextPage()
+//        page.pageView.reDrewText(content: pagrAttr)
         print("😀😀😀After")
-        if pagrAttr?.length ?? 0 < 10 {
-            print("😀😀😀After 字符长度为空")
-        }
+//        if pagrAttr?.length ?? 0 < 10 {
+//            print("😀😀😀After 字符长度为空")
+//        }
         return page
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        
+        print("😀😀😀\(finished ? "finished ture":"finished false")--\(completed ? "completed ture":"completed false")")
+        print("😀😀😀",previousViewControllers)
     }
 }
 

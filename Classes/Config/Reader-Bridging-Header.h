@@ -6,3 +6,4 @@
 //
 
 #import "NSString+HTML.h"
+#import "NSString+CoreParser.h"

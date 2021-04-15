@@ -80,3 +80,58 @@ public struct JMBookCatalog {
         self.subTable = tableOfContents.subTable?.compactMap({ $0 }).map({ JMBookCatalog($0) })
     }
 }
+
+// MARK: -- 配置信息类
+public class JMBookConfig: Codable {
+    /// 文本宽度
+    var width: CGFloat
+    /// 文本高度
+    var height: CGFloat
+    /// 字体大小
+    var fontSize: CGFloat
+    /// 字体名称
+    var fontName: String
+    /// 字体行间距
+    var lineSpace: CGFloat
+    /// 字体颜色
+    var textColor: String
+    /// 选中字体颜色
+    var selectColor: String
+    /// 选中字体颜色
+    var bkgColor: String
+    /// 翻页类型
+    var flipType: JMFlipType
+    /// 亮度
+    var brightness: CGFloat
+    /// 白天、夜晚模式
+    var isDayMode = true
+    
+    static let share: JMBookConfig = {
+        return JMBookConfig()
+    }()
+    
+    public init(){
+        self.width = UIScreen.main.bounds.size.width - 40
+        self.height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight
+        self.fontSize = 20.0
+        self.lineSpace = 4.0
+        self.fontName = "Times New Roman"
+        self.textColor = "#131313"
+        self.selectColor = "#131313"
+        self.bkgColor = "#131313"
+        self.flipType = .VertScroll
+        self.brightness = UIScreen.main.brightness
+    }
+    
+    /// 当前字体
+    func font() -> UIFont {
+        return UIFont(name: fontName, size: fontSize) ?? UIFont.systemFont(ofSize: 17)
+    }
+    
+    /// 文本显示大小
+    func bounds() -> CGRect {
+        return CGRect.Rect(0, 0, width, height)
+    }
+}
+
+

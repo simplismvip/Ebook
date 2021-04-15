@@ -110,6 +110,11 @@ public extension String {
         }
     }
     
+    /// 颜色
+    var color: UIColor {
+        return UIColor(rgba: self)
+    }
+    
     /// JSON字符串转字典
     func tojSONObjc() -> Dictionary <String, Any>? {
         if let jsonData:Data = self.data(using: .utf8) {
@@ -312,16 +317,4 @@ extension Array {
 
 func delay(_ delay:Double, closure:@escaping ()->()) {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
-}
-
-public extension UIView {
-    /// 翻页效果
-    func transition(_ type: JMTransitionType){
-        let animation = CATransition()
-        animation.duration = 0.7
-        animation.type = type.rawValue
-        animation.subtype = kCATransitionFromRight
-        animation.timingFunction = CAMediaTimingFunction( name: kCAMediaTimingFunctionEaseInEaseOut)
-        layer.add(animation, forKey: "animation")
-    }
 }

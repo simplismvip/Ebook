@@ -15,16 +15,19 @@ public enum JMEpubStatus {
     case OpenInit // 初始状态
 }
 
-public enum JMTransitionType: String {
-    case kCATransitionPageNormal = "normal" // 正常
-    case kCATransitionCube = "cube" // 覆盖
-    case kCATransitionOglFlip = "oglFlip" // 翻转
-    case kCATransitionPageCurl = "pageCurl" // 仿真
-    
-    func title() -> String {
-        let titleArr = ["normal":"正常", "cube":"覆盖", "oglFlip":"翻转", "pageCurl":"仿真"]
-        return titleArr[self.rawValue] ?? "normal"
-    }
+// MARK: -- 翻页类型
+public enum JMFlipType: String, Codable {
+    case VertScroll = "竖直滚动" // 竖直滚动
+    case VertCurl = "竖直翻页" // 竖直翻页
+    case HoriScroll = "横向滚动" // 横向滚动
+    case HoriCurl = "横向翻页" // 横向翻页
+}
+
+// MARK: -- 系统亮度
+public enum JMBrightness {
+    case System // 系统亮度
+    case Custom // 自定义
+    case CaseEye // 护眼模式
 }
 
 // MARK: -- 章节分解图书后每一页内容类型

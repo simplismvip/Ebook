@@ -58,39 +58,39 @@ struct JMHtmlParse {
     }
     
     
-    static func convertHTML(_ htmlStr: String, imaPath: String) -> [JMBookContentItem]? {
-        let scanner = Scanner(string: htmlStr)
-        
-        while !scanner.isAtEnd {
-            if scanner.scanString("<img>", into: nil) {
-                let uPoint = UnsafeMutablePointer<NSString?>.allocate(capacity: 1)
-                let aPointer = AutoreleasingUnsafeMutablePointer<NSString?>(uPoint)
-                if scanner.scanUpTo("</img>", into: aPointer), let imaName = uPoint.pointee as String? {
-                    if let image = UIImage(contentsOfFile: "" + imaPath + imaName) {
-                        
-                    }
-        
-                }else{
-                    print("没有匹配到")
-                }
-            }
-        }
-        
-        return nil
-    }
-    
-    static func convertHTMLToText(_ htmlStr: NSString) -> [JMBookContentItem]? {
-        
-        return nil
-    }
-    
-    static func convertHTMLToImage(_ htmlStr: NSString) -> [JMBookContentItem]? {
-        
-        return nil
-    }
-    
-    static func convertHTMLToLink(_ htmlStr: NSString) -> [JMBookContentItem]? {
-       
-        return nil
-    }
+//    static func convertHTML(_ htmlStr: String, imaPath: String) -> [JMBookContentItem]? {
+//        let scanner = Scanner(string: htmlStr)
+//
+//        while !scanner.isAtEnd {
+//            if scanner.scanString("<img>", into: nil) {
+//                let uPoint = UnsafeMutablePointer<NSString?>.allocate(capacity: 1)
+//                let aPointer = AutoreleasingUnsafeMutablePointer<NSString?>(uPoint)
+//                if scanner.scanUpTo("</img>", into: aPointer), let imaName = uPoint.pointee as String? {
+//                    if let image = UIImage(contentsOfFile: "" + imaPath + imaName) {
+//
+//                    }
+//
+//                }else{
+//                    print("没有匹配到")
+//                }
+//            }
+//        }
+//
+//        return nil
+//    }
+//
+//    static func convertHTMLToText(_ htmlStr: NSString) -> [JMBookContentItem]? {
+//
+//        return nil
+//    }
+//
+//    static func convertHTMLToImage(_ htmlStr: NSString) -> [JMBookContentItem]? {
+//        
+//        return nil
+//    }
+//
+//    static func convertHTMLToLink(_ htmlStr: NSString) -> [JMBookContentItem]? {
+//
+//        return nil
+//    }
 }

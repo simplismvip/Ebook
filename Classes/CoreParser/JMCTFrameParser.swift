@@ -7,6 +7,7 @@
 
 import UIKit
 import BSText
+import YYText
 
 public struct JMCTFrameParser {
     static public func parseAttributed(linkDic: Dictionary<String, String>, config: JMCTFrameParserConfig) ->NSAttributedString? {
@@ -143,14 +144,16 @@ public struct JMCTFrameParser {
         // 当前偏移
         var curOffset = 0
         var ctRange = CFRangeMake(0, 0)
+        var page = 0
         repeat {
             let ctFrame = CTFramesetterCreateFrame(ctFrameSetter, CFRangeMake(curOffset, 0), cfPath, nil)
             ctRange = CTFrameGetVisibleStringRange(ctFrame)
             
             let pageStr = content.attributedSubstring(from: NSMakeRange(ctRange.location, ctRange.length))
-            let item = JMBookPage(pageStr)
+            let item = JMBookPage(pageStr, page: page)
             pageArray.append(item)
             curOffset += ctRange.length
+            page += 1
         }while( ctRange.location + ctRange.length < content.length )
         
         return pageArray

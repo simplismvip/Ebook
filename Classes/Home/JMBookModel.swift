@@ -62,37 +62,47 @@ final public class JMBookModel {
     
     subscript(indexPath: JMBookIndex) -> NSAttributedString? {
         get {
-            if indexPath.chapter < contents.count
-                && indexPath.section < sectionCount()
-                && indexPath.page < pageCount() {
-                return contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page].attribute
+            if let page = contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page] {
+                return page.attribute
+                
+            }else {
+                contents[indexPath.chapter].content()
+                let page = contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page]
+                return page?.attribute
             }
-            return nil
         }
+    }
+    
+    /// 当前页
+    func currPage() -> NSAttributedString? {
+        let attri = self[indexPath]
+        indexPath.page += 1
+        return attri
     }
 
     /// 下一页
     // 先检查页，再检查小节，再检查章节
     func nextPage() -> NSAttributedString? {
-        // 小章节还有，获取小章节
         if indexPath.chapter < contents.count && indexPath.section < sectionCount() && indexPath.page < pageCount() {
+            let attri = self[indexPath]
             indexPath.page += 1
-            return self[indexPath]
+            return attri
             
         }else if indexPath.chapter < contents.count && indexPath.section < sectionCount() && indexPath.page >= pageCount() {
-            indexPath.section += 1
             indexPath.page = 0
-            return self[indexPath]
+            let attri = self[indexPath]
+            indexPath.section += 1
+            return attri
             
         }else if indexPath.chapter < contents.count && indexPath.section >= sectionCount() {
-            indexPath.chapter += 1
             indexPath.section = 0
             indexPath.page = 0
-            return self[indexPath]
+            let attri = self[indexPath]
+            indexPath.chapter += 1
+            return attri
             
         }else if indexPath.chapter >= contents.count {
             return self[indexPath]
-            
         }
         return nil
     }
@@ -100,10 +110,12 @@ final public class JMBookModel {
     /// 上一页， 小章节还有，获取小章节
     func prevPage() -> NSAttributedString? {
         if indexPath.chapter > 0 && indexPath.section > 0 && indexPath.page > 0 {
+            let attri = self[indexPath]
             indexPath.page -= 1
-            return self[indexPath]
+            return attri
             
         }else if indexPath.chapter > 0 && indexPath.section > 0 && indexPath.page == 0 {
+            let attri = self[indexPath]
             indexPath.section -= 1
             let pageC = pageCount()
             if pageC > 0  {
@@ -111,11 +123,12 @@ final public class JMBookModel {
             }else {
                 indexPath.page = 0
             }
-            return self[indexPath]
+            return attri
             
         }else if indexPath.chapter > 0 && indexPath.section == 0 {
-            indexPath.chapter -= 1
+            let attri = self[indexPath]
             
+            indexPath.chapter -= 1
             let secC = sectionCount()
             if secC > 0 {
                 indexPath.section = secC - 1
@@ -129,7 +142,7 @@ final public class JMBookModel {
             }else {
                 indexPath.page = 0
             }
-            return self[indexPath]
+            return attri
             
         }else if indexPath.chapter == 0 {
             return self[indexPath]
@@ -227,23 +240,19 @@ public class JMBookSection {
     /// 分解后的章节，每一个元素表示1页
     public var pages: [JMBookPage]
     
-    /// 文本绘制区域高度
-    public var attribute: NSMutableAttributedString?
-    
     init(_ content: String, _ catalog: JMBookCatalog) {
         self.title = catalog.title
         self.idef = catalog.id
         self.item = catalog.src
-        let attrDic = JMCTFrameParser.attributes(JMCTFrameParserConfig())
-        let attributeStr = NSMutableAttributedString(string: content, attributes: attrDic)
-        let height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight
-        self.pages = JMCTFrameParser.pageContent(content: attributeStr, bounds: CGRect.Rect(0, 0, UIScreen.main.bounds.width-40, height))
+        let path = Bundle.resouseBundle?.path(forResource: "epubtestpng", ofType: "png")
+        let attributeStr = (content as NSString).parserEpub(path!, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
+        self.pages = JMCTFrameParser.pageContent(content: attributeStr, bounds: JMBookConfig.share.bounds())
     }
     
     // 读取需求页
     public func page(_ page: Int) -> NSAttributedString? {
         if page < pages.count {
-            return attribute
+            return pages[page].attribute
         }
         return nil
     }
@@ -255,49 +264,16 @@ public class JMBookSection {
 
 // MARK: -- 文本数据
 public struct JMBookPage {
-    /// 本页多少字
+    /// 本页字数
     public let word: Int
     /// 当前第几页
-    public var page = 0
-    /// 文本绘制区域高度
-    public var attribute: NSAttributedString?
-    
-    /// String类型url链接地址
-    public var link: String?
-    /// 文字在属性文字中的范围
-    public var range: NSRange?
-    
-    /// 图片地址
-    public var imaUrl: String?
-    /// 图片大小
-    public var imaRect: CGRect?
-    /// 图片位置
-    public var postion: Int?
-    
-    public var pageType: JMDataType = .UnKnow
-    
-    
+    public let page: Int
+    /// 本页内容
+    public let attribute: NSAttributedString
     /// 文本类型
-    init(_ attribute: NSAttributedString) {
+    init(_ attribute: NSAttributedString, page: Int) {
         self.attribute = attribute
-        self.pageType = .Txt
         self.word = attribute.length
-    }
-    
-    /// 图片类型
-    init(_ imaUrl: String, _ imaRect: CGRect, _ postion: Int) {
-        self.imaUrl = imaUrl
-        self.imaRect = imaRect
-        self.postion = postion
-        self.pageType = .Image
-        self.word = 0
-    }
-    
-    /// 链接类型
-    init(_ link: String, _ range: NSRange) {
-        self.link = link
-        self.range = range
-        self.pageType = .Link
-        self.word = 0
+        self.page = page
     }
 }
