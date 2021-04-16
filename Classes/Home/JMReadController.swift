@@ -7,12 +7,18 @@
 
 import UIKit
 import ZJMKit
-import RxCocoa
-import RxSwift
 
 final public class JMReadController: JMBaseController {
+    // 第N章-N小节-N页，表示当前读到的位置
+    public let currPage: JMBookIndex
+    
     let pageView = JMReadView(frame: CGRect.zero)
-    let disposeBag = DisposeBag()
+    
+    public init(cPage: JMBookIndex) {
+        self.currPage = cPage
+        super.init(nibName: nil, bundle: nil)
+        
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +34,10 @@ final public class JMReadController: JMBaseController {
                 make.bottom.equalTo(view.snp.bottom)
             }
         }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

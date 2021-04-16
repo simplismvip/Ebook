@@ -22,9 +22,14 @@ class JMReadView: JMBaseView {
         addSubview(contentL)
         contentL.isUserInteractionEnabled = true
         contentL.numberOfLines = 0;
+        contentL.displaysAsynchronously = true
         contentL.textVerticalAlignment = .top;
         contentL.snp.makeConstraints { (make) in
             make.edges.equalTo(self)
+        }
+        
+        contentL.highlightTapAction = { view, text, range, rect in
+            print(text.string)
         }
     }
     

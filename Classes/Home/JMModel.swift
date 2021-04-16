@@ -57,6 +57,10 @@ public class JMBookIndex {
     func sectionSet(_ n: Int) {
         chapter = n
     }
+    
+    func descrtion() {
+        print("chapter:\(chapter) section:\(section) page:\(page)")
+    }
 }
 
 // MARK: -- 分享
@@ -112,7 +116,8 @@ public class JMBookConfig: Codable {
     
     public init(){
         self.width = UIScreen.main.bounds.size.width - 40
-        self.height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight
+//        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
+        self.height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight - 20
         self.fontSize = 17.0
         self.lineSpace = 4.0
         self.fontName = "PingFangSC-Regular"

@@ -38,11 +38,41 @@
                 conText.yy_lineSpacing = spacing;
                 conText.yy_font = font;
                 conText.yy_firstLineHeadIndent = 20;
-                [text appendAttributedString:conText];
+                [text appendAttributedString:[self matcheUrls:conText font:font]];
             }
         }
     }
     return text;
+}
+
+// 正则匹配网址
+- (NSMutableAttributedString *)matcheUrls:(NSMutableAttributedString *)conText font:(UIFont *)font {
+    NSString *pattern = @"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                               options:NSRegularExpressionCaseInsensitive
+                                                                                 error:&error];
+    if (regex) {
+        NSArray *allMatches = [regex matchesInString:conText.string options:NSMatchingReportCompletion range: NSMakeRange(0, conText.string.length)];
+        for (NSTextCheckingResult *match in allMatches) {
+            NSString *substrinsgForMatch2 = [conText.string substringWithRange: match.range];
+            NSMutableAttributedString *one = [[NSMutableAttributedString alloc] initWithString:substrinsgForMatch2];
+            // 利用YYText设置一些文本属性
+            one.yy_underlineStyle = NSUnderlineStyleSingle;
+            one.yy_color = [UIColor colorWithRed:0.093 green:0.492 blue:1.000 alpha:1.000];
+            one.yy_font = font;
+            YYTextBorder *border = [YYTextBorder new];
+            border.cornerRadius = 3;
+            border.insets = UIEdgeInsetsMake(-2, -1, -2, -1);
+            border.fillColor = [UIColor colorWithWhite:0.000 alpha:0.220];
+            
+            YYTextHighlight *highlight = [YYTextHighlight new];
+            [highlight setBorder:border];
+            [one yy_setTextHighlight:highlight range:one.yy_rangeOfAll];
+            [conText replaceCharactersInRange:match.range withAttributedString:one];
+        }
+    }
+    return conText;
 }
 
 - (UIFont *)fontWithSize:(NSInteger)fontSize {

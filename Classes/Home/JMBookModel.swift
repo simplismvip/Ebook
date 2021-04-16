@@ -11,8 +11,8 @@ import ZJMKit
 
 // 层次结构：总共N章节
 // 第一章
-//   第一章第二小节
-//     第一章第二小节第二页
+//   第一章第一小节
+//     第一章第一小节第一页
 // MARK: -- 书本📖模型
 final public class JMBookModel {
     public var bookId: String
@@ -62,9 +62,11 @@ final public class JMBookModel {
     
     subscript(indexPath: JMBookIndex) -> NSAttributedString? {
         get {
+            print("😀😀😀: ------------------")
+            print(indexPath.descrtion())
+            print("😀😀😀: ------------------")
             if let page = contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page] {
                 return page.attribute
-                
             }else {
                 contents[indexPath.chapter].content()
                 let page = contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page]
@@ -73,90 +75,65 @@ final public class JMBookModel {
         }
     }
     
-    /// 当前页
-    func currPage() -> NSAttributedString? {
-        let attri = self[indexPath]
-        indexPath.page += 1
-        return attri
-    }
-
     /// 下一页
     // 先检查页，再检查小节，再检查章节
     func nextPage() -> NSAttributedString? {
-        if indexPath.chapter < contents.count && indexPath.section < sectionCount() && indexPath.page < pageCount() {
-            let attri = self[indexPath]
-            indexPath.page += 1
-            return attri
+        if indexPath.chapter == contents.count - 1
+            && indexPath.section == sectionCount() - 1
+            && indexPath.page == pageCount() - 1 {
+            print("😀😀😀已读到最后一页")
+            return nil
+        }else {
+            if contents[indexPath.chapter].sections == nil {
+                contents[indexPath.chapter].content()
+            }
             
-        }else if indexPath.chapter < contents.count && indexPath.section < sectionCount() && indexPath.page >= pageCount() {
-            indexPath.page = 0
-            let attri = self[indexPath]
-            indexPath.section += 1
-            return attri
-            
-        }else if indexPath.chapter < contents.count && indexPath.section >= sectionCount() {
-            indexPath.section = 0
-            indexPath.page = 0
-            let attri = self[indexPath]
-            indexPath.chapter += 1
-            return attri
-            
-        }else if indexPath.chapter >= contents.count {
-            return self[indexPath]
+            // 如果当前小节是本章最后，且当前页是当前小节最后一页，此时才需要更新章节
+            if indexPath.section == sectionCount() - 1 && indexPath.page == pageCount() - 1 {
+                indexPath.section = 0
+                indexPath.page = 0
+                indexPath.chapter += 1
+                return self[indexPath]
+            }else {
+                // 当前页是本小节最后一页，更新小节
+                if indexPath.page == pageCount() - 1  {
+                    indexPath.page = 0
+                    indexPath.section += 1
+                    return self[indexPath]
+                }else {
+                    indexPath.page += 1
+                    return self[indexPath]
+                }
+            }
         }
-        return nil
     }
 
     /// 上一页， 小章节还有，获取小章节
     func prevPage() -> NSAttributedString? {
-        if indexPath.chapter > 0 && indexPath.section > 0 && indexPath.page > 0 {
-            let attri = self[indexPath]
-            indexPath.page -= 1
-            return attri
-            
-        }else if indexPath.chapter > 0 && indexPath.section > 0 && indexPath.page == 0 {
-            let attri = self[indexPath]
-            indexPath.section -= 1
-            let pageC = pageCount()
-            if pageC > 0  {
-                indexPath.page = pageC - 1
+        if indexPath.chapter == 0
+            && indexPath.section == 0
+            && indexPath.page == 0  {
+            print("😀😀😀已回到第一页")
+            return nil
+        }else {
+            if indexPath.section == 0 && indexPath.page == 0 {
+                // 到这里说明更新章
+                indexPath.chapter -= 1
+                indexPath.section = sectionCount() - 1
+                indexPath.page = pageCount() - 1
+                return self[indexPath]
             }else {
-                indexPath.page = 0
+                if indexPath.page == 0  {
+                    // 到这里说明不需要更新下一节，判断是否允许进入下一章
+                    indexPath.section -= 1
+                    indexPath.page = sectionCount() - 1
+                    return self[indexPath]
+                }else {
+                    indexPath.page -= 1
+                    return self[indexPath]
+                }
             }
-            return attri
-            
-        }else if indexPath.chapter > 0 && indexPath.section == 0 {
-            let attri = self[indexPath]
-            
-            indexPath.chapter -= 1
-            let secC = sectionCount()
-            if secC > 0 {
-                indexPath.section = secC - 1
-            }else {
-                indexPath.section = 0
-            }
-            
-            let pageC = pageCount()
-            if pageC > 0 {
-                indexPath.page = pageC - 1
-            }else {
-                indexPath.page = 0
-            }
-            return attri
-            
-        }else if indexPath.chapter == 0 {
-            return self[indexPath]
-            
         }
-        return nil
-    }
-    
-    /// 读取需求页
-    func pageText() -> NSAttributedString? {
-        if indexPath.chapter < contents.count {
-            return contents[indexPath.chapter].pageText(indexPath.section, page: indexPath.page)
-        }
-        return nil
     }
     
     private func sectionCount() -> Int {
@@ -193,6 +170,8 @@ public class JMBookCharpter {
     public var mediaType: JMReadMediaType = .xHTML
     /// 文本绘制区域高度
     public var attribute: NSMutableAttributedString?
+    /// 当前哪一小节
+    public var cSection = 0
     
     init(spine: EPUBSpineItem, catalogs: [JMBookCatalog], fullHref: URL) {
         self.idref = spine.idref
@@ -215,14 +194,6 @@ public class JMBookCharpter {
     public func word() -> Int {
         return sections?.reduce(0, { $0 + $1.word() }) ?? 0
     }
-    
-    // 读取需求页
-    func pageText(_ section: Int, page: Int) -> NSAttributedString? {
-        if section < sections?.count ?? 0 {
-            return sections?[section].page(page)
-        }
-        return nil
-    }
 }
 
 
@@ -239,6 +210,8 @@ public class JMBookSection {
     
     /// 分解后的章节，每一个元素表示1页
     public var pages: [JMBookPage]
+    /// 当前哪一小节
+    public var cPage = 0
     
     init(_ content: String, _ catalog: JMBookCatalog, href: URL) {
         self.title = catalog.title
@@ -248,14 +221,6 @@ public class JMBookSection {
         let path = href.deletingLastPathComponent()
         let attributeStr = (content as NSString).parserEpub(path, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
         self.pages = JMCTFrameParser.pageContent(content: attributeStr, bounds: JMBookConfig.share.bounds())
-    }
-    
-    // 读取需求页
-    public func page(_ page: Int) -> NSAttributedString? {
-        if page < pages.count {
-            return pages[page].attribute
-        }
-        return nil
     }
     
     public func word() -> Int {
