@@ -10,7 +10,7 @@ import BSText
 import YYText
 
 public struct JMCTFrameParser {
-    static public func parseAttributed(linkDic: Dictionary<String, String>, config: JMCTFrameParserConfig) ->NSAttributedString? {
+    static public func parseAttributed(linkDic: Dictionary<String, String>, config: JMBookConfig) ->NSAttributedString? {
         if let attri = parseAttributed(dic: linkDic, config: config) {
             let mutabAttr = NSMutableAttributedString(attributedString: attri)
             
@@ -33,7 +33,7 @@ public struct JMCTFrameParser {
      *
      *  @return 返回的属性文字
      */
-    static public func parseAttributed(dic: Dictionary<String, String>, config: JMCTFrameParserConfig) -> NSAttributedString? {
+    static public func parseAttributed(dic: Dictionary<String, String>, config: JMBookConfig) -> NSAttributedString? {
         var attributes = self.attributes(config)
         
         if let colorType = dic["color"] {
@@ -61,7 +61,7 @@ public struct JMCTFrameParser {
      *
      *  @return CoreTextData对象
      */
-    static public func parseAttributed(content: NSAttributedString, config: JMCTFrameParserConfig) ->JMCoreTextData {
+    static public func parseAttributed(content: NSAttributedString, config: JMBookConfig) {
         // 创建CTFrameSetterRef实例
         let ctFrameSetterRef = CTFramesetterCreateWithAttributedString(content as CFAttributedString)
         // 获取要绘制的区域信息
@@ -69,9 +69,9 @@ public struct JMCTFrameParser {
         let coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(ctFrameSetterRef, CFRange(location: 0, length: 0), nil, restrictSize, nil)
         let textHeight = coreTextSize.height
         // 配置ctframeRef信息
-        let ctFrame = createFrame(frameSetter: ctFrameSetterRef, config: config, height: textHeight)
+        let _ = createFrame(frameSetter: ctFrameSetterRef, config: config, height: textHeight)
         // 配置coreTextData数据
-        return JMCoreTextData(ctFrame: ctFrame, height: textHeight)
+//        return JMCoreTextData(ctFrame: ctFrame, height: textHeight)
     }
     
     
@@ -84,7 +84,7 @@ public struct JMCTFrameParser {
      *
      *  @return CTFrameRef
      */
-    static public func createFrame(frameSetter: CTFramesetter, config: JMCTFrameParserConfig, height: CGFloat) ->CTFrame {
+    static public func createFrame(frameSetter: CTFramesetter, config: JMBookConfig, height: CGFloat) ->CTFrame {
         let path = CGMutablePath()
         path.addRect(CGRect.Rect(0, 0, config.width, height))
         return CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, nil)
@@ -97,7 +97,7 @@ public struct JMCTFrameParser {
      *
      *  @return 配置文字属性字典
      */
-    static public func attributes(_ config: JMCTFrameParserConfig) -> [NSAttributedString.Key: Any] {
+    static public func attributes(_ config: JMBookConfig) -> [NSAttributedString.Key: Any] {
         let fontSize = config.fontSize
         let ctfont = CTFontCreateWithName(config.fontName as CFString, fontSize, nil)
 
