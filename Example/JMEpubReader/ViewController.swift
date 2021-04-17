@@ -12,10 +12,11 @@ import JMEpubReader
 import SnapKit
 import ZJMKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, JMReadProtocol {
 
     @IBOutlet weak var book1: UIImageView!
     var bookModel: JMBookParse?
+    var flipCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,7 @@ class ViewController: UIViewController {
             if let model = bookModel as? JMBookModel {
                 Toast.toast("😀😀😀打开 \(model.title)成功")
                 let vc = JMReadPageContrller(model)
+                vc.delegate = self
                 self?.push(vc)
             }
             return nil
@@ -83,12 +85,41 @@ class ViewController: UIViewController {
             print("⚠️⚠️⚠️⚠️⚠️打开 \(error.localizedDescription)失败⚠️⚠️⚠️⚠️⚠️")
         }
     }
+    
+    // 返回需要展示的
+    func currentReadVC(_ forward: Bool) -> UIViewController? {
+        if forward {
+            flipCount += 1
+            return (flipCount % 5 == 0) ? JMEpubViewController() : nil
+        }else {
+            return nil
+        }
+    }
 }
 
 class JMEpubViewController: UIViewController {
+    let imagev = UIImageView(image: UIImage(named: "00002"))
+    let tips = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-  
+        view.addSubview(imagev)
+        view.addSubview(tips)
+        
+        imagev.snp.makeConstraints { (make) in
+            make.width.height.equalTo(self.view.jmWidth)
+            make.centerX.equalTo(self.view.snp.centerX)
+            make.centerY.equalTo(self.view.snp.centerY)
+        }
+        
+        tips.snp.makeConstraints { (make) in
+            make.width.equalTo(self.view)
+            make.height.equalTo(44)
+            make.top.equalTo(imagev.snp.bottom).offset(20)
+        }
+        
+        tips.jmConfigLabel(alig: .center, font: UIFont.jmMedium(20), color: UIColor.jmRGB(230, 230, 230))
+        tips.text = "点击可继续翻页"
     }
 
 }

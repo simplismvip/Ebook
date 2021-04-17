@@ -27,11 +27,11 @@ final public class JMReadController: JMBaseController {
             make.left.equalTo(view).offset(20)
             make.right.equalTo(view).offset(-20)
             if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
             } else {
-                make.top.equalTo(view.snp.top)
-                make.bottom.equalTo(view.snp.bottom)
+                make.top.equalTo(view.snp.top).offset(30)
+                make.bottom.equalTo(view.snp.bottom).offset(-20)
             }
         }
     }

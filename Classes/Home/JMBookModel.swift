@@ -60,6 +60,21 @@ final public class JMBookModel {
         return contents.reduce(0, { $0 + $1.word() })
     }
     
+    /// 阅读百分比
+    public func readRate() -> String {
+        let curr = CGFloat(contents.reduce(0) { $0 + ($1.sections?.count ?? 0) })
+        let total = catalogs.reduce(0) { $0 + ($1.subTable?.count ?? 0) }
+        return (curr > 0) ? "\(curr / CGFloat(total))%" : ""
+    }
+    
+    /// 当前小节标题
+    public func currTitle() -> String {
+        if let title = contents[indexPath.chapter].sections?[indexPath.section].title {
+            return title
+        }
+        return title
+    }
+    
     subscript(indexPath: JMBookIndex) -> NSAttributedString? {
         get {
             print("😀😀😀: ------------------")
@@ -73,6 +88,10 @@ final public class JMBookModel {
                 return page?.attribute
             }
         }
+    }
+    
+    func currPage() -> NSAttributedString? {
+        return self[indexPath]
     }
     
     /// 下一页

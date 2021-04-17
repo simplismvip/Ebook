@@ -44,6 +44,9 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionMore, block: { [weak self](_) in
+            if let pagrAttr = self?.bookModel.currPage(), pagrAttr.length > 10 {
+                self?.speech.readImmediately(pagrAttr, clear: false)
+            }
             
         }, next: false)
         

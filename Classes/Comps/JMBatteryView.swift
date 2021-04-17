@@ -8,11 +8,10 @@
 import UIKit
 import ZJMKit
 
-class JMBatteryView: JMBaseView {
+final class JMBatteryView: JMBaseView {
     private let b_width: CGFloat = 20
     private let b_height: CGFloat = 10
     private let b_lineW: CGFloat = 1
-    private var value: CGFloat = 10
     private let b_x: CGFloat = 20
     private let b_y: CGFloat = 5
     private var is12Hour = false
@@ -20,25 +19,23 @@ class JMBatteryView: JMBaseView {
     private let batteryLayer = CAShapeLayer()
     private let layerRight = CAShapeLayer()
     
-    private let progressLabel = UILabel()
+    public let title = UILabel()
+    public let progress = UILabel()
     private let timeLabel = UILabel()
-    private let titleLabel = UILabel()
-    
     private var timer: Timer?
     var batteryColor = UIColor.black {
         willSet {
             batteryView.backgroundColor = newValue
             layerRight.strokeColor = newValue.cgColor
             batteryLayer.strokeColor = newValue.cgColor
-            updateValue(self.value)
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(batteryView)
-        addSubview(progressLabel)
-        addSubview(titleLabel)
+        addSubview(progress)
+        addSubview(title)
         addSubview(timeLabel)
         is12Hour = is12HourFormat()
         
@@ -63,7 +60,6 @@ class JMBatteryView: JMBaseView {
         batteryView.layer.cornerRadius = 1;
         batteryView.frame = CGRect.Rect(b_x + 1.5,b_y + b_lineW+0.5, 0, b_height - (b_lineW+0.5) * 2);
         
-        timeLabel.text = "上午 6:32"
         timeLabel.jmConfigLabel(font: UIFont.jmAvenir(11), color: UIColor.jmRGBValue(0x999999))
         timeLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(b_x + b_width + 8)
@@ -71,59 +67,57 @@ class JMBatteryView: JMBaseView {
             make.centerY.equalTo(snp.centerY)
         }
         
-        titleLabel.text = "点击中央屏幕呼出菜单"
-        titleLabel.jmConfigLabel(font: UIFont.jmAvenir(11), color: UIColor.jmRGBValue(0x999999))
-        titleLabel.snp.makeConstraints { (make) in
+        title.jmConfigLabel(font: UIFont.jmAvenir(11), color: UIColor.jmRGBValue(0x999999))
+        title.snp.makeConstraints { (make) in
             make.centerX.equalTo(self)
             make.centerY.height.equalTo(timeLabel)
         }
         
-        progressLabel.text = "16%"
-        progressLabel.jmConfigLabel(alig: .right, font: UIFont.jmAvenir(11), color: UIColor.jmRGBValue(0x999999))
-        progressLabel.snp.makeConstraints { (make) in
+        progress.jmConfigLabel(alig: .right, font: UIFont.jmAvenir(11), color: UIColor.jmRGBValue(0x999999))
+        progress.snp.makeConstraints { (make) in
             make.right.equalTo(self).offset(-20)
             make.centerY.height.equalTo(timeLabel)
         }
         
-        let value = UIDevice.current.batteryLevel * 100
-        self.updateValue(CGFloat(value))
         
-        NotificationCenter.default.jm.addObserver(target: self, name: NSNotification.Name.UIDeviceBatteryLevelDidChange.rawValue, object: nil) { [weak self](notify) in
-            let value = UIDevice.current.batteryLevel * 100
-            self?.updateValue(CGFloat(value))
+        updateValue()
+        let name = NSNotification.Name.UIDeviceBatteryLevelDidChange.rawValue
+        NotificationCenter.default.jm.addObserver(target: self, name: name) { [weak self](_) in
+            self?.updateValue()
         }
         
+        updateTime()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self](_) in
-            let dateFormat = DateFormatter()
-            if self?.is12Hour ?? false {
-                dateFormat.amSymbol = "上午"
-                dateFormat.pmSymbol = "下午"
-                dateFormat.dateFormat = "aaah:mm"
-            }else {
-                dateFormat.dateFormat = "H:mm"
-            }
-            dateFormat.calendar = Calendar(identifier: .gregorian)
-            self?.timeLabel.text = dateFormat.string(from: Date())
+            self?.updateTime()
         }
         timer?.tolerance = 0.2
     }
     
-    func updateValue(_ value: CGFloat) {
-        if value <= 0 { return }
-        batteryView.backgroundColor = batteryColor
-        
+    public func fireTimer() {
+        timer?.invalidate()
+        let name = NSNotification.Name.UIDeviceBatteryLevelDidChange.rawValue
+        NotificationCenter.default.jm.removeObserver(target: self, name)
+    }
+    
+    private func updateValue() {
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        let value: CGFloat = CGFloat(UIDevice.current.batteryLevel * 100.0)
         var rect = batteryView.frame
         rect.size.width = (value * (b_width - (b_lineW+0.5) * 2))/100
         batteryView.frame = rect
     }
     
-    public func fireTimer() {
-        timer?.invalidate()
-        NotificationCenter.default.jm.removeObserver(target: self, NSNotification.Name.UIDeviceBatteryLevelDidChange.rawValue)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func updateTime() {
+        let dateFormat = DateFormatter()
+        if is12Hour {
+            dateFormat.amSymbol = "上午"
+            dateFormat.pmSymbol = "下午"
+            dateFormat.dateFormat = "aaah:mm"
+        }else {
+            dateFormat.dateFormat = "H:mm"
+        }
+        dateFormat.calendar = Calendar(identifier: .gregorian)
+        timeLabel.text = dateFormat.string(from: Date())
     }
     
     // 判断是否是24小时制
@@ -133,5 +127,9 @@ class JMBatteryView: JMBaseView {
             return containsA.location != NSNotFound
         }
         return false
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

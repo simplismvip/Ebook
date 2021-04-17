@@ -41,6 +41,8 @@ extension JMReadPageContrller {
     }
     
     func setupviews()  {
+        view.addSubview(battery)
+        view.addSubview(bookTitle)
         topContainer.backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         view.addSubview(topContainer)
         topContainer.addSubview(topLeft)
@@ -55,7 +57,6 @@ extension JMReadPageContrller {
         view.addSubview(set)
         view.addSubview(light)
         view.addSubview(play)
-        view.addSubview(battery)
         
         chapter.snp.makeConstraints { (make) in
             make.left.equalTo(view).offset(-view.jmWidth*0.9)
@@ -91,6 +92,16 @@ extension JMReadPageContrller {
             make.left.width.equalTo(view)
             make.height.equalTo(230)
             make.bottom.equalTo(view.snp.bottom).offset(230)
+        }
+        
+        bookTitle.snp.makeConstraints { (make) in
+            make.left.width.equalTo(view)
+            make.height.equalTo(20)
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            } else {
+                make.top.equalTo(view.snp.top)
+            }
         }
         
         battery.snp.makeConstraints { (make) in
@@ -230,6 +241,7 @@ extension JMReadPageContrller {
             }else {
                 hideWithType()
             }
+            setNeedsStatusBarAppearanceUpdate()
         }else {
             if currType == .ViewType_NONE {
                 print("点击右侧1/4翻页")

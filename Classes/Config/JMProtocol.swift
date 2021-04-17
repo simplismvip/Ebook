@@ -9,7 +9,7 @@ import Foundation
 
 @objc public protocol JMReadProtocol {
     /// 提供一个自定义页面展示自定义内容
-    func currentReadVC() -> UIViewController?
+    func currentReadVC(_ forward: Bool) -> UIViewController?
 }
 
 // MARK: -- 图书数据模型

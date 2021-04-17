@@ -11,6 +11,7 @@ import SnapKit
 
 public class JMReadPageContrller: JMBaseController {
     public weak var delegate: JMReadProtocol?
+    
     let bookModel: JMBookModel
     let topLeft = JMReadItemView()
     let topRight = JMReadItemView()
@@ -19,6 +20,8 @@ public class JMReadPageContrller: JMBaseController {
     let set = JMMenuSetView() // 设置
     let light = JMMenuLightView() // 亮度
     let play = JMMeunPlayVIew() // 播放
+    
+    let bookTitle = JMBookTitleView() // 标题
     let battery = JMBatteryView() // 电池
     
     let topContainer = UIView() // 亮度
@@ -27,11 +30,17 @@ public class JMReadPageContrller: JMBaseController {
     
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
+    
     // 第N章-N小节-N页，表示当前读到的位置
     public let cPage = JMBookIndex(0, 0, 0)
+    let speech: JMSpeechParse
     
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
+    
+    public override var prefersStatusBarHidden: Bool {
+        return currType == .ViewType_NONE
+    }
     
     private lazy var pageViewController: UIPageViewController = {
         let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -44,6 +53,8 @@ public class JMReadPageContrller: JMBaseController {
     /// 调用初始化
     public init (_ bookModel: JMBookModel) {
         self.bookModel = bookModel
+        let speechModel = JMSpeechModel()
+        self.speech = JMSpeechParse(speechModel)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -72,6 +83,9 @@ public class JMReadPageContrller: JMBaseController {
         loadDats()
         registerMenuEvent()
         
+        battery.progress.text = bookModel.readRate()
+        bookTitle.title.text = bookModel.currTitle()
+        
         let tapGes = UITapGestureRecognizer()
         tapGes.delegate = self
         tapGes.numberOfTapsRequired = 1
@@ -98,8 +112,7 @@ public class JMReadPageContrller: JMBaseController {
 extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        
-        if let vc = delegate?.currentReadVC() {
+        if let vc = delegate?.currentReadVC(false) {
             return vc
         }else {
             print("😀😀😀Before")
@@ -117,7 +130,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     
     // 往后翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC() {
+        if let vc = delegate?.currentReadVC(true) {
             return vc
         }else {
             print("😀😀😀After")
@@ -136,6 +149,8 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             print("😀😀😀completed")
+            battery.progress.text = bookModel.readRate()
+            bookTitle.title.text = bookModel.currTitle()
         }else {
 //            print("😀😀😀completed none")
 //            if let page = previousViewControllers.first as? JMReadController {
