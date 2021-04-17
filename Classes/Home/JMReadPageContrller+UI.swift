@@ -49,12 +49,14 @@ extension JMReadPageContrller {
         bottomContainer.backgroundColor = topContainer.backgroundColor
         view.addSubview(bottomContainer)
         bottomContainer.addSubview(bottom)
+        battery.batteryColor = UIColor.darkText
         
         view.addSubview(chapter)
         view.addSubview(set)
         view.addSubview(light)
         view.addSubview(play)
-
+        view.addSubview(battery)
+        
         chapter.snp.makeConstraints { (make) in
             make.left.equalTo(view).offset(-view.jmWidth*0.9)
             make.width.equalTo(view.jmWidth*0.9)
@@ -89,6 +91,16 @@ extension JMReadPageContrller {
             make.left.width.equalTo(view)
             make.height.equalTo(230)
             make.bottom.equalTo(view.snp.bottom).offset(230)
+        }
+        
+        battery.snp.makeConstraints { (make) in
+            make.left.width.equalTo(view)
+            make.height.equalTo(20)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(view.snp.bottom)
+            }
         }
     }
 }

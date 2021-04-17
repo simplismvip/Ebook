@@ -7,6 +7,11 @@
 
 import Foundation
 
+@objc public protocol JMReadProtocol {
+    /// 提供一个自定义页面展示自定义内容
+    func currentReadVC() -> UIViewController?
+}
+
 // MARK: -- 图书数据模型
 public class JMEpubWapper<T> {
     let item: T

@@ -31,6 +31,7 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBack, block: { [weak self](_) in
+            self?.battery.fireTimer()
             self?.navigationController?.popViewController(animated: true)
         }, next: false)
         

@@ -26,38 +26,6 @@ public class JMBookIndex {
         self.page = page
     }
     
-    func sectionAdd() {
-        chapter += 1
-    }
-    
-    func rowAdd() {
-        page += 1
-    }
-    
-    func sectionJian() {
-        chapter -= 1
-    }
-    
-    func rowJian() {
-        page -= 1
-    }
-    
-    func rowZero() {
-        page = 0
-    }
-    
-    func secZero() {
-        chapter = 0
-    }
-    
-    func rowSet(_ n: Int) {
-        page = n
-    }
-    
-    func sectionSet(_ n: Int) {
-        chapter = n
-    }
-    
     func descrtion() {
         print("chapter:\(chapter) section:\(section) page:\(page)")
     }

@@ -10,8 +10,8 @@ import ZJMKit
 import SnapKit
 
 public class JMReadPageContrller: JMBaseController {
+    public weak var delegate: JMReadProtocol?
     let bookModel: JMBookModel
-    
     let topLeft = JMReadItemView()
     let topRight = JMReadItemView()
     let bottom = JMReadItemView()
@@ -19,6 +19,7 @@ public class JMReadPageContrller: JMBaseController {
     let set = JMMenuSetView() // 设置
     let light = JMMenuLightView() // 亮度
     let play = JMMeunPlayVIew() // 播放
+    let battery = JMBatteryView() // 电池
     
     let topContainer = UIView() // 亮度
     let bottomContainer = UIView() // 亮度
@@ -91,37 +92,44 @@ public class JMReadPageContrller: JMBaseController {
         page.pageView.reDrewText(content: pagrAttr)
         return page
     }
-    
-    
 }
 
 // TODO: -- PageView Delegate --
 extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-//        print("😀😀😀Before")
-        if let pagrAttr = bookModel.prevPage(), pagrAttr.length > 10 {
-            let indexPath = JMBookIndex(0, 0, 0)
-            let page = JMReadController(cPage: indexPath)
-            page.pageView.reDrewText(content: pagrAttr)
-            return page
+        
+        if let vc = delegate?.currentReadVC() {
+            return vc
         }else {
-//            print("😀😀😀Before 字符长度为空")
-            return nil
+            print("😀😀😀Before")
+            if let pagrAttr = bookModel.prevPage(), pagrAttr.length > 10 {
+                let indexPath = JMBookIndex(0, 0, 0)
+                let page = JMReadController(cPage: indexPath)
+                page.pageView.reDrewText(content: pagrAttr)
+                return page
+            }else {
+                print("😀😀😀Before 字符长度为空")
+                return nil
+            }
         }
     }
     
     // 往后翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        print("😀😀😀After")
-        if let pagrAttr = bookModel.nextPage(), pagrAttr.length > 0 {
-            let indexPath = JMBookIndex(0, 0, 0)
-            let page = JMReadController(cPage: indexPath)
-            page.pageView.reDrewText(content: pagrAttr)
-            return page
+        if let vc = delegate?.currentReadVC() {
+            return vc
         }else {
-//            print("😀😀😀After 字符长度为空")
-            return nil
+            print("😀😀😀After")
+            if let pagrAttr = bookModel.nextPage(), pagrAttr.length > 0 {
+                let indexPath = JMBookIndex(0, 0, 0)
+                let page = JMReadController(cPage: indexPath)
+                page.pageView.reDrewText(content: pagrAttr)
+                return page
+            }else {
+                print("😀😀😀After 字符长度为空")
+                return nil
+            }
         }
     }
     
