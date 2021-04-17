@@ -12,18 +12,26 @@ import JMEpubReader
 import SnapKit
 import ZJMKit
 
-class ViewController: UIViewController, JMReadProtocol {
-
-    @IBOutlet weak var book1: UIImageView!
+class ViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
+    var dataSource = [EbookModel]()
     var bookModel: JMBookParse?
     var flipCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        "htmlStr".decodingHTMLEntities()
+        register()
+        let items = [["title":"TianXiaDaoZong","type":"epub"],
+         ["title":"没有你，什么都不甜蜜","type":"epub"],
+         ["title":"每天懂一点好玩心理学","type":"epub"],
+         ["title":"mdjyml", "type":"txt"]]
+        dataSource.append(contentsOf: items.map { return EbookModel($0["title"]!, $0["type"]!) })
+    }
+    
+    func register() {
         let router = JMRouter()
         jmSetAssociatedMsgRouter(router: router)
-        
         jmReciverMsg(msgName: kMsgNameStartOpeningBook) { (msg) -> MsgObjc? in
             if let text = msg as? String {
                 Toast.toast(text)
@@ -48,44 +56,13 @@ class ViewController: UIViewController, JMReadProtocol {
             return nil
         }
     }
-
-    @IBAction func openDefault(_ sender: Any) {
-
-    }
-    
-    @IBAction func test1(_ sender: Any) {
-        
-    }
-    
-    @IBAction func test2(_ sender: Any) {
-        
-    }
     
     @IBAction func openBooks(_ sender: Any) {
-        if let path = Bundle.main.path(forResource: "TianXiaDaoZong", ofType: "epub") {
-            bookModel = JMBookParse(path)
-            
-            if let router = self.msgRouter {
-                bookModel?.jmSetAssociatedMsgRouter(router: router)
-                bookModel?.startRead()
-            }
-        }
+        
     }
-    
-    func openDefault() {
-        do{
-            let path = "/Users/jl/Desktop/EPUB/TianXiaDaoZong.epub"
-            let url = URL(fileURLWithPath: path)
-            let document = try EPUBParser().parse(documentAt: url)
-            if let cover = document.cover {
-                book1.image = UIImage(data: try Data(contentsOf: cover))
-            }
-            print(url.lastPathComponent)
-        }catch {
-            print("⚠️⚠️⚠️⚠️⚠️打开 \(error.localizedDescription)失败⚠️⚠️⚠️⚠️⚠️")
-        }
-    }
-    
+}
+
+extension ViewController: JMReadProtocol {
     // 返回需要展示的
     func currentReadVC(_ forward: Bool) -> UIViewController? {
         if forward {
@@ -94,6 +71,40 @@ class ViewController: UIViewController, JMReadProtocol {
         }else {
             return nil
         }
+    }
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: "kReuseCellIdentifier")
+        if cell == nil { cell = UITableViewCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
+        cell?.textLabel?.text = dataSource[indexPath.row].name
+        return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let model = dataSource[indexPath.row]
+        if let path = Bundle.main.path(forResource: model.name, ofType: model.type) {
+            bookModel = JMBookParse(path)
+            if let router = self.msgRouter {
+                bookModel?.jmSetAssociatedMsgRouter(router: router)
+                bookModel?.startRead()
+            }
+        }
+    }
+}
+
+struct EbookModel {
+    let name: String
+    let type: String
+    
+    init(_ name: String, _ type: String) {
+        self.name = name
+        self.type = type
     }
 }
 

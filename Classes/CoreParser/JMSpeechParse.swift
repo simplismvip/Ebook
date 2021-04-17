@@ -56,7 +56,6 @@ final public class JMSpeechParse: NSObject {
         if play && !synthesizer.isSpeaking {
             let utterance = createUtter(attri)
             synthesizer.speak(utterance)
-            queue.removeFirst()
         }
     }
     
