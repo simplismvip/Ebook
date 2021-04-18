@@ -191,6 +191,8 @@ public class JMBookCharpter {
     public var attribute: NSMutableAttributedString?
     /// 当前哪一小节
     public var cSection = 0
+    /// 解析器
+    public let parser = JMXMLParser()
     
     init(spine: EPUBSpineItem, catalogs: [JMBookCatalog], fullHref: URL) {
         self.idref = spine.idref
@@ -201,12 +203,17 @@ public class JMBookCharpter {
     
     // 读取本章节，
     func content() {
-        if let html = try? String(contentsOf: fullHref, encoding: .utf8),
-           let content = html.convertingHTMLToPlainText() {
-            self.sections = JMCTFrameParser.sectionContent(content: content, catalogs: catalogs, href: fullHref)
-        }else {
-            print("🆘🆘🆘解析失败！")
-        }
+        self.parser.content(self.fullHref)
+        let attr = self.parser.attributeStr(JMBookConfig.share)
+        self.sections = [JMBookSection(attr, self.catalogs.first!, href: self.fullHref)]
+        
+//        DispatchQueue.global().async {
+//            self.parser.content(self.fullHref)
+//            DispatchQueue.main.async {
+//                let attr = self.parser.attributeStr(JMBookConfig.share)
+//                self.sections = [JMBookSection(attr, self.catalogs.first!, href: self.fullHref)]
+//            }
+//        }
     }
     
     /// 本章多少字：=小节总字数
@@ -232,14 +239,14 @@ public class JMBookSection {
     /// 当前哪一小节
     public var cPage = 0
     
-    init(_ content: String, _ catalog: JMBookCatalog, href: URL) {
+    init(_ content: NSMutableAttributedString, _ catalog: JMBookCatalog, href: URL) {
         self.title = catalog.title
         self.idef = catalog.id
         self.item = catalog.src
         self.href = href
-        let path = href.deletingLastPathComponent()
-        let attributeStr = (content as NSString).parserEpub(path, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
-        self.pages = JMCTFrameParser.pageContent(content: attributeStr, bounds: JMBookConfig.share.bounds())
+//        let path = href.deletingLastPathComponent()
+//        let attributeStr = (content as NSString).parserEpub(path, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
+        self.pages = JMPageParse.pageContent(content: content, bounds: JMBookConfig.share.bounds())
     }
     
     public func word() -> Int {
