@@ -9,11 +9,11 @@ import AEXML
 import YYText
 import ZJMKit
 
-public struct JMXmlNode {
+public class JMXmlNode {
     var tag: String
     var content: String
     var media: Bool {
-        return ["h1","h2","h3","h4","h5"].contains(tag)
+        return ["h1","h2","h3","h4","h5","h6"].contains(tag)
     }
     
     init(_ tag: String, _ content: String) {
@@ -31,39 +31,13 @@ public class JMXMLParser {
         options.parserSettings.shouldReportNamespacePrefixes = false
         options.parserSettings.shouldResolveExternalEntities = false
     }
-    
-    public func titlePage(_ href: URL) {
-        do {
-            self.baseHref = href
-            let data = try Data(contentsOf: href)
-            let xmlDoc = try AEXMLDocument(xml: data, options: options)
-            for child in xmlDoc.root["body"]["div"].children {
-                parserXml(child: child)
-            }
-        } catch {
-            print("🆘🆘🆘 解析XML出错\(error)")
-        }
-    }
-    
-    public func coverPage(_ href: URL) {
-        do {
-            self.baseHref = href
-            let data = try Data(contentsOf: href)
-            let xmlDoc = try AEXMLDocument(xml: data, options: options)
-            for child in xmlDoc.root["body"]["div"].children {
-                parserXml(child: child)
-            }
-        } catch {
-            print("🆘🆘🆘 解析XML出错\(error)")
-        }
-    }
-    
+
     public func content(_ href: URL) {
         do {
             self.baseHref = href
             let data = try Data(contentsOf: href)
             let xmlDoc = try AEXMLDocument(xml: data, options: options)
-            for child in xmlDoc.root["body"]["div"].children {
+            for child in xmlDoc.root["body"].children {
                 parserXml(child: child)
             }
         } catch {
@@ -79,12 +53,21 @@ public class JMXMLParser {
             }
         }else {
             if let value = child.value, value.count > 0 {
-//                print(child.name, value)
-                xmlNodes.append(JMXmlNode(child.name,value))
+                // print(child.name, value)
+                // 如果上一段落是文本没必要新建模型，直接拼接到上一个模型上去
+                // 因为某些文本文件有大量短段落，每段都生成属性字符串时会导致内存问题
+                if let prevNode = xmlNodes.last, prevNode.tag != "img", !prevNode.media {
+                    prevNode.content += ("\n"+value)
+                }else {
+                    xmlNodes.append(JMXmlNode(child.name,value))
+                }
             }else {
                 if child.name == "img", let src = child.attributes["src"] {
                     xmlNodes.append(JMXmlNode("img",src))
-//                    print(child.name,src)
+                    // print(child.name,src)
+                }else if child.name == "image", let src = child.attributes["xlink:href"] {
+                    xmlNodes.append(JMXmlNode("img", src))
+                    // print(child.attributes)
                 }
             }
         }
@@ -116,6 +99,7 @@ public class JMXMLParser {
             }else {
                 let conText = NSMutableAttributedString(string: xmlNode.content)
                 conText.yy_lineSpacing = config.lineSpace
+                conText.yy_paragraphSpacing = config.lineSpace * 1.2
                 conText.yy_font = xmlNode.media ? UIFont.jmMedium(20) : config.font()
                 conText.yy_firstLineHeadIndent = 20
                 text.append(conText)
@@ -127,21 +111,5 @@ public class JMXMLParser {
     
     func attachMent(image: UIImage, font: UIFont) -> NSMutableAttributedString {
         return NSMutableAttributedString.yy_attachmentString(withContent: image, contentMode: .center, attachmentSize: image.size, alignTo: font, alignment: .center)
-    }
-}
-
-extension AEXMLElement {
-    func parserXml(child: AEXMLElement) {
-        if child.children.count > 0 {
-            for subChild in child.children {
-                parserXml(child: subChild)
-            }
-        }else {
-            if let value = child.value {
-                print(child.name, value)
-            }else {
-                print(child.name,child.attributes)
-            }
-        }
     }
 }

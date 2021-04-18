@@ -87,7 +87,7 @@ public class JMBookConfig: Codable {
 //        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
         self.height = UIScreen.main.bounds.height - UIDevice.footerSafeAreaHeight - UIDevice.headerSafeAreaHeight - 20 - 50
         self.fontSize = 16.0
-        self.lineSpace = 10.0
+        self.lineSpace = 8.0
         self.fontName = "PingFangSC-Regular"
         self.textColor = "#131313"
         self.selectColor = "#131313"
