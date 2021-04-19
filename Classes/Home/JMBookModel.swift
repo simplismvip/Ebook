@@ -60,11 +60,11 @@ final public class JMBookModel {
         return contents.reduce(0, { $0 + $1.word() })
     }
     
-    /// 阅读百分比
-    public func readRate() -> String {
-        let curr = CGFloat(contents.reduce(0) { $0 + ($1.pages?.count ?? 0) })
-        let total = catalogs.reduce(0) { $0 + ($1.subTable?.count ?? 0) }
-        return (curr > 0) ? "\(curr / CGFloat(total))%" : ""
+    /// 当前页数
+    public func readRate() -> String? {
+        // 本章当前读到页数
+        let curr = indexPath.page
+        return (curr > 0) ? String(format: "第%d页", indexPath.page) : nil
     }
     
     /// 当前小节标题
@@ -171,7 +171,7 @@ public class JMBookCharpter {
     func pagesContent() {
         parser.content(fullHref)
         let attr = parser.attributeStr(JMBookConfig.share)
-        self.pages = JMPageParse.pageContent(content: attr, bounds: JMBookConfig.share.bounds())
+        self.pages = JMPageParse.pageContent(content: attr, title: charpTitle, bounds: JMBookConfig.share.bounds())
 //        DispatchQueue.global().async {
 //            self.parser.content(self.fullHref)
 //            DispatchQueue.main.async {
@@ -189,6 +189,8 @@ public class JMBookCharpter {
 
 // MARK: -- 文本数据
 public struct JMBookPage {
+    /// 本页标题
+    public let title: String
     /// 本页字数
     public let word: Int
     /// 当前第几页
@@ -196,10 +198,11 @@ public struct JMBookPage {
     /// 本页内容
     public let attribute: NSAttributedString
     /// 文本类型
-    init(_ attribute: NSAttributedString, page: Int) {
+    init(_ attribute: NSAttributedString, title: String, page: Int) {
         self.attribute = attribute
         self.word = attribute.length
         self.page = page
+        self.title = title
     }
 }
 
@@ -227,7 +230,7 @@ public class JMBookSection {
         self.href = href
 //        let path = href.deletingLastPathComponent()
 //        let attributeStr = (content as NSString).parserEpub(path, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
-        self.pages = JMPageParse.pageContent(content: content, bounds: JMBookConfig.share.bounds())
+        self.pages = JMPageParse.pageContent(content: content, title:"", bounds: JMBookConfig.share.bounds())
     }
     
     public func word() -> Int {

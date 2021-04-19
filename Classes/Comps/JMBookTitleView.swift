@@ -9,7 +9,7 @@ import UIKit
 import ZJMKit
 
 final class JMBookTitleView: JMBaseView {
-    let title = UILabel()
+    var title = UILabel()
     private let back = UIButton(type: .system)
     
     override init(frame: CGRect) {

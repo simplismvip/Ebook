@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: -- Private Method, Setup views
 extension JMReadPageContrller {
-    
     func loadDats() {
         let bottomItems: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
         let top_left: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
@@ -40,7 +39,29 @@ extension JMReadPageContrller {
         }
     }
     
-    func setupviews()  {
+    func setupviews() {
+        battery.batteryColor = UIColor.darkText
+        view.addSubview(bookTitle)
+        bookTitle.snp.makeConstraints { (make) in
+            make.left.width.equalTo(view)
+            make.height.equalTo(20)
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            } else {
+                make.top.equalTo(view.snp.top)
+            }
+        }
+        
+        view.addSubview(battery)
+        battery.snp.makeConstraints { (make) in
+            make.left.width.equalTo(view)
+            make.height.equalTo(20)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.bottom.equalTo(view.snp.bottom)
+            }
+        }
         
         topContainer.backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         view.addSubview(topContainer)

@@ -26,6 +26,9 @@ public class JMReadPageContrller: JMBaseController {
     let bottomContainer = UIView() // 亮度
     let chapter = JMChapterView() // 左侧目录
     
+    let bookTitle = JMBookTitleView() // 标题
+    let battery = JMBatteryView() // 电池
+    
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
     
@@ -81,12 +84,12 @@ public class JMReadPageContrller: JMBaseController {
         loadDats()
         registerMenuEvent()
         getCurrentReadView()
+        
         let tapGes = UITapGestureRecognizer()
         tapGes.delegate = self
         tapGes.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGes)
         tapGes.addTarget(self, action: #selector(topgesture(_:)))
-        
     }
     
     @objc func topgesture(_ gesture: UITapGestureRecognizer) {
@@ -100,6 +103,10 @@ public class JMReadPageContrller: JMBaseController {
             pageView.loadPage(page)
             pageViewController.setViewControllers([pageView], direction: .reverse, animated: true, completion: nil)
         }
+    }
+    
+    deinit {
+        battery.fireTimer()
     }
 }
 
@@ -142,8 +149,8 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             print("😀😀😀completed")
-//            battery.progress.text = bookModel.readRate()
-//            bookTitle.title.text = bookModel.currTitle()
+            battery.progress.text = bookModel.readRate()
+            bookTitle.title.text = bookModel.currTitle()
         }else {
 //            print("😀😀😀completed none")
 //            if let page = previousViewControllers.first as? JMReadController {
