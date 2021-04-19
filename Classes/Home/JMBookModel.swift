@@ -75,28 +75,28 @@ final public class JMBookModel {
         return title
     }
     
-    subscript(indexPath: JMBookIndex) -> NSAttributedString? {
+    subscript(indexPath: JMBookIndex) -> JMBookPage? {
         get {
             print("😀😀😀: ------------------")
             print(indexPath.descrtion())
             print("😀😀😀: ------------------")
             if let page = contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page] {
-                return page.attribute
+                return page
             }else {
                 contents[indexPath.chapter].content()
                 let page = contents[indexPath.chapter].sections?[indexPath.section].pages[indexPath.page]
-                return page?.attribute
+                return page
             }
         }
     }
     
-    func currPage() -> NSAttributedString? {
+    func currPage() -> JMBookPage? {
         return self[indexPath]
     }
     
     /// 下一页
     // 先检查页，再检查小节，再检查章节
-    func nextPage() -> NSAttributedString? {
+    func nextPage() -> JMBookPage? {
         if indexPath.chapter == contents.count - 1
             && indexPath.section == sectionCount() - 1
             && indexPath.page == pageCount() - 1 {
@@ -128,7 +128,7 @@ final public class JMBookModel {
     }
 
     /// 上一页， 小章节还有，获取小章节
-    func prevPage() -> NSAttributedString? {
+    func prevPage() -> JMBookPage? {
         if indexPath.chapter == 0
             && indexPath.section == 0
             && indexPath.page == 0  {
@@ -181,6 +181,8 @@ public class JMBookCharpter {
     public let fullHref: URL
     /// 分解后的小节
     public var sections: [JMBookSection]?
+    /// 分解后的章节，每一个元素表示1页
+    public var pages: [JMBookPage]
     /// catalogs：每章的小节
     public let catalogs: [JMBookCatalog]
     /// 当前第几小节
@@ -206,7 +208,7 @@ public class JMBookCharpter {
         self.parser.content(self.fullHref)
         let attr = self.parser.attributeStr(JMBookConfig.share)
         self.sections = [JMBookSection(attr, self.catalogs.first!, href: self.fullHref)]
-        
+        self.pages = JMPageParse.pageContent(content: attr, bounds: JMBookConfig.share.bounds())
 //        DispatchQueue.global().async {
 //            self.parser.content(self.fullHref)
 //            DispatchQueue.main.async {

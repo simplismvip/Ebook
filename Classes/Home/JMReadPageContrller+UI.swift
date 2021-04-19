@@ -41,8 +41,7 @@ extension JMReadPageContrller {
     }
     
     func setupviews()  {
-        view.addSubview(battery)
-        view.addSubview(bookTitle)
+        
         topContainer.backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         view.addSubview(topContainer)
         topContainer.addSubview(topLeft)
@@ -51,7 +50,6 @@ extension JMReadPageContrller {
         bottomContainer.backgroundColor = topContainer.backgroundColor
         view.addSubview(bottomContainer)
         bottomContainer.addSubview(bottom)
-        battery.batteryColor = UIColor.darkText
         
         view.addSubview(chapter)
         view.addSubview(set)
@@ -92,26 +90,6 @@ extension JMReadPageContrller {
             make.left.width.equalTo(view)
             make.height.equalTo(230)
             make.bottom.equalTo(view.snp.bottom).offset(230)
-        }
-        
-        bookTitle.snp.makeConstraints { (make) in
-            make.left.width.equalTo(view)
-            make.height.equalTo(20)
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            } else {
-                make.top.equalTo(view.snp.top)
-            }
-        }
-        
-        battery.snp.makeConstraints { (make) in
-            make.left.width.equalTo(view)
-            make.height.equalTo(20)
-            if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            } else {
-                make.bottom.equalTo(view.snp.bottom)
-            }
         }
     }
 }

@@ -31,7 +31,7 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBack, block: { [weak self](_) in
-            self?.battery.fireTimer()
+//            self?.battery.fireTimer()
             self?.navigationController?.popViewController(animated: true)
         }, next: false)
         
@@ -44,8 +44,8 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionMore, block: { [weak self](_) in
-            if let pagrAttr = self?.bookModel.currPage(), pagrAttr.length > 10 {
-                self?.speech.readImmediately(pagrAttr, clear: false)
+            if let page = self?.bookModel.currPage(), page.attribute.length > 10 {
+                self?.speech.readImmediately(page.attribute, clear: false)
             }
             
         }, next: false)

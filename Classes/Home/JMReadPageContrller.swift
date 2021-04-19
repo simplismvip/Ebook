@@ -21,9 +21,6 @@ public class JMReadPageContrller: JMBaseController {
     let light = JMMenuLightView() // 亮度
     let play = JMMeunPlayVIew() // 播放
     
-    let bookTitle = JMBookTitleView() // 标题
-    let battery = JMBatteryView() // 电池
-    
     let topContainer = UIView() // 亮度
     let bottomContainer = UIView() // 亮度
     let chapter = JMChapterView() // 左侧目录
@@ -82,16 +79,13 @@ public class JMReadPageContrller: JMBaseController {
         setupviews()
         loadDats()
         registerMenuEvent()
-        
-        battery.progress.text = bookModel.readRate()
-        bookTitle.title.text = bookModel.currTitle()
-        
+        getCurrentReadView()
         let tapGes = UITapGestureRecognizer()
         tapGes.delegate = self
         tapGes.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGes)
         tapGes.addTarget(self, action: #selector(topgesture(_:)))
-        pageViewController.setViewControllers([getCurrentReadView()], direction: .reverse, animated: true, completion: nil)
+        
     }
     
     @objc func topgesture(_ gesture: UITapGestureRecognizer) {
@@ -99,12 +93,10 @@ public class JMReadPageContrller: JMBaseController {
         tapActionSwitchMenu(point.x)
     }
     
-    func getCurrentReadView() -> JMReadController {
-        let indexPath = JMBookIndex(0, 0, 0)
-        let page = JMReadController(cPage: indexPath)
-        let pagrAttr = bookModel[bookModel.indexPath]
-        page.pageView.reDrewText(content: pagrAttr)
-        return page
+    func getCurrentReadView() {
+        if let page = bookModel[bookModel.indexPath] {
+            pageViewController.setViewControllers([JMReadController(page)], direction: .reverse, animated: true, completion: nil)
+        }
     }
 }
 
@@ -116,11 +108,8 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
             return vc
         }else {
             print("😀😀😀Before")
-            if let pagrAttr = bookModel.prevPage(), pagrAttr.length > 10 {
-                let indexPath = JMBookIndex(0, 0, 0)
-                let page = JMReadController(cPage: indexPath)
-                page.pageView.reDrewText(content: pagrAttr)
-                return page
+            if let page = bookModel.prevPage() {
+                return JMReadController(page)
             }else {
                 print("😀😀😀Before 字符长度为空")
                 return nil
@@ -134,11 +123,8 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
             return vc
         }else {
             print("😀😀😀After")
-            if let pagrAttr = bookModel.nextPage(), pagrAttr.length > 0 {
-                let indexPath = JMBookIndex(0, 0, 0)
-                let page = JMReadController(cPage: indexPath)
-                page.pageView.reDrewText(content: pagrAttr)
-                return page
+            if let page = bookModel.nextPage() {
+                return JMReadController(page)
             }else {
                 print("😀😀😀After 字符长度为空")
                 return nil
@@ -149,8 +135,8 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             print("😀😀😀completed")
-            battery.progress.text = bookModel.readRate()
-            bookTitle.title.text = bookModel.currTitle()
+//            battery.progress.text = bookModel.readRate()
+//            bookTitle.title.text = bookModel.currTitle()
         }else {
 //            print("😀😀😀completed none")
 //            if let page = previousViewControllers.first as? JMReadController {
