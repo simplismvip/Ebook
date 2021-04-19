@@ -16,18 +16,17 @@ import ZJMKit
 //     第一章第二小节第二页
 public class JMBookIndex {
     var chapter: Int = 0 // 章
-    var section: Int = 0 // 小节
+//    var section: Int = 0 // 小节
     var page: Int = 0    // 页
     var loc: Int = 0     // 页中第几个字符
     
-    init(_ chapter: Int, _ section: Int, _ page: Int) {
+    init(_ chapter: Int, _ page: Int) {
         self.chapter = chapter
-        self.section = section
         self.page = page
     }
     
     func descrtion() {
-        print("chapter:\(chapter) section:\(section) page:\(page)")
+        print("chapter:\(chapter) page:\(page)")
     }
 }
 

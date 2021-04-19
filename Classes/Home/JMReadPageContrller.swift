@@ -11,7 +11,8 @@ import SnapKit
 
 public class JMReadPageContrller: JMBaseController {
     public weak var delegate: JMReadProtocol?
-    
+    // 数据源
+    private var dataSource = [JMReadController(), JMReadController()]
     let bookModel: JMBookModel
     let topLeft = JMReadItemView()
     let topRight = JMReadItemView()
@@ -29,7 +30,7 @@ public class JMReadPageContrller: JMBaseController {
     let s_width = UIScreen.main.bounds.size.width
     
     // 第N章-N小节-N页，表示当前读到的位置
-    public let cPage = JMBookIndex(0, 0, 0)
+    public let cPage = JMBookIndex(0, 0)
     let speech: JMSpeechParse
     
     /// 状态
@@ -95,7 +96,9 @@ public class JMReadPageContrller: JMBaseController {
     
     func getCurrentReadView() {
         if let page = bookModel[bookModel.indexPath] {
-            pageViewController.setViewControllers([JMReadController(page)], direction: .reverse, animated: true, completion: nil)
+            let pageView = dataSource.first!
+            pageView.loadPage(page)
+            pageViewController.setViewControllers([pageView], direction: .reverse, animated: true, completion: nil)
         }
     }
 }
@@ -109,7 +112,9 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
         }else {
             print("😀😀😀Before")
             if let page = bookModel.prevPage() {
-                return JMReadController(page)
+                let pageView = dataSource.filter { viewController != $0 }.first!
+                pageView.loadPage(page)
+                return pageView
             }else {
                 print("😀😀😀Before 字符长度为空")
                 return nil
@@ -124,7 +129,9 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
         }else {
             print("😀😀😀After")
             if let page = bookModel.nextPage() {
-                return JMReadController(page)
+                let pageView = dataSource.filter { viewController != $0 }.first!
+                pageView.loadPage(page)
+                return pageView
             }else {
                 print("😀😀😀After 字符长度为空")
                 return nil
