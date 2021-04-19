@@ -48,7 +48,7 @@ final class JMReadMenuContainer: JMBaseView {
     }
     
     /// 显示左侧目录
-    public func showChapter(items: [JMBookChapter]) {
+    public func showChapter(items: [JMBookCharpter]) {
         if chapter.dataSource.isEmpty {
             chapter.dataSource = items
             showWithType(type: .ViewType_CHAPTER)
@@ -75,106 +75,18 @@ final class JMReadMenuContainer: JMBaseView {
                 hideWithType()
             }
         }
-        
-        
-//        if let value = try? showOrHide.value() {
-//            let width = UIScreen.main.bounds.size.width
-//            if x < width/4 {
-//                switch value {
-//                case .HideOrShowAll(let isHide):
-//                    if isHide {
-//                        print("点击左侧1/4翻页")
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowSet(let isHide):
-//                    if isHide {
-//
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowLight(let isHide):
-//                    if isHide {
-//
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowPlay(let isHide):
-//                    if isHide {
-//
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                }
-//
-//            }else if x > width/4 && x < width/4*3 {
-//                switch value {
-//                case .HideOrShowAll(let isHide):
-//                    showOrHide.onNext(JMMenuStatus.HideOrShowAll(!isHide))
-//                case .ShowSet(let isHide):
-//                    if !isHide {
-//                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowLight(let isHide):
-//                    if !isHide {
-//                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowPlay(let isHide):
-//                    if !isHide {
-//                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                }
-//            }else {
-//                switch value {
-//                case .HideOrShowAll(let isHide):
-//                    if isHide {
-//                        print("点击右侧1/4翻页")
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowSet(let isHide):
-//                    if isHide {
-//
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.ShowSet(true))
-//                        // 隐藏设置View后，立即修改全局状态为隐藏。否则下一次点击会出问题
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowLight(let isHide):
-//                    if isHide {
-//
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.ShowLight(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                case .ShowPlay(let isHide):
-//                    if isHide {
-//
-//                    }else {
-//                        showOrHide.onNext(JMMenuStatus.ShowPlay(true))
-//                        showOrHide.onNext(JMMenuStatus.HideOrShowAll(true))
-//                    }
-//                }
+    }
+    
+//    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//        for view in subviews {
+//            let convertPoint = convert(point, from: self)
+//            if view.bounds.contains(convertPoint) {
+//                return super.hitTest(point, with: event)
 //            }
 //        }
-    }
-    
-    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        for view in subviews {
-            let convertPoint = convert(point, from: self)
-            if view.bounds.contains(convertPoint) {
-                return super.hitTest(point, with: event)
-            }
-        }
-        return nil
-    }
-    
+//        return nil
+//    }
+//
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -84,17 +84,6 @@ public class JMReadPageContrller: JMBaseController {
         loadDats()
         registerMenuEvent()
         getCurrentReadView()
-        
-        let tapGes = UITapGestureRecognizer()
-        tapGes.delegate = self
-        tapGes.numberOfTapsRequired = 1
-        view.addGestureRecognizer(tapGes)
-        tapGes.addTarget(self, action: #selector(topgesture(_:)))
-    }
-    
-    @objc func topgesture(_ gesture: UITapGestureRecognizer) {
-        let point = gesture.location(in: gesture.view)
-        tapActionSwitchMenu(point.x)
     }
     
     func getCurrentReadView() {
@@ -152,6 +141,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
             battery.progress.text = bookModel.readRate()
             bookTitle.title.text = bookModel.currTitle()
         }else {
+            hideWithType()
 //            print("😀😀😀completed none")
 //            if let page = previousViewControllers.first as? JMReadController {
 //                bookModel.indexPath.chapter = page.currPage.chapter
@@ -166,12 +156,3 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     }
 }
 
-
-extension JMReadPageContrller: UIGestureRecognizerDelegate {
-    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.view === view {
-            return true
-        }
-        return false
-    }
-}

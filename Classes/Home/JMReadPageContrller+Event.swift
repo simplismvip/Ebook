@@ -10,8 +10,10 @@ import UIKit
 // TODO: -- Register Event --
 extension JMReadPageContrller {
     func registerMenuEvent() {
-        jmRegisterEvent(eventName: kEventNameMenuActionTapAction, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionTapAction, block: { [weak self](pointX) in
+            if let px = pointX as? CGFloat {
+                self?.tapActionSwitchMenu(px)
+            }
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionTapLeft, block: { (_) in
@@ -50,8 +52,9 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { [weak self](_) in
-            if let tocItems = self?.bookModel.catalogs {
-                self?.showChapter(items: tocItems)
+            if let tocItems = self?.bookModel.contents {
+                self?.hideWithType()
+                self?.showChapter(items: tocItems.filter { ($0.charpTitle?.count ?? 0) > 0 })
             }
         }, next: false)
         
@@ -80,7 +83,17 @@ extension JMReadPageContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameDidSelectChapter, block: { [weak self](value) in
-            print(value as Any)
+            if let charpter = value as? JMBookChapter {
+                self?.hideWithType()
+                
+//                if let page = bookModel[bookModel.indexPath] {
+//                    let pageView = dataSource.first!
+//                    pageView.loadPage(page)
+//                    pageViewController.setViewControllers([pageView], direction: .reverse, animated: true, completion: nil)
+//                }
+                
+                print(charpter.title, charpter.fullHref)
+            }
         }, next: false)
     }
 }

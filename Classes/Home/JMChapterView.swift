@@ -12,7 +12,7 @@ final class JMChapterView: JMBaseView, UITableViewDelegate, UITableViewDataSourc
     private let titleLabel = UILabel()
     private let chapterCount = UILabel()
     private let sortBtn = UIButton(type: .system)
-    var dataSource = [JMBookChapter]() {
+    var dataSource = [JMBookCharpter]() {
         willSet {
             titleLabel.text = "三国演义"
             chapterCount.text = "已完结｜共\(newValue.count)章"
@@ -83,12 +83,8 @@ final class JMChapterView: JMBaseView, UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return dataSource.count
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource[section].subTable?.count ?? 0
+        return dataSource.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -99,26 +95,12 @@ final class JMChapterView: JMBaseView, UITableViewDelegate, UITableViewDataSourc
         var cell = tableView.dequeueReusableCell(withIdentifier: "kReuseCellIdentifier")
         if cell == nil { cell = JMBookChapterCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMBookChapterCell
-        if let item = dataSource[indexPath.section].subTable?[indexPath.row] {
-            newCell.setup(item)
-        }
+        newCell.setup(dataSource[indexPath.row])
         return newCell
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = JMReaderHeaderView.reuse()
-        header.config(dataSource[section])
-        return header
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let item = dataSource[indexPath.section].subTable?[indexPath.row] {
-            jmRouterEvent(eventName: kEventNameDidSelectChapter, info: item as MsgObjc)
-        }
+        jmRouterEvent(eventName: kEventNameDidSelectChapter, info: dataSource[indexPath.row] as MsgObjc)
     }
     
     required init?(coder: NSCoder) {
@@ -156,8 +138,8 @@ class JMBookChapterCell: JMBaseTableViewCell {
         }
     }
 
-    func setup(_ item: JMBookChapter) {
-        index.text = item.title
+    func setup(_ item: JMBookCharpter) {
+        index.text = item.charpTitle
         lock.text = "免费"
     }
     
@@ -178,7 +160,7 @@ class JMReaderHeaderView: UITableViewHeaderFooterView {
         contentView.backgroundColor = UIColor.jmRGB(200, 200, 200)
         contentView.addSubview(label)
         contentView.addSubview(actionBtn)
-        label.font = UIFont(name: "Avenir-Light", size: 15)
+        label.font = UIFont.jmMedium(18)
         label.snp.makeConstraints { (make) in
             make.left.equalTo(snp.left).offset(15)
             make.right.equalTo(snp.right).offset(-60)

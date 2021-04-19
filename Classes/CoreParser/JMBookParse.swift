@@ -38,16 +38,9 @@ public class JMBookParse: NSObject {
     private func parseEpubBook() {
         do{
             let document = try EPUBParser().parse(documentAt: pathUrl)
-            if let tocItems = document.tableOfContents.subTable {
-                let ncx = tocItems.map { JMBookChapter($0,baseHref: document.contentDirectory) }
-                let bookModel = JMBookModel(document: document, catalog: ncx)
-                DispatchQueue.main.async {
-                    self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)
-                }
-            }else {
-                DispatchQueue.main.async {
-                    self.jmSendMsg(msgName: kMsgNameOpenBookFail, info: "🆘🆘🆘打开失败" as MsgObjc)
-                }
+            let bookModel = JMBookModel(document: document)
+            DispatchQueue.main.async {
+                self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)
             }
         }catch {
             DispatchQueue.main.async {
@@ -79,5 +72,29 @@ extension JMBookParse {
     // Mobi
     private func parseMobiBook() {
         
+    }
+}
+
+extension EPUBDocument {
+    public func findTarget(target: String) -> EPUBTableOfContents? {
+        guard let items = tableOfContents.subTable, items.count > 0 else {
+            return nil
+        }
+        
+        for item in items {
+            if item.item == target {
+                return item
+            }else {
+                // 第一层没找到遍历第二层
+                if let subItems = item.subTable, subItems.count > 0 {
+                    for subItem in subItems {
+                        if subItem.item == target {
+                            return subItem
+                        }
+                    }
+                }
+            }
+        }
+        return nil
     }
 }

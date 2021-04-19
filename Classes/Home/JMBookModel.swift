@@ -23,28 +23,29 @@ final public class JMBookModel {
     public let indexPath: JMBookIndex
     // 所有当前章节
     public var contents: [JMBookCharpter]
-    // 左侧章节目录，这个相比上面的更详细
-    public let catalogs: [JMBookChapter]
-    
     public var updateTime: TimeInterval? // 更新时间
     public var readTime: TimeInterval? //阅读的最后时间
     public var onBookshelf = false // 是否在书架上
     public var isDownload = false // 是否已下载
     
-    init(document: EPUBDocument, catalog: [JMBookChapter]) {
+    init(document: EPUBDocument) {
         self.bookId = document.metadata.identifier ?? ""
         self.title = document.title ?? ""
         self.author = document.author ?? ""
-        self.catalogs = catalog
         self.coverImg = document.cover
         self.directory = document.directory
         self.contentDirectory = document.contentDirectory
         self.desc = document.metadata.description
         self.indexPath = JMBookIndex(0,0)
-        self.contents = document.spine.items.map({
-            if let href = document.manifest.items[$0.idref]?.path {
+        self.contents = document.spine.items.map({ spine ->JMBookCharpter? in
+            if spine.linear, let href = document.manifest.items[spine.idref]?.path {
                 let fullHref = document.contentDirectory.appendingPathComponent(href)
-                return JMBookCharpter(spine: $0, fullHref: fullHref)
+                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref)
+                // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
+                if let path = document.manifest.items[spine.idref]?.path {
+                    charpter.charpTitle = document.findTarget(target: path)?.label
+                }
+                return charpter
             }else {
                 return nil
             }
@@ -64,7 +65,7 @@ final public class JMBookModel {
     
     /// 当前小节标题
     public func currTitle() -> String {
-        return contents[indexPath.chapter].charpTitle
+        return contents[indexPath.chapter].charpTitle ?? ""
     }
     
     subscript(indexPath: JMBookIndex) -> JMBookPage? {
@@ -143,7 +144,7 @@ final public class JMBookModel {
 // MARK: -- 章节模型
 public class JMBookCharpter {
     /// 章节标题
-    public var charpTitle: String
+    public var charpTitle: String?
     /// 地址
     public var idref: String
     /// 是否隐藏
@@ -159,14 +160,13 @@ public class JMBookCharpter {
         self.idref = spine.idref
         self.linear = spine.linear
         self.fullHref = fullHref
-        self.charpTitle = spine.idref
     }
         
     // 读取本章节，
     func pagesContent() {
         parser.content(fullHref)
         let attr = parser.attributeStr(JMBookConfig.share)
-        self.pages = JMPageParse.pageContent(content: attr, title: charpTitle, bounds: JMBookConfig.share.bounds())
+        self.pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: JMBookConfig.share.bounds())
     }
     
     /// 本章多少字：=小节总字数
@@ -191,37 +191,5 @@ public struct JMBookPage {
         self.word = attribute.length
         self.page = page
         self.title = title
-    }
-}
-
-
-// MARK: -- 小节模型 ------- 暂时用不到 -------
-public class JMBookSection {
-    /// 分解后的章节，每一个元素表示1页
-    public let href: URL
-    
-    public var title: String
-
-    public var idef: String
-
-    public var item: String?
-    
-    /// 分解后的章节，每一个元素表示1页
-    public var pages: [JMBookPage]
-    /// 当前哪一小节
-    public var cPage = 0
-    
-    init(_ content: NSMutableAttributedString, _ catalog: JMBookChapter, href: URL) {
-        self.title = catalog.title
-        self.idef = catalog.id
-        self.item = catalog.src
-        self.href = href
-//        let path = href.deletingLastPathComponent()
-//        let attributeStr = (content as NSString).parserEpub(path, spacing: JMBookConfig.share.lineSpace, font: JMBookConfig.share.font())
-        self.pages = JMPageParse.pageContent(content: content, title:"", bounds: JMBookConfig.share.bounds())
-    }
-    
-    public func word() -> Int {
-        return pages.reduce(0, { $0 + $1.word })
     }
 }

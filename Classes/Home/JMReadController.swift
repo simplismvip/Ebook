@@ -36,6 +36,12 @@ final public class JMReadController: JMBaseController {
         currPage = page
         pageView.reDrewText(content: page.attribute)
     }
+    
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.randomElement()
+        let point = touch?.location(in: view)
+        jmRouterEvent(eventName: kEventNameMenuActionTapAction, info: point?.x as MsgObjc)
+    }
 }
 
 
