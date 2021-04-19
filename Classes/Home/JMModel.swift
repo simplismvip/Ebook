@@ -9,14 +9,8 @@ import Foundation
 import EPUBKit
 import ZJMKit
 
-// 第几章，第几小章
-// 层次结构：总共N章节
-// 第一章
-//   第一章第二小节
-//     第一章第二小节第二页
 public class JMBookIndex {
     var chapter: Int = 0 // 章
-//    var section: Int = 0 // 小节
     var page: Int = 0    // 页
     var loc: Int = 0     // 页中第几个字符
     
@@ -39,16 +33,18 @@ public struct JMBookShareItem {
 }
 
 // MARK: -- 目录, ncx中读取的目录
-public struct JMBookCatalog {
+public struct JMBookChapter {
     public var title: String
     public var id: String
     public let src: String
-    public var subTable: [JMBookCatalog]?
-    init(_ tableOfContents: EPUBTableOfContents) {
+    public let fullHref: URL
+    public var subTable: [JMBookChapter]?
+    init(_ tableOfContents: EPUBTableOfContents, baseHref: URL) {
         self.id = tableOfContents.id
         self.title = tableOfContents.label
-        self.src = tableOfContents.item!
-        self.subTable = tableOfContents.subTable?.compactMap({ $0 }).map({ JMBookCatalog($0) })
+        self.src = tableOfContents.item ?? ""
+        self.fullHref = baseHref.appendingPathComponent(self.src)
+        self.subTable = tableOfContents.subTable?.compactMap({ $0 }).map({ JMBookChapter($0, baseHref: baseHref) })
     }
 }
 

@@ -34,15 +34,13 @@ public class JMBookParse: NSObject {
         }
     }
     
-    // Epub
+    // Epub, 读取目录
     private func parseEpubBook() {
         do{
-            // 读取目录
             let document = try EPUBParser().parse(documentAt: pathUrl)
             if let tocItems = document.tableOfContents.subTable {
-                let ncx = tocItems.map { JMBookCatalog($0) }
+                let ncx = tocItems.map { JMBookChapter($0,baseHref: document.contentDirectory) }
                 let bookModel = JMBookModel(document: document, catalog: ncx)
-                
                 DispatchQueue.main.async {
                     self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)
                 }

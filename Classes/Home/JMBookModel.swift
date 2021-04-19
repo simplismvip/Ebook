@@ -9,10 +9,6 @@ import UIKit
 import EPUBKit
 import ZJMKit
 
-// 层次结构：总共N章节
-// 第一章
-//   第一章第一小节
-//     第一章第一小节第一页
 // MARK: -- 书本📖模型
 final public class JMBookModel {
     public var bookId: String
@@ -28,14 +24,14 @@ final public class JMBookModel {
     // 所有当前章节
     public var contents: [JMBookCharpter]
     // 左侧章节目录，这个相比上面的更详细
-    public let catalogs: [JMBookCatalog]
+    public let catalogs: [JMBookChapter]
     
     public var updateTime: TimeInterval? // 更新时间
     public var readTime: TimeInterval? //阅读的最后时间
     public var onBookshelf = false // 是否在书架上
     public var isDownload = false // 是否已下载
     
-    init(document: EPUBDocument, catalog: [JMBookCatalog]) {
+    init(document: EPUBDocument, catalog: [JMBookChapter]) {
         self.bookId = document.metadata.identifier ?? ""
         self.title = document.title ?? ""
         self.author = document.author ?? ""
@@ -62,7 +58,6 @@ final public class JMBookModel {
     
     /// 当前页数
     public func readRate() -> String? {
-        // 本章当前读到页数
         let curr = indexPath.page
         return (curr > 0) ? String(format: "第%d页", indexPath.page) : nil
     }
@@ -172,13 +167,6 @@ public class JMBookCharpter {
         parser.content(fullHref)
         let attr = parser.attributeStr(JMBookConfig.share)
         self.pages = JMPageParse.pageContent(content: attr, title: charpTitle, bounds: JMBookConfig.share.bounds())
-//        DispatchQueue.global().async {
-//            self.parser.content(self.fullHref)
-//            DispatchQueue.main.async {
-//                let attr = self.parser.attributeStr(JMBookConfig.share)
-//                self.sections = [JMBookSection(attr, self.catalogs.first!, href: self.fullHref)]
-//            }
-//        }
     }
     
     /// 本章多少字：=小节总字数
@@ -223,7 +211,7 @@ public class JMBookSection {
     /// 当前哪一小节
     public var cPage = 0
     
-    init(_ content: NSMutableAttributedString, _ catalog: JMBookCatalog, href: URL) {
+    init(_ content: NSMutableAttributedString, _ catalog: JMBookChapter, href: URL) {
         self.title = catalog.title
         self.idef = catalog.id
         self.item = catalog.src

@@ -48,7 +48,7 @@ final class JMReadMenuContainer: JMBaseView {
     }
     
     /// 显示左侧目录
-    public func showChapter(items: [JMBookCatalog]) {
+    public func showChapter(items: [JMBookChapter]) {
         if chapter.dataSource.isEmpty {
             chapter.dataSource = items
             showWithType(type: .ViewType_CHAPTER)

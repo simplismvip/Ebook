@@ -12,7 +12,7 @@ final class JMChapterView: JMBaseView, UITableViewDelegate, UITableViewDataSourc
     private let titleLabel = UILabel()
     private let chapterCount = UILabel()
     private let sortBtn = UIButton(type: .system)
-    var dataSource = [JMBookCatalog]() {
+    var dataSource = [JMBookChapter]() {
         willSet {
             titleLabel.text = "三国演义"
             chapterCount.text = "已完结｜共\(newValue.count)章"
@@ -156,7 +156,7 @@ class JMBookChapterCell: JMBaseTableViewCell {
         }
     }
 
-    func setup(_ item: JMBookCatalog) {
+    func setup(_ item: JMBookChapter) {
         index.text = item.title
         lock.text = "免费"
     }
@@ -191,7 +191,7 @@ class JMReaderHeaderView: UITableViewHeaderFooterView {
         }
     }
     
-    func config(_ model: JMBookCatalog) {
+    func config(_ model: JMBookChapter) {
         label.text = model.title
         actionBtn.jmAddAction { [weak self](_) in
             self?.jmRouterEvent(eventName: kEventNameDidSelectChapter, info: model as MsgObjc)
