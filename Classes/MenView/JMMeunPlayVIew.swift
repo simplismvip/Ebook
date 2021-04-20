@@ -17,7 +17,7 @@ final class JMMeunPlayVIew: JMBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         addSubview(playControl)
         addSubview(rateName)
         addSubview(playRate)

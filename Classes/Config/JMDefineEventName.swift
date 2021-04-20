@@ -68,12 +68,14 @@ public let kEventNameMenuPlayBookNext = "kEventNameMenuPlayBookNext"
 /// 设置播放风格
 public let kEventNameMenuPlayBookStyle = "kEventNameMenuPlayBookStyle"
 
-/// 覆盖
-public let kEventNameMenuPageFlipCube = "kEventNameMenuPageFlipCube"
-/// 仿真
-public let kEventNameMenuPageFlipPageCurl = "kEventNameMenuPageFlipPageCurl"
-/// 翻转
-public let kEventNameMenuPageFlipOglFlip = "kEventNameMenuPageFlipOglFlip"
+/// 横向滚动
+public let kEventNameMenuPageHoriScroll = "kEventNameMenuPageHoriScroll"
+/// 横向翻页
+public let kEventNameMenuPageHoriCurl = "kEventNameMenuPageHoriCurl"
+/// 竖向滚动
+public let kEventNameMenuPageVeriScroll = "kEventNameMenuPageVeriScroll"
+/// 竖向翻页
+public let kEventNameMenuPageVeriCurl = "kEventNameMenuPageVeriCurl"
 /// 点击目录
 public let kEventNameDidSelectChapter = "kEventNameDidSelectChapter"
 

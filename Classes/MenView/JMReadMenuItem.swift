@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RxSwift
 import HandyJSON
 
 public class JMReadMenuItem: HandyJSON {
@@ -19,12 +18,14 @@ public class JMReadMenuItem: HandyJSON {
     
     /// 是否是设置背景模型
     var bkgColor: String?
-    
     var borderWidth: CGFloat?
     var cornerRadius: CGFloat?
     var borderColor: UIColor?
     var titleColor: UIColor?
     var identify: JMMenuStyle = .nonetype 
-    var isSelect = BehaviorSubject<Bool>(value: false)
+    var isSelect: Bool = false {
+        willSet { didSelectAction?(newValue) }
+    }
+    var didSelectAction: ((Bool)->())?
     required public init () { }
 }

@@ -14,8 +14,19 @@ final public class JMReadController: JMBaseController {
     public var isShow: Bool = false
     let pageView = JMReadView(frame: CGRect.zero)
 
+//    public override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        isShow = true
+//    }
+//    
+//    public override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        isShow = false
+//    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.white
         view.addSubview(pageView)
         pageView.snp.makeConstraints { make in
             make.left.equalTo(view).offset(20)
@@ -38,9 +49,16 @@ final public class JMReadController: JMBaseController {
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.randomElement()
-        let point = touch?.location(in: view)
-        jmRouterEvent(eventName: kEventNameMenuActionTapAction, info: point?.x as MsgObjc)
+        if let point = touches.randomElement()?.location(in: view) {
+            let s_width = UIScreen.main.bounds.size.width
+            if point.x < s_width/4 {
+                jmRouterEvent(eventName: kEventNameMenuActionTapLeft, info: nil)
+            }else if point.x > s_width/4 && point.x < s_width/4*3 {
+                jmRouterEvent(eventName: kEventNameMenuActionTapAction, info: nil)
+            }else {
+                jmRouterEvent(eventName: kEventNameMenuActionTapRight, info: nil)
+            }
+        }
     }
 }
 

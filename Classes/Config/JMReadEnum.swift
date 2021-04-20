@@ -17,10 +17,22 @@ public enum JMEpubStatus {
 
 // MARK: -- 翻页类型
 public enum JMFlipType: String, Codable {
-    case VertScroll = "竖直滚动" // 竖直滚动
-    case VertCurl = "竖直翻页" // 竖直翻页
-    case HoriScroll = "横向滚动" // 横向滚动
-    case HoriCurl = "横向翻页" // 横向翻页
+    case VertScroll = "vertScroll" // 竖直滚动
+    case VertCurl = "vertCurl" // 竖直翻页
+    case HoriScroll = "horiScroll" // 横向滚动
+    case HoriCurl = "horiCurl" // 横向翻页
+    
+    static func typeFrom(_ typeStr: String) -> JMFlipType {
+        if typeStr == "vertScroll" {
+            return .VertScroll
+        }else if typeStr == "vertCurl" {
+            return .VertCurl
+        }else if typeStr == "horiScroll" {
+            return .HoriScroll
+        }else {
+            return .HoriCurl
+        }
+    }
 }
 
 // MARK: -- 系统亮度
@@ -131,10 +143,10 @@ public enum JMMenuStyle: String, HandyJSONEnum {
     case TRightWifi = "sharewifi"// 主页顶部右侧
     case TRightMore = "actionmore"// 主页顶部右侧
     
-    case PFlipNormal = "normal"// 翻页
-    case PFlipCube = "cube"// 翻页
-    case PFlipCurl = "pageCurl"// 翻页
-    case PFlipOgl = "oglFlip"// 翻页
+    case PFlipHoriScrolll = "horiScroll"// 翻页
+    case PFlipHoriCurl = "horiCurl"// 翻页
+    case PFlipVertScroll = "vertScroll"// 翻页
+    case PFlipVertCurl = "vertCurl"// 翻页
     
     case PFont = "Andada"// 字体
     case PFont1 = "Lato"// 字体

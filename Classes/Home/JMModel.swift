@@ -48,7 +48,7 @@ public class JMBookConfig: Codable {
     var textColor: String
     /// 选中字体颜色
     var selectColor: String
-    /// 选中字体颜色
+    /// 主题颜色
     var bkgColor: String
     /// 翻页类型
     var flipType: JMFlipType
@@ -70,8 +70,8 @@ public class JMBookConfig: Codable {
         self.fontName = "PingFangSC-Regular"
         self.textColor = "#131313"
         self.selectColor = "#131313"
-        self.bkgColor = "#131313"
-        self.flipType = .VertScroll
+        self.bkgColor = "#ffffff"
+        self.flipType = .HoriCurl
         self.brightness = UIScreen.main.brightness
     }
     

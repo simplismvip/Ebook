@@ -41,6 +41,7 @@ extension JMReadPageContrller {
     
     func setupviews() {
         battery.batteryColor = UIColor.darkText
+        chapter.isHidden = true
         view.addSubview(bookTitle)
         bookTitle.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
@@ -85,14 +86,14 @@ extension JMReadPageContrller {
         
         topContainer.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(104)
-            make.top.equalTo(view.snp.top).offset(-104)
+            make.height.equalTo(94)
+            make.top.equalTo(view.snp.top).offset(-94)
         }
         
         bottomContainer.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(104)
-            make.bottom.equalTo(view.snp.bottom).offset(104)
+            make.height.equalTo(94)
+            make.bottom.equalTo(view.snp.bottom).offset(94)
         }
         
         set.snp.makeConstraints { (make) in
@@ -116,22 +117,6 @@ extension JMReadPageContrller {
 }
 
 extension JMReadPageContrller {
-    func switchWithType() {
-        if currType == .ViewType_TOP_BOTTOM {
-            
-        }else if currType == .ViewType_LIGHT {
-            
-        }else if currType == .ViewType_SET {
-            
-        }else if currType == .ViewType_CHAPTER {
-            
-        }else if currType == .ViewType_PLAY {
-            
-        }else if currType == .ViewType_NONE {
-            
-        }
-    }
-    
     /// 展示
     func showWithType(type: JMMenuViewType) {
         self.currType = type
@@ -143,30 +128,29 @@ extension JMReadPageContrller {
             bottomContainer.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom)
             }
-            
+            layoutIfNeeded([topContainer,bottomContainer], ishide: false)
         }else if type == .ViewType_LIGHT {
             light.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom)
             }
+            layoutIfNeeded([light], ishide: false)
         }else if type == .ViewType_SET {
             set.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom)
             }
+            layoutIfNeeded([set], ishide: false)
         }else if type == .ViewType_CHAPTER {
             chapter.snp.updateConstraints { (make) in
                 make.left.equalTo(view)
             }
+            layoutIfNeeded([chapter], ishide: false)
         }else if type == .ViewType_PLAY {
             play.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom)
             }
+            layoutIfNeeded([play], ishide: false)
         }else if type == .ViewType_NONE {
             
-        }
-        
-        view.setNeedsUpdateConstraints()
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
         }
     }
     
@@ -180,32 +164,51 @@ extension JMReadPageContrller {
             bottomContainer.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom).offset(104)
             }
+            layoutIfNeeded([topContainer,bottomContainer], ishide: true)
+            
         }else if currType == .ViewType_LIGHT {
             light.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom).offset(160)
             }
+            layoutIfNeeded([light], ishide: true)
         }else if currType == .ViewType_SET {
             set.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom).offset(320)
             }
+            layoutIfNeeded([set], ishide: true)
         }else if currType == .ViewType_CHAPTER {
             chapter.snp.updateConstraints { (make) in
                 make.left.equalTo(view).offset(-view.jmWidth*0.9)
             }
+            layoutIfNeeded([chapter], ishide: true)
         }else if currType == .ViewType_PLAY {
             play.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom).offset(230)
             }
+            layoutIfNeeded([play], ishide: true)
         }else if currType == .ViewType_NONE {
             
         }
         
         // 重置
         currType = .ViewType_NONE
-        
+    }
+    
+    private func layoutIfNeeded(_ views: [UIView], ishide: Bool) {
+        if !ishide {
+            for view in views {
+                view.isHidden = ishide
+            }
+        }
         view.setNeedsUpdateConstraints()
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
+        } completion: { (finish) in
+            if finish && ishide {
+                for view in views {
+                    view.isHidden = ishide
+                }
+            }
         }
     }
 }

@@ -116,7 +116,7 @@ class JMEpubViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(imagev)
         view.addSubview(tips)
-        
+        view.backgroundColor = UIColor.white
         imagev.snp.makeConstraints { (make) in
             make.width.height.equalTo(self.view.jmWidth)
             make.centerX.equalTo(self.view.snp.centerX)

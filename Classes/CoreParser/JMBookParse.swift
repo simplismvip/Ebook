@@ -18,7 +18,7 @@ public class JMBookParse: NSObject {
     public init(_ path: String) {
         self.path = path
         self.pathUrl = URL(fileURLWithPath: path)
-        self.bookType = JMBookType.bookType(pathUrl.pathExtension)
+        self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
         super.init()
     }
     
@@ -51,15 +51,11 @@ public class JMBookParse: NSObject {
     
     // Txt
     private func parseTxtBook() {
-//        do{
-//            DispatchQueue.main.async {
-//                self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: "😀😀😀打开 \("document.title")成功" as MsgObjc)
-//            }
-//        }catch {
-//            DispatchQueue.main.async {
-//                self.jmSendMsg(msgName: kMsgNameOpenBookFail, info: "🆘🆘🆘打开 \(error.localizedDescription)失败" as MsgObjc)
-//            }
-//        }
+        do {
+            let document = try JMTxtParser().parser(url: pathUrl)
+        }catch let error as NSError {
+            print(error)
+        }
     }
 }
 

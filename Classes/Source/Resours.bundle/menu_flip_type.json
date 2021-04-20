@@ -1,31 +1,31 @@
 [
     {
-        "title":"正常",
+        "title":"横向滚动",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
         "type":"pageflip",
-        "identify":"normal"
+        "identify":"horiScroll"
     },{
-        "title":"覆盖",
+        "title":"横向翻页",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
         "type":"pageflip",
-        "identify":"cube"
+        "identify":"horiCurl"
     },{
-        "title":"仿真",
+        "title":"竖直滚动",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
         "type":"pageflip",
-        "identify":"pageCurl"
+        "identify":"vertScroll"
     },{
-        "title":"翻转",
+        "title":"竖直翻页",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
         "type":"pageflip",
-        "identify":"oglFlip"
+        "identify":"vertCurl"
     }
 ]

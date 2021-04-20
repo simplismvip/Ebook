@@ -22,7 +22,7 @@ final class JMMenuSetView: JMBaseView {
         addSubview(fontSize)
         addSubview(pageFlip)
         addSubview(fontType)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         
         pageFlip.snp.makeConstraints({ (make) in
             make.width.equalTo(self)
@@ -63,7 +63,7 @@ final class BkgColorView: JMBaseView {
     internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         name.text = "阅读背景"
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +105,7 @@ final class FontSizeView: JMBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         addSubview(name)
         addSubview(nameSize)
         addSubview(slider)
@@ -151,7 +151,7 @@ final class PageFlipView: JMBaseView {
     internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         name.text = "翻页设置"
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -186,7 +186,7 @@ final class FontTypeView: JMBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGB(31, 31, 31)
+        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
         name.text = "字体设置"
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
         name.translatesAutoresizingMaskIntoConstraints = false

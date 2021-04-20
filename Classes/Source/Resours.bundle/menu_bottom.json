@@ -1,28 +1,24 @@
 [
     {
-        "title":"目录",
-        "image":"icon-sun",
+        "image":"epub_chapter",
         "event":"kEventNameMenuActionBookCatalog",
         "border":false,
         "type":"bottom",
         "identify":"bookCatalog"
     },{
-        "title":"夜间模式",
-        "image":"icon-moon",
+        "image":"epub_progress",
         "event":"kEventNameMenuActionDayOrNight",
         "border":false,
         "type":"bottom",
         "identify":"dayornight"
     },{
-        "title":"亮度",
-        "image":"icon-sun",
+        "image":"epub_bkg",
         "event":"kEventNameMenuActionBrightness",
         "border":false,
         "type":"bottom",
         "identify":"brightness"
     },{
-        "title":"设置",
-        "image":"book_set",
+        "image":"epub_set",
         "event":"kEventNameMenuActionSettingMore",
         "border":false,
         "type":"bottom",

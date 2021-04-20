@@ -18,11 +18,8 @@ final public class JMBookModel {
     public let contentDirectory: URL
     public var coverImg: URL?
     public var desc: String?
-    
-    // 第N章-N小节-N页，表示当前读到的位置
-    public let indexPath: JMBookIndex
-    // 所有当前章节
-    public var contents: [JMBookCharpter]
+    public let indexPath: JMBookIndex // 表示当前读到的位置
+    public var contents = [JMBookCharpter]() // 所有当前章节
     public var updateTime: TimeInterval? // 更新时间
     public var readTime: TimeInterval? //阅读的最后时间
     public var onBookshelf = false // 是否在书架上
@@ -36,20 +33,20 @@ final public class JMBookModel {
         self.directory = document.directory
         self.contentDirectory = document.contentDirectory
         self.desc = document.metadata.description
-        self.indexPath = JMBookIndex(0,0)
-        self.contents = document.spine.items.map({ spine ->JMBookCharpter? in
+        self.indexPath = JMBookIndex(0, 0)
+        
+        // 初始化章节
+        for (index, spine) in document.spine.items.enumerated() {
             if spine.linear, let href = document.manifest.items[spine.idref]?.path {
                 let fullHref = document.contentDirectory.appendingPathComponent(href)
-                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref)
+                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0))
                 // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
                 if let path = document.manifest.items[spine.idref]?.path {
                     charpter.charpTitle = document.findTarget(target: path)?.label
                 }
-                return charpter
-            }else {
-                return nil
+                self.contents.append(charpter)
             }
-        }).compactMap({ $0 })
+        }
     }
     
     /// 本书所有文字数
@@ -73,13 +70,15 @@ final public class JMBookModel {
             print("😀😀😀: ------------------")
             print(indexPath.descrtion())
             print("😀😀😀: ------------------")
+            if contents[indexPath.chapter].pages == nil {
+                contents[indexPath.chapter].pagesContent()
+            }
+            
             if let page = contents[indexPath.chapter].pages?[indexPath.page] {
                 return page
-            }else {
-                contents[indexPath.chapter].pagesContent()
-                let page = contents[indexPath.chapter].pages?[indexPath.page]
-                return page
             }
+            
+            return nil
         }
     }
     
@@ -89,7 +88,6 @@ final public class JMBookModel {
     }
     
     /// 下一页
-    // 先检查页，再检查小节，再检查章节
     func nextPage() -> JMBookPage? {
         if indexPath.chapter == contents.count - 1
             && indexPath.page == pageCount() - 1 {
@@ -112,7 +110,7 @@ final public class JMBookModel {
         }
     }
 
-    /// 上一页， 小章节还有，获取小章节
+    /// 上一页
     func prevPage() -> JMBookPage? {
         if indexPath.chapter == 0
             && indexPath.page == 0  {
@@ -155,11 +153,13 @@ public class JMBookCharpter {
     public var pages: [JMBookPage]?
     /// 解析器
     public let parser = JMXMLParser()
-    
-    init(spine: EPUBSpineItem, fullHref: URL) {
+    /// 当前章节
+    public let location: JMBookIndex
+    init(spine: EPUBSpineItem, fullHref: URL, loc: JMBookIndex) {
         self.idref = spine.idref
         self.linear = spine.linear
         self.fullHref = fullHref
+        self.location = loc
     }
         
     // 读取本章节，
