@@ -29,8 +29,14 @@ public let kEventNameMenuActionBack = "kEventNameMenuActionBack"
 public let kEventNameMenuActionShare = "kEventNameMenuActionShare"
 /// 听书
 public let kEventNameMenuActionListenBook = "kEventNameMenuActionListenBook"
-/// 通过Wi-Fi分享给他人
-public let kEventNameMenuActionShareWifi = "kEventNameMenuActionShareWifi"
+/// 进度
+public let kEventNameMenuActionProgress = "kEventNameMenuActionProgress"
+/// 下一章
+public let kEventNameMenuActionNextCharpter = "kEventNameMenuActionNextCharpter"
+/// 上一章
+public let kEventNameMenuActionPrevCharpter = "kEventNameMenuActionPrevCharpter"
+/// 跳到指定章
+public let kEventNameMenuActionTargetCharpter = "kEventNameMenuActionTargetCharpter"
 /// 更多
 public let kEventNameMenuActionMore = "kEventNameMenuActionMore"
 /// 目录
@@ -55,6 +61,8 @@ public let kEventNameMenuPageFlipType = "kEventNameMenuPageFlipType"
 public let kEventNameMenuFontType = "kEventNameMenuFontType"
 /// 字体大小滑杆
 public let kEventNameMenuFontSizeSlider = "kEventNameMenuFontSizeSlider"
+/// 滑杆改变值大小
+public let kEventNameMenuSliderValueChange = "kEventNameMenuSliderValueChange"
 /// 颜色
 public let kEventNameMenuPageBkgColor = "kEventNameMenuPageBkgColor"
 /// 播放进度

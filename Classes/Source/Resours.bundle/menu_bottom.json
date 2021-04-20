@@ -7,7 +7,7 @@
         "identify":"bookCatalog"
     },{
         "image":"epub_progress",
-        "event":"kEventNameMenuActionDayOrNight",
+        "event":"kEventNameMenuActionProgress",
         "border":false,
         "type":"bottom",
         "identify":"dayornight"

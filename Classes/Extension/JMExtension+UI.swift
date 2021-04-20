@@ -188,6 +188,21 @@ public extension Double {
 }
 
 extension UIColor {
+    /// 菜单背景颜色
+    public static var menuBkg: UIColor {
+        return UIColor.jmRGBValue(0xF0F8FF)
+    }
+    
+    /// 菜单背景颜色
+    public static var menuTintColor: UIColor {
+        return UIColor(rgba: "#979797")
+    }
+    
+    /// 菜单背景颜色
+    public static var menuTextColor: UIColor {
+        return UIColor.gray
+    }
+
     convenience init(rgba: String) {
         var red:   CGFloat = 0.0
         var green: CGFloat = 0.0
@@ -251,23 +266,19 @@ extension UIColor {
     }
     
     func highlightColor() -> UIColor {
-        
         var hue : CGFloat = 0
         var saturation : CGFloat = 0
         var brightness : CGFloat = 0
         var alpha : CGFloat = 0
-        
         if getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
             return UIColor(hue: hue, saturation: 0.30, brightness: 1, alpha: alpha)
         } else {
             return self;
         }
-        
     }
     
     /**
      Returns a lighter color by the provided percentage
-     
      :param: lighting percent percentage
      :returns: lighter UIColor
      */
@@ -296,7 +307,6 @@ extension UIColor {
         var saturation : CGFloat = 0
         var brightness : CGFloat = 0
         var alpha : CGFloat = 0
-        
         if getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
             return UIColor(hue: hue, saturation: saturation, brightness: brightness * factor, alpha: alpha)
         } else {

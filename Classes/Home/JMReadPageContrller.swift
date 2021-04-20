@@ -21,13 +21,14 @@ public class JMReadPageContrller: JMBaseController {
     let set = JMMenuSetView() // 设置
     let light = JMMenuLightView() // 亮度
     let play = JMMeunPlayVIew() // 播放
-    
+    let progress = JMMeunProgress() // 进度
     let topContainer = UIView() // 亮度
     let bottomContainer = UIView() // 亮度
     let chapter = JMChapterView() // 左侧目录
     
     let bookTitle = JMBookTitleView() // 标题
     let battery = JMBatteryView() // 电池
+    let toast = JMMenuToastView() // toast
     
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
@@ -77,6 +78,8 @@ public class JMReadPageContrller: JMBaseController {
         setupFristPageView()
         registerMenuEvent()
         registerSubMenuEvent()
+        registerJumpEvent()
+        updateProgress()
     }
     
     private func setupFristPageView() {
@@ -165,6 +168,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
             print("😀😀😀completed")
             battery.progress.text = bookModel.readRate()
             bookTitle.title.text = bookModel.currTitle()
+            updateProgress()
         }else {
             hideWithType()
 //            print("😀😀😀completed none")
@@ -218,14 +222,13 @@ extension JMReadPageContrller {
             
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionShareWifi, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionProgress, block: { [weak self](_) in
+            self?.hideWithType()
+            self?.showWithType(type: .ViewType_PROGRESS)
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionMore, block: { [weak self](_) in
-            if let page = self?.bookModel.currPage(), page.attribute.length > 10 {
-                self?.speech.readImmediately(page.attribute, clear: false)
-            }
+            
             
         }, next: false)
                 
@@ -238,6 +241,9 @@ extension JMReadPageContrller {
         jmRegisterEvent(eventName: kEventNameMenuActionListenBook, block: { [weak self](_) in
             self?.hideWithType()
             self?.showWithType(type: .ViewType_PLAY)
+            if let page = self?.bookModel.currPage(), page.attribute.length > 10 {
+                self?.speech.readImmediately(page.attribute, clear: false)
+            }
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBrightness, block: { [weak self](_) in
@@ -250,8 +256,27 @@ extension JMReadPageContrller {
             self?.showWithType(type: .ViewType_SET)
         }, next: false)
         
-        // 滑动滑杆转跳
+        // 滑动滑杆修改字体
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
+            self?.toast.isHidden = true
+            if let fontsize = value as? CGFloat {
+                JMBookConfig.share.fontSize = fontsize
+            }
+        }, next: false)
+        
+        // 显示左侧目录
+        jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { [weak self](_) in
+            if let tocItems = self?.bookModel.contents {
+                self?.hideWithType()
+                self?.showChapter(items: tocItems.filter { ($0.charpTitle?.count ?? 0) > 0 })
+            }
+        }, next: false)
+    }
+    
+    // 这个方法处理书籍章节转跳
+    func registerJumpEvent() {
+        // 点击左侧目录转跳
+        jmRegisterEvent(eventName: kEventNameDidSelectChapter, block: { [weak self](value) in
             if let charpter = value as? JMBookCharpter {
                 self?.hideWithType()
                 self?.bookModel.indexPath.chapter = charpter.location.chapter
@@ -264,19 +289,45 @@ extension JMReadPageContrller {
             }
         }, next: false)
         
-        // 显示左侧目录
-        jmRegisterEvent(eventName: kEventNameMenuActionBookCatalog, block: { [weak self](_) in
-            if let tocItems = self?.bookModel.contents {
+        // 下一章
+        jmRegisterEvent(eventName: kEventNameMenuActionNextCharpter, block: { [weak self](_) in
+            if let indexpath = self?.bookModel.indexPath,
+               indexpath.chapter < (self?.bookModel.contents.count ?? 0) {
                 self?.hideWithType()
-                self?.showChapter(items: tocItems.filter { ($0.charpTitle?.count ?? 0) > 0 })
+                self?.bookModel.indexPath.chapter += 1
+                self?.bookModel.indexPath.page = 0
+                if let page = self?.bookModel.currPage(),
+                   let pageView = self?.unusePageView() {
+                    pageView.loadPage(page)
+                    self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
+                }
+            }else {
+                JMTextToast.share.jmShowString(text: "已经是最后一章", seconds: 1)
             }
         }, next: false)
-
-        // 点击左侧目录转跳
-        jmRegisterEvent(eventName: kEventNameDidSelectChapter, block: { [weak self](value) in
-            if let charpter = value as? JMBookCharpter {
+        
+        // 上一章
+        jmRegisterEvent(eventName: kEventNameMenuActionPrevCharpter, block: { [weak self](_) in
+            if let indexpath = self?.bookModel.indexPath, indexpath.chapter > 0 {
                 self?.hideWithType()
-                self?.bookModel.indexPath.chapter = charpter.location.chapter
+                self?.bookModel.indexPath.chapter -= 1
+                self?.bookModel.indexPath.page = 0
+                if let page = self?.bookModel.currPage(),
+                   let pageView = self?.unusePageView() {
+                    pageView.loadPage(page)
+                    self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
+                }
+            }else {
+                JMTextToast.share.jmShowString(text: "已经是第一章", seconds: 1)
+            }
+        }, next: false)
+        
+        // 滑动滑杆跳到指定章节
+        jmRegisterEvent(eventName: kEventNameMenuActionTargetCharpter, block: { [weak self](value) in
+            self?.toast.isHidden = true
+            if let target = value as? Int, target < (self?.bookModel.contents.count ?? 0) {
+                self?.hideWithType()
+                self?.bookModel.indexPath.chapter = target
                 self?.bookModel.indexPath.page = 0
                 if let page = self?.bookModel.currPage(),
                    let pageView = self?.unusePageView() {
@@ -314,6 +365,14 @@ extension JMReadPageContrller {
                 }
             }
             
+        }, next: false)
+        
+        // 设置翻页
+        jmRegisterEvent(eventName: kEventNameMenuSliderValueChange, block: { [weak self](value) in
+            if let typeStr = value as? String {
+                self?.toast.updateToast(typeStr)
+                self?.toast.isHidden = false
+            }
         }, next: false)
     }
 }

@@ -16,6 +16,18 @@
         "bkgColor":"#FFE4CA",
         "identify":"color3"
     },{
+        
+        "event":"kEventNameMenuPageBkgColor",
+        "type":"color",
+        "bkgColor":"#FFE4CA",
+        "identify":"color3"
+    },{
+        
+        "event":"kEventNameMenuPageBkgColor",
+        "type":"color",
+        "bkgColor":"#FFE4CA",
+        "identify":"color3"
+    },{
         "event":"kEventNameMenuPageBkgColor",
         "type":"color",
         "bkgColor":"#E1C4C4",

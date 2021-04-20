@@ -37,9 +37,17 @@ final class JMReadItemView: JMBaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         let count = CGFloat(self.subviews.count)
-        let width = (self.bounds.size.width - (count+1) * margin) / count
-        for (index, view) in self.subviews.enumerated() {
-            view.frame = CGRect.Rect( margin + (margin + width) * CGFloat(index), 0, width, self.jmHeight)
+        if margin <= 0 && models.count > 0 { // margin 设置小于0认为宽高44
+            let margin = (self.jmWidth - CGFloat(models.count * 30)) / CGFloat(models.count)
+            let width = (self.jmWidth - (count+1) * margin) / count
+            for (index, view) in self.subviews.enumerated() {
+                view.frame = CGRect.Rect(margin + (margin + width) * CGFloat(index), jmHeight/2-15, 30, 30)
+            }
+        }else{
+            let width = (self.bounds.size.width - (count+1) * margin) / count
+            for (index, view) in self.subviews.enumerated() {
+                view.frame = CGRect.Rect( margin + (margin + width) * CGFloat(index), 0, width, self.jmHeight)
+            }
         }
     }
     
@@ -47,11 +55,11 @@ final class JMReadItemView: JMBaseView {
         switch model.type {
         case .BkgColor:
             if let colorStr = model.bkgColor {
-                btn.layer.cornerRadius = 10
+                btn.layer.cornerRadius = 15
                 btn.backgroundColor = UIColor(rgba: colorStr)
                 model.didSelectAction = { select in
                     btn.layer.borderWidth = select ? 1 : 0
-                    btn.layer.borderColor = UIColor.red.cgColor
+                    btn.layer.borderColor = UIColor.menuTintColor.cgColor
                 }
             }
             
@@ -64,23 +72,31 @@ final class JMReadItemView: JMBaseView {
         case .TopLeft, .TopRight:
             btn.setImage(model.image?.image?.origin, for: .normal)
             
-        case .PageFont, .PageFlip, .PageLight, .PlayRate, .PlayStyle:
+        case .PageFont, .PageFlip, .PlayRate, .PlayStyle:
+            btn.setTitleColor(UIColor.menuTextColor, for: .normal)
             btn.setTitle(model.title, for: .normal)
             model.didSelectAction = { select in
-                btn.setTitleColor(select ? UIColor(rgba: "#66B3FF") : UIColor.white, for: .normal)
+                btn.setTitleColor(select ? UIColor(rgba: "#66B3FF") : UIColor.menuTextColor, for: .normal)
                 btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
             }
-        
+        case .PageLight:
+            btn.layer.cornerRadius = 10
+            btn.layer.borderWidth = 0.5
+            btn.layer.borderColor = UIColor.menuTextColor.cgColor
+            btn.setTitleColor(UIColor.menuTextColor, for: .normal)
+            btn.setTitle(model.title, for: .normal)
+            model.didSelectAction = { select in
+                btn.setTitleColor(select ? UIColor(rgba: "#66B3FF") : UIColor.menuTextColor, for: .normal)
+                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
+            }
         case .PlayOrPause:
+            btn.setImage(model.image?.image?.origin, for: .normal)
             if model.identify == .PlayOrPause {
                 model.didSelectAction = { select in
-                    let imageStr = select ? "pause-icon" : "play-icon"
+                    let imageStr = select ? "epub_pause" : "epub_play_p"
                     btn.setImage(imageStr.image?.origin, for: .normal)
                 }
-            }else {
-                btn.setImage(model.image?.image?.origin, for: .normal)
             }
-            
         case .nonetype:
             print("")
         }

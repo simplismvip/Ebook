@@ -7,16 +7,14 @@
 
 import UIKit
 import ZJMKit
-import RxSwift
 
 final class JMMenuLightView: JMBaseView {
     private let leftBtn = UIButton(type: .system)
     private let rightBtn = UIButton(type: .system)
     private let bkgView = JMReadItemView()
-    private let disposeBag = DisposeBag()
+    private let bkgColor = JMReadItemView()
     private var slider: UISlider = {
         let slider = UISlider()
-        slider.setThumbImage("light-full".image, for: .normal)
         slider.thumbTintColor = .white
         slider.minimumValue = 0
         slider.maximumValue = 1
@@ -27,23 +25,25 @@ final class JMMenuLightView: JMBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        backgroundColor = UIColor.menuBkg
         addSubview(leftBtn)
         addSubview(rightBtn)
         addSubview(slider)
         addSubview(bkgView)
+        addSubview(bkgColor)
         layoutViews()
         
-        leftBtn.setImage("light-null".image, for: .normal)
-        rightBtn.setImage("light-full".image, for: .normal)
-        leftBtn.tintColor = .white
-        rightBtn.tintColor = .white
-        bkgView.margin = 30
-        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
+        leftBtn.setImage("epub_light-null".image, for: .normal)
+        rightBtn.setImage("epub_light-full".image, for: .normal)
+        leftBtn.tintColor = UIColor.menuTintColor
+        rightBtn.tintColor = UIColor.menuTintColor
         
-        slider.rx.value.subscribe (onNext:{ (value) in
-            UIScreen.main.brightness = CGFloat(value)
-        }).disposed(by: disposeBag)
+        bkgView.margin = 50
+        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
+        bkgColor.margin = 0
+        bkgColor.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
+        
+        slider.addTarget(self, action: #selector(startSlider(_:)), for: .touchUpInside)
         
         jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](_) in
             UIScreen.main.brightness = 0.5
@@ -56,9 +56,13 @@ final class JMMenuLightView: JMBaseView {
         }, next: false)
     }
     
+    @objc func startSlider(_ slider: UISlider) {
+        UIScreen.main.brightness = CGFloat(slider.value)
+    }
+    
     /// 获取所有显示的Items
     func allItems() -> [JMReadMenuItem] {
-        return bkgView.models
+        return [bkgColor.models, bkgView.models].flatMap { $0 }
     }
     
     func layoutViews() {        
@@ -81,10 +85,17 @@ final class JMMenuLightView: JMBaseView {
             make.centerY.equalTo(rightBtn.snp.centerY)
         }
         
+        bkgColor.snp.makeConstraints { (make) in
+            make.left.equalTo(leftBtn.snp.left)
+            make.right.equalTo(rightBtn.snp.right)
+            make.height.equalTo(44)
+            make.top.equalTo(leftBtn.snp.bottom).offset(10)
+        }
+        
         bkgView.snp.makeConstraints { (make) in
             make.left.width.equalTo(self)
-            make.height.equalTo(44)
-            make.top.equalTo(leftBtn.snp.bottom).offset(20)
+            make.height.equalTo(34)
+            make.top.equalTo(bkgColor.snp.bottom).offset(20)
         }
     }
     

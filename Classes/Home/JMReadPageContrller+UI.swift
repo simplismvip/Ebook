@@ -18,16 +18,18 @@ extension JMReadPageContrller {
         topLeft.updateViews(top_left)
         topRight.updateViews(top_right)
         
+        topLeft.margin = 0
         topLeft.snp.makeConstraints { (make) in
-            make.left.equalTo(topContainer).offset(10)
-            make.width.equalTo((44.0 + margin) * CGFloat(top_left.count))
+            make.left.equalTo(topContainer)
+            make.width.equalTo(44.0 * CGFloat(top_left.count))
             make.height.equalTo(44)
-            make.bottom.equalTo(topContainer.snp.bottom).offset(-10)
+            make.bottom.equalTo(topContainer.snp.bottom)
         }
         
+        topRight.margin = 0
         topRight.snp.makeConstraints { (make) in
-            make.right.equalTo(topContainer.snp.right).offset(-10)
-            make.width.equalTo((44.0 + margin) * CGFloat(top_right.count))
+            make.right.equalTo(topContainer.snp.right)
+            make.width.equalTo(44.0 * CGFloat(top_right.count))
             make.height.equalTo(topLeft)
             make.bottom.equalTo(topLeft.snp.bottom)
         }
@@ -35,13 +37,14 @@ extension JMReadPageContrller {
         bottom.snp.makeConstraints { (make) in
             make.left.width.equalTo(bottomContainer)
             make.height.equalTo(44)
-            make.top.equalTo(bottomContainer.snp.top).offset(10)
+            make.top.equalTo(bottomContainer.snp.top).offset(5)
         }
     }
     
     func setupviews() {
         battery.batteryColor = UIColor.darkText
         chapter.isHidden = true
+        toast.isHidden = true
         view.addSubview(bookTitle)
         bookTitle.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
@@ -64,7 +67,7 @@ extension JMReadPageContrller {
             }
         }
         
-        topContainer.backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        topContainer.backgroundColor = UIColor.menuBkg
         view.addSubview(topContainer)
         topContainer.addSubview(topLeft)
         topContainer.addSubview(topRight)
@@ -73,10 +76,12 @@ extension JMReadPageContrller {
         view.addSubview(bottomContainer)
         bottomContainer.addSubview(bottom)
         
+        view.addSubview(progress)
         view.addSubview(chapter)
         view.addSubview(set)
         view.addSubview(light)
         view.addSubview(play)
+        view.addSubview(toast)
         
         chapter.snp.makeConstraints { (make) in
             make.left.equalTo(view).offset(-view.jmWidth*0.9)
@@ -86,33 +91,54 @@ extension JMReadPageContrller {
         
         topContainer.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(94)
+            make.height.equalTo(84)
             make.top.equalTo(view.snp.top).offset(-94)
         }
         
         bottomContainer.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(94)
+            make.height.equalTo(84)
             make.bottom.equalTo(view.snp.bottom).offset(94)
         }
         
         set.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(320)
-            make.bottom.equalTo(view.snp.bottom).offset(320)
+            make.height.equalTo(236)
+            make.bottom.equalTo(view.snp.bottom).offset(236)
         }
         
         light.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(160)
-            make.bottom.equalTo(view.snp.bottom).offset(160)
+            make.height.equalTo(204)
+            make.bottom.equalTo(view.snp.bottom).offset(204)
         }
         
         play.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
-            make.height.equalTo(230)
-            make.bottom.equalTo(view.snp.bottom).offset(230)
+            make.height.equalTo(136)
+            make.bottom.equalTo(view.snp.bottom).offset(136)
         }
+        
+        
+        progress.snp.makeConstraints { (make) in
+            make.left.width.equalTo(view)
+            make.height.equalTo(94)
+            make.bottom.equalTo(view.snp.bottom).offset(94)
+        }
+        
+        toast.snp.makeConstraints { (make) in
+            make.width.equalTo(260)
+            make.height.equalTo(54)
+            make.centerX.equalTo(view.snp.centerX)
+            make.centerY.equalTo(view.snp.centerY)
+        }
+    }
+    
+    /// 更新阅读进度
+    func updateProgress() {
+        let max = Float(bookModel.contents.count)
+        let curr = Float(bookModel.indexPath.chapter)/Float(bookModel.contents.count)
+        progress.setSlider(max: max, curr: curr)
     }
 }
 
@@ -149,7 +175,12 @@ extension JMReadPageContrller {
                 make.bottom.equalTo(view.snp.bottom)
             }
             layoutIfNeeded([play], ishide: false)
-        }else if type == .ViewType_NONE {
+        }else if type == .ViewType_PROGRESS {
+            progress.snp.updateConstraints { (make) in
+                make.bottom.equalTo(view.snp.bottom)
+            }
+            layoutIfNeeded([progress], ishide: false)
+        } else if type == .ViewType_NONE {
             
         }
     }
@@ -186,7 +217,12 @@ extension JMReadPageContrller {
                 make.bottom.equalTo(view.snp.bottom).offset(230)
             }
             layoutIfNeeded([play], ishide: true)
-        }else if currType == .ViewType_NONE {
+        }else if currType == .ViewType_PROGRESS {
+            progress.snp.updateConstraints { (make) in
+                make.bottom.equalTo(view.snp.bottom).offset(94)
+            }
+            layoutIfNeeded([progress], ishide: false)
+        } else if currType == .ViewType_NONE {
             
         }
         

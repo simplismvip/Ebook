@@ -106,6 +106,7 @@ public enum JMMenuViewType {
     case ViewType_PLAY // 显示播放
     case ViewType_SET // 显示设置
     case ViewType_CHAPTER // 显示目录
+    case ViewType_PROGRESS // 进度
     case ViewType_NONE // 没有显示任何项目
 }
 

@@ -8,21 +8,18 @@
 import UIKit
 import ZJMKit
 import SnapKit
-import RxSwift
 
 final class JMMenuSetView: JMBaseView {
-    let bkgColor = BkgColorView()
     let fontSize = FontSizeView()
     let pageFlip = PageFlipView()
     let fontType = FontTypeView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(bkgColor)
         addSubview(fontSize)
         addSubview(pageFlip)
         addSubview(fontType)
-        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        backgroundColor = UIColor.menuBkg
         
         pageFlip.snp.makeConstraints({ (make) in
             make.width.equalTo(self)
@@ -36,14 +33,8 @@ final class JMMenuSetView: JMBaseView {
             make.height.equalTo(64)
         })
         
-        bkgColor.snp.makeConstraints({ (make) in
-            make.width.equalTo(self)
-            make.top.equalTo(fontSize.snp.bottom)
-            make.height.equalTo(64)
-        })
-        
         fontType.snp.makeConstraints({ (make) in
-            make.top.equalTo(bkgColor.snp.bottom)
+            make.top.equalTo(fontSize.snp.bottom)
             make.width.equalTo(self)
             make.height.equalTo(64)
         })
@@ -51,7 +42,7 @@ final class JMMenuSetView: JMBaseView {
     
     /// 获取所有显示的Items
     func allItems() -> [JMReadMenuItem] {
-        return [bkgColor.bkgView.models, pageFlip.bkgView.models, fontType.bkgView.models].flatMap { $0 }
+        return [pageFlip.bkgView.models, fontType.bkgView.models].flatMap { $0 }
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -63,9 +54,9 @@ final class BkgColorView: JMBaseView {
     internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        backgroundColor = UIColor.menuBkg
         name.text = "阅读背景"
-        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
+        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.translatesAutoresizingMaskIntoConstraints = false
         bkgView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(name)
@@ -94,31 +85,38 @@ final class BkgColorView: JMBaseView {
 // MARK: -- 字体大小 --
 final class FontSizeView: JMBaseView {
     private var name = UILabel()
-    private var nameSize = UILabel()
-    private let disposeBag = DisposeBag()
     private var slider: UISlider = {
         let slider = UISlider()
         slider.setThumbImage("green-marker".image, for: .normal)
+        slider.minimumValue = 10
+        slider.maximumValue = 30
         slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
         return slider
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        backgroundColor = UIColor.menuBkg
         addSubview(name)
-        addSubview(nameSize)
+        
         addSubview(slider)
-        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
-        nameSize.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
+        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.text = "字体大小"
-        nameSize.text = "10"
         layoutViews()
         
-        slider.rx.value.map({ Int($0 * 30 + 10) }).distinctUntilChanged().subscribe (onNext:{ [weak self] (value) in
-            self?.nameSize.text = String(format: "%d", value)
-            self?.jmRouterEvent(eventName: kEventNameMenuFontSizeSlider, info: value as MsgObjc)
-        }).disposed(by: disposeBag)
+        slider.addTarget(self, action: #selector(touchSliderEnd(_:)), for: .touchUpInside)
+        slider.addTarget(self, action: #selector(touchSliderStart(_:)), for: .valueChanged)
+    }
+    
+    @objc func touchSliderStart(_ slider: UISlider) {
+        let value = Int(slider.value)
+        print("touchSliderStart\(value)")
+        jmRouterEvent(eventName: kEventNameMenuSliderValueChange, info: ("字体大小\(value)") as MsgObjc)
+    }
+    
+    @objc func touchSliderEnd(_ slider: UISlider) {
+        let value = CGFloat(slider.value)
+        jmRouterEvent(eventName: kEventNameMenuFontSizeSlider, info: value as MsgObjc)
     }
     
     func layoutViews() {
@@ -129,14 +127,8 @@ final class FontSizeView: JMBaseView {
             make.centerY.equalTo(snp.centerY)
         }
         
-        nameSize.snp.makeConstraints { (make) in
-            make.height.equalTo(44)
-            make.centerY.equalTo(snp.centerY)
-            make.left.equalTo(name.snp.right).offset(10)
-        }
-        
         slider.snp.makeConstraints { (make) in
-            make.left.equalTo(nameSize.snp.right).offset(20)
+            make.left.equalTo(name.snp.right).offset(20)
             make.right.equalTo(snp.right).offset(-10)
             make.height.equalTo(44)
             make.centerY.equalTo(snp.centerY)
@@ -151,9 +143,9 @@ final class PageFlipView: JMBaseView {
     internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        backgroundColor = UIColor.menuBkg
         name.text = "翻页设置"
-        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
+        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.translatesAutoresizingMaskIntoConstraints = false
         bkgView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(name)
@@ -186,9 +178,9 @@ final class FontTypeView: JMBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.jmRGBValue(0xF0F8FF)
+        backgroundColor = UIColor.menuBkg
         name.text = "字体设置"
-        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: .gray)
+        name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.translatesAutoresizingMaskIntoConstraints = false
         bkgView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(name)
