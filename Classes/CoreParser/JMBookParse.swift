@@ -20,6 +20,7 @@ public class JMBookParse: NSObject {
         self.pathUrl = URL(fileURLWithPath: path)
         self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
         super.init()
+        let _ = JMBookDataBase.share
     }
     
     /// 开始读书

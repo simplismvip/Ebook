@@ -94,3 +94,9 @@ public let kMsgNameStartOpeningBook = "kMsgNameStartOpeningBook"
 public let kMsgNameOpenBookSuccess = "kMsgNameOpenBookSuccess"
 /// 打开失败
 public let kMsgNameOpenBookFail = "kMsgNameOpenBookFail"
+
+/// 展示目录
+public let kEventNameMenuShowCharter = "kEventNameMenuShowCharter"
+/// 展示书签
+public let kEventNameMenuShowCharterTag = "kEventNameMenuShowCharterTag"
+

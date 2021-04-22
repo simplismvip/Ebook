@@ -84,9 +84,7 @@ extension JMReadPageContrller {
         view.addSubview(toast)
         
         chapter.snp.makeConstraints { (make) in
-            make.left.equalTo(view).offset(-view.jmWidth*0.9)
-            make.width.equalTo(view.jmWidth*0.9)
-            make.top.height.equalTo(view)
+            make.edges.equalTo(view)
         }
         
         topContainer.snp.makeConstraints { (make) in
@@ -209,7 +207,7 @@ extension JMReadPageContrller {
             layoutIfNeeded([set], ishide: true)
         }else if currType == .ViewType_CHAPTER {
             chapter.snp.updateConstraints { (make) in
-                make.left.equalTo(view).offset(-view.jmWidth*0.9)
+                make.left.equalTo(view).offset(-view.jmWidth)
             }
             layoutIfNeeded([chapter], ishide: true)
         }else if currType == .ViewType_PLAY {
@@ -260,9 +258,8 @@ extension JMReadPageContrller {
     
     /// 显示左侧目录
     public func showChapter(items: [JMBookCharpter]) {
-        if chapter.dataSource.isEmpty {
-            chapter.dataSource = items
-        }
+        chapter.updateSource(items, title: bookModel.title, currCharter: bookModel.indexPath.chapter)
+        chapter.updateTags(bookModel.bookId)
         showWithType(type: .ViewType_CHAPTER)
     }
     

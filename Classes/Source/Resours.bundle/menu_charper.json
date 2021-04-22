@@ -1,0 +1,15 @@
+[
+    {
+        "title":"目录",
+        "event":"kEventNameMenuShowCharter",
+        "isSelect":true,
+        "type":"charterTag",
+        "identify":"charter"
+    },{
+        "title":"书签",
+        "event":"kEventNameMenuShowCharterTag",
+        "isSelect":false,
+        "type":"charterTag",
+        "identify":"charterTag"
+    }
+]

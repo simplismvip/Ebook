@@ -89,6 +89,7 @@ final class FontSizeView: JMBaseView {
         let slider = UISlider()
         slider.setThumbImage("green-marker".image, for: .normal)
         slider.minimumValue = 10
+        slider.value = Float(JMBookConfig.share.fontSize)
         slider.maximumValue = 30
         slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
         return slider
@@ -111,6 +112,7 @@ final class FontSizeView: JMBaseView {
     @objc func touchSliderStart(_ slider: UISlider) {
         let value = Int(slider.value)
         print("touchSliderStart\(value)")
+        JMBookConfig.share.fontSize = CGFloat(slider.value)
         jmRouterEvent(eventName: kEventNameMenuSliderValueChange, info: ("字体大小\(value)") as MsgObjc)
     }
     

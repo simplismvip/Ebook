@@ -24,7 +24,7 @@ public class JMReadPageContrller: JMBaseController {
     let progress = JMMeunProgress() // 进度
     let topContainer = UIView() // 亮度
     let bottomContainer = UIView() // 亮度
-    let chapter = JMChapterView() // 左侧目录
+    let chapter = JMChapterContainer() // 左侧目录
     
     let bookTitle = JMBookTitleView() // 标题
     let battery = JMBatteryView() // 电池
@@ -55,20 +55,6 @@ public class JMReadPageContrller: JMBaseController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.jmHexColor(JMBookConfig.share.bkgColor)
@@ -84,7 +70,7 @@ public class JMReadPageContrller: JMBaseController {
     
     private func setupFristPageView() {
         if let page = bookModel.currPage(),
-           let pageView = unusePageView() {
+           let pageView = useingPageView() {
             pageView.loadPage(page)
             pageVC?.setViewControllers([pageView], direction: .reverse, animated: true, completion: nil)
         }
@@ -92,7 +78,7 @@ public class JMReadPageContrller: JMBaseController {
     
     private func nextPageView(_ isNext: Bool) -> JMReadController? {
         if let page = isNext ? bookModel.nextPage() : bookModel.prevPage() {
-            let pageView = unusePageView()
+            let pageView = useingPageView()
             pageView?.loadPage(page)
             return pageView
         }else {
@@ -101,10 +87,10 @@ public class JMReadPageContrller: JMBaseController {
         }
     }
     
-    // 查找未使用的View
-    private func unusePageView() -> JMReadController? {
+    // 查找正在使用的View
+    private func useingPageView(_ using: Bool = false) -> JMReadController? {
         for pageView in dataSource {
-            if !(pageVC?.viewControllers?.contains(pageView) ?? false) {
+            if (pageVC?.viewControllers?.contains(pageView) ?? false) == using {
                 return pageView
             }
         }
@@ -134,6 +120,38 @@ public class JMReadPageContrller: JMBaseController {
         view.insertSubview(pageVC.view, at: 0)
         addChildViewController(pageVC)
         self.pageVC = pageVC
+    }
+    
+    // 重新计算分页
+    private func reCalculationPage() {
+        // 获取当前页的第一段文字
+        if let targetPage = bookModel.currPage()?.attribute.string, targetPage.count > 10 {
+            // 重新修改字体，计算页数
+            bookModel.reCountCharpter()
+            // 完成后遍历所有页对比前获取的页数，定位到阅读页
+            let text = String(targetPage.prefix(10))
+            if let page = bookModel.newPageLoc(text: text),
+               let pageView = useingPageView(true) {
+                pageView.loadPage(page)
+            }
+        }
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        // 保存当前进度
+        JMBookDataBase.insertData(isTag: false, book: bookModel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     deinit {
@@ -218,8 +236,10 @@ extension JMReadPageContrller {
             self?.navigationController?.popViewController(animated: true)
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { (_) in
-            
+        jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { [weak self](_) in
+            if let book = self?.bookModel {
+                JMBookDataBase.insertData(isTag: true, book: book)
+            }
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionProgress, block: { [weak self](_) in
@@ -259,9 +279,7 @@ extension JMReadPageContrller {
         // 滑动滑杆修改字体
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
             self?.toast.isHidden = true
-            if let fontsize = value as? CGFloat {
-                JMBookConfig.share.fontSize = fontsize
-            }
+            self?.reCalculationPage()
         }, next: false)
         
         // 显示左侧目录
@@ -277,12 +295,12 @@ extension JMReadPageContrller {
     func registerJumpEvent() {
         // 点击左侧目录转跳
         jmRegisterEvent(eventName: kEventNameDidSelectChapter, block: { [weak self](value) in
-            if let charpter = value as? JMBookCharpter {
-                self?.hideWithType()
+            self?.hideWithType()
+            if let charpter = value as? JMBookCharpter { // 如果是空说明选中当前章节，不操作
                 self?.bookModel.indexPath.chapter = charpter.location.chapter
                 self?.bookModel.indexPath.page = 0
                 if let page = self?.bookModel.currPage(),
-                   let pageView = self?.unusePageView() {
+                   let pageView = self?.useingPageView() {
                     pageView.loadPage(page)
                     self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
                 }
@@ -297,7 +315,7 @@ extension JMReadPageContrller {
                 self?.bookModel.indexPath.chapter += 1
                 self?.bookModel.indexPath.page = 0
                 if let page = self?.bookModel.currPage(),
-                   let pageView = self?.unusePageView() {
+                   let pageView = self?.useingPageView() {
                     pageView.loadPage(page)
                     self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
                 }
@@ -313,7 +331,7 @@ extension JMReadPageContrller {
                 self?.bookModel.indexPath.chapter -= 1
                 self?.bookModel.indexPath.page = 0
                 if let page = self?.bookModel.currPage(),
-                   let pageView = self?.unusePageView() {
+                   let pageView = self?.useingPageView() {
                     pageView.loadPage(page)
                     self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
                 }
@@ -330,7 +348,7 @@ extension JMReadPageContrller {
                 self?.bookModel.indexPath.chapter = target
                 self?.bookModel.indexPath.page = 0
                 if let page = self?.bookModel.currPage(),
-                   let pageView = self?.unusePageView() {
+                   let pageView = self?.useingPageView() {
                     pageView.loadPage(page)
                     self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
                 }
@@ -356,7 +374,7 @@ extension JMReadPageContrller {
         jmRegisterEvent(eventName: kEventNameMenuPageFlipType, block: { [weak self](item) in
             if let typeStr = (item as? JMReadMenuItem)?.identify.rawValue {
                 JMBookConfig.share.flipType = JMFlipType.typeFrom(typeStr)
-                if let page = self?.bookModel.currPage(), let pageView = self?.unusePageView() {
+                if let page = self?.bookModel.currPage(), let pageView = self?.useingPageView() {
                     self?.pageVC?.view.removeFromSuperview()
                     self?.pageVC?.removeFromParentViewController()
                     self?.setupPageVC()

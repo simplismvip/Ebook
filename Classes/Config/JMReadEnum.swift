@@ -122,6 +122,7 @@ public enum JMMenuType: String, HandyJSONEnum {
     case PlayRate = "playrate"// 播放速率
     case PlayStyle = "playstyle"// 播放风格
     case PlayOrPause = "playpause"// 播放或暂停
+    case CharterTag = "charterTag"// 播放或暂停
     case nonetype = "nonetype"// 播放或暂停
 }
 
@@ -169,6 +170,9 @@ public enum JMMenuStyle: String, HandyJSONEnum {
     case PlayOrPause = "curr"// 播放或暂停
     case PlayPrev = "prev"// 播放或暂停
     case PlayNext = "next"// 播放或暂停
+    
+    case Charter = "charter"// 播放或暂停
+    case CharterTag = "charterTag"// 播放或暂停
     
     case nonetype = "nonetype"// 播放或暂停
 }

@@ -9,20 +9,8 @@ import UIKit
 import ZJMKit
 
 final public class JMReadController: JMBaseController {
-    // 当前页
     public var currPage: JMBookPage?
-    public var isShow: Bool = false
     let pageView = JMReadView(frame: CGRect.zero)
-
-//    public override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        isShow = true
-//    }
-//    
-//    public override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        isShow = false
-//    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,25 +27,34 @@ final public class JMReadController: JMBaseController {
                 make.bottom.equalTo(view.snp.bottom).offset(-20)
             }
         }
+        
+        let tapGes = UITapGestureRecognizer()
+        tapGes.addTarget(self, action: #selector(tapGestureAction(_:)))
+        tapGes.delegate = self
+        tapGes.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGes)
+    }
+    
+    @objc func tapGestureAction(_ gesture: UIGestureRecognizer) {
+        jmRouterEvent(eventName: kEventNameMenuActionTapAction, info: nil)
     }
     
     /// 设置当前页
     public func loadPage(_ page: JMBookPage) {
-        isShow = true
-        currPage = page
         pageView.reDrewText(content: page.attribute)
+        currPage = page
     }
-    
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let point = touches.randomElement()?.location(in: view) {
-            let s_width = UIScreen.main.bounds.size.width
-            if point.x < s_width/4 {
-                jmRouterEvent(eventName: kEventNameMenuActionTapLeft, info: nil)
-            }else if point.x > s_width/4 && point.x < s_width/4*3 {
-                jmRouterEvent(eventName: kEventNameMenuActionTapAction, info: nil)
-            }else {
-                jmRouterEvent(eventName: kEventNameMenuActionTapRight, info: nil)
-            }
+}
+
+extension JMReadController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let point = gestureRecognizer.location(in: gestureRecognizer.view)
+        let s_width = UIScreen.main.bounds.size.width
+        if point.x > s_width/4 && point.x < s_width/4*3 {
+            return true
+        }else {
+            jmRouterEvent(eventName: kEventNameMenuActionTapLeft, info: nil)
+            return false
         }
     }
 }

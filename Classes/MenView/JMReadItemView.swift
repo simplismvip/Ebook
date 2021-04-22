@@ -10,7 +10,7 @@ import ZJMKit
 
 final class JMReadItemView: JMBaseView {
     public var margin: CGFloat = 5
-    internal var models = [JMReadMenuItem]()
+    public var models = [JMReadMenuItem]()
     final public func updateViews(_ items: [JMReadMenuItem]) {
         self.models = items
         for (index, model) in items.enumerated() {
@@ -76,7 +76,7 @@ final class JMReadItemView: JMBaseView {
             btn.setTitleColor(UIColor.menuTextColor, for: .normal)
             btn.setTitle(model.title, for: .normal)
             model.didSelectAction = { select in
-                btn.setTitleColor(select ? UIColor(rgba: "#66B3FF") : UIColor.menuTextColor, for: .normal)
+                btn.setTitleColor(select ? UIColor.menuSelColor : UIColor.menuTextColor, for: .normal)
                 btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
             }
         case .PageLight:
@@ -86,7 +86,7 @@ final class JMReadItemView: JMBaseView {
             btn.setTitleColor(UIColor.menuTextColor, for: .normal)
             btn.setTitle(model.title, for: .normal)
             model.didSelectAction = { select in
-                btn.setTitleColor(select ? UIColor(rgba: "#66B3FF") : UIColor.menuTextColor, for: .normal)
+                btn.setTitleColor(select ? UIColor.menuSelColor : UIColor.menuTextColor, for: .normal)
                 btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
             }
         case .PlayOrPause:
@@ -96,6 +96,14 @@ final class JMReadItemView: JMBaseView {
                     let imageStr = select ? "epub_pause" : "epub_play_p"
                     btn.setImage(imageStr.image?.origin, for: .normal)
                 }
+            }
+        case .CharterTag:
+            btn.setTitle(model.title, for: .normal)
+            btn.setTitleColor(model.isSelect ? UIColor.menuSelColor : UIColor.menuTextColor, for: .normal)
+            btn.titleLabel?.font = model.isSelect ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
+            model.didSelectAction = { select in
+                btn.setTitleColor(select ? UIColor.menuSelColor : UIColor.menuTextColor, for: .normal)
+                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
             }
         case .nonetype:
             print("")

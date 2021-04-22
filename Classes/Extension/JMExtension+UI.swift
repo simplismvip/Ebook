@@ -202,6 +202,16 @@ extension UIColor {
     public static var menuTextColor: UIColor {
         return UIColor.gray
     }
+    
+    /// 菜单背景颜色
+    public static var charterTextColor: UIColor {
+        return UIColor.jmRGB(50, 50, 50)
+    }
+    
+    /// 菜单选中颜色
+    public static var menuSelColor: UIColor {
+        return UIColor(rgba: "#66B3FF")
+    }
 
     convenience init(rgba: String) {
         var red:   CGFloat = 0.0
