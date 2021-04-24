@@ -37,6 +37,7 @@ Pod::Spec.new do |s|
     'Classes/Config/*.{swift,h}',
     'Classes/Home/*.swift',
     'Classes/CoreParser/*.{swift,h,m}',
+    'Classes/EpubParser/*.{swift}',
     'Classes/MenView/*.{swift}'
   ]
   
@@ -55,10 +56,10 @@ Pod::Spec.new do |s|
   s.dependency 'FMDB'
   s.dependency 'SnapKit'
   s.dependency 'ZJMKit'
-  s.dependency 'RxSwift'
-  s.dependency 'RxCocoa'
+#  s.dependency 'RxSwift'
+#  s.dependency 'RxCocoa'
   s.dependency 'HandyJSON'
-  s.dependency 'BSText'
+#  s.dependency 'BSText'
   s.dependency 'YYText'
   
 end

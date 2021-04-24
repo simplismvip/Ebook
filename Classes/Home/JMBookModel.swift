@@ -56,8 +56,11 @@ final public class JMBookModel {
     
     /// 当前页数
     public func readRate() -> String? {
-        let curr = indexPath.page
-        return (curr > 0) ? String(format: "第%d页", indexPath.page) : nil
+        if let page = contents[indexPath.chapter].pages?.count {
+            return "第\(indexPath.page + 1)/\(page)页"
+        }else {
+            return "第\(indexPath.page + 1))页"
+        }
     }
     
     /// 当前小节标题
@@ -89,6 +92,14 @@ final public class JMBookModel {
         return self[indexPath]
     }
     
+    /// 当前页
+    public func currCharpter() -> JMBookCharpter? {
+        if indexPath.chapter < contents.count {
+            return contents[indexPath.chapter]
+        }
+        return nil
+    }
+    
     // 当前页数
     private func pageCount() -> Int {
         if let pages = contents[indexPath.chapter].pages {
@@ -97,6 +108,47 @@ final public class JMBookModel {
             contents[indexPath.chapter].countPages()
             return contents[indexPath.chapter].pages?.count ?? 0
         }
+    }
+    
+    // 初始化章节
+    private func initCharter(document: EPUBDocument) {
+        for (index, spine) in document.spine.items.enumerated() {
+            if spine.linear, let href = document.manifest.items[spine.idref]?.path {
+                let fullHref = document.contentDirectory.appendingPathComponent(href)
+                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0))
+                // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
+                if let path = document.manifest.items[spine.idref]?.path {
+                    charpter.charpTitle = document.findTarget(target: path)?.label
+                }else {
+                    charpter.charpTitle = title
+                }
+                self.contents.append(charpter)
+            }
+        }
+    }
+}
+
+// MARK: -- 处理章节、页数 --
+extension JMBookModel {
+    
+    /// 下一章节
+    func nextCharpter() -> JMBookPage? {
+        if indexPath.chapter < contents.count {
+            indexPath.chapter += 1
+            indexPath.page = 0
+            return currPage()
+        }
+        return nil
+    }
+    
+    /// 上一章节
+    func prevCharpter() -> JMBookPage? {
+        if indexPath.chapter > 0 {
+            indexPath.chapter -= 1
+            indexPath.page = 0
+            return currPage()
+        }
+        return nil
     }
     
     /// 下一页
@@ -157,26 +209,9 @@ final public class JMBookModel {
             return nil
         }
     }
-    
-    // 初始化章节
-    private func initCharter(document: EPUBDocument) {
-        for (index, spine) in document.spine.items.enumerated() {
-            if spine.linear, let href = document.manifest.items[spine.idref]?.path {
-                let fullHref = document.contentDirectory.appendingPathComponent(href)
-                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0))
-                // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
-                if let path = document.manifest.items[spine.idref]?.path {
-                    charpter.charpTitle = document.findTarget(target: path)?.label
-                }else {
-                    charpter.charpTitle = title
-                }
-                self.contents.append(charpter)
-            }
-        }
-    }
 }
 
-// MARK: -- 章节模型
+// MARK: -- 章节模型 --
 public class JMBookCharpter {
     /// 章节标题
     public var charpTitle: String?
@@ -215,7 +250,7 @@ public class JMBookCharpter {
     }
 }
 
-// MARK: -- 文本数据
+// MARK: -- 文本页模型 ---
 public struct JMBookPage {
     /// 本页标题
     public let title: String

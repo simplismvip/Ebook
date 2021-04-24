@@ -58,14 +58,27 @@ public class JMReadPageContrller: JMBaseController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.jmHexColor(JMBookConfig.share.bkgColor)
+        associatRouter()
         setupPageVC()
         setupviews()
         loadDats()
         setupFristPageView()
         registerMenuEvent()
         registerSubMenuEvent()
+        registerEventPlay()
         registerJumpEvent()
         updateProgress()
+    }
+    
+    private func initdatas() {
+        battery.progress.text = bookModel.readRate()
+        bookTitle.title.text = bookModel.currTitle()
+        updateProgress()
+        if let word = bookModel.currCharpter()?.word() {
+            // 正常人阅读一分钟约300字，一秒钟5个字
+            let time = (word / 5).jmCurrentTime
+            battery.title.text = "本章共\(word)字，读完约\(time)"
+        }
     }
     
     private func setupFristPageView() {
@@ -73,9 +86,11 @@ public class JMReadPageContrller: JMBaseController {
            let pageView = useingPageView() {
             pageView.loadPage(page)
             pageVC?.setViewControllers([pageView], direction: .reverse, animated: true, completion: nil)
+            initdatas()
         }
     }
     
+    // 点击自动处理翻页，上一页，下一页
     private func nextPageView(_ isNext: Bool) -> JMReadController? {
         if let page = isNext ? bookModel.nextPage() : bookModel.prevPage() {
             let pageView = useingPageView()
@@ -137,6 +152,14 @@ public class JMReadPageContrller: JMBaseController {
         }
     }
     
+    // 惯量router
+    private func associatRouter() {
+        let router = JMRouter()
+        jmSetAssociatedMsgRouter(router: router)
+        speech.jmSetAssociatedMsgRouter(router: router)
+        
+    }
+    
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -184,9 +207,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             print("😀😀😀completed")
-            battery.progress.text = bookModel.readRate()
-            bookTitle.title.text = bookModel.currTitle()
-            updateProgress()
+            initdatas()
         }else {
             hideWithType()
 //            print("😀😀😀completed none")
@@ -223,13 +244,6 @@ extension JMReadPageContrller {
             }
         }, next: false)
         
-        jmRegisterEvent(eventName: kEventNameMenuActionTapRight, block: { [weak self](_) in
-            if self?.currType == .ViewType_NONE {
-                print("点击右侧1/4翻页")
-            }else {
-                self?.hideWithType()
-            }
-        }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBack, block: { [weak self](_) in
             self?.battery.fireTimer()
@@ -261,9 +275,6 @@ extension JMReadPageContrller {
         jmRegisterEvent(eventName: kEventNameMenuActionListenBook, block: { [weak self](_) in
             self?.hideWithType()
             self?.showWithType(type: .ViewType_PLAY)
-            if let page = self?.bookModel.currPage(), page.attribute.length > 10 {
-                self?.speech.readImmediately(page.attribute, clear: false)
-            }
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionBrightness, block: { [weak self](_) in
@@ -309,35 +320,12 @@ extension JMReadPageContrller {
         
         // 下一章
         jmRegisterEvent(eventName: kEventNameMenuActionNextCharpter, block: { [weak self](_) in
-            if let indexpath = self?.bookModel.indexPath,
-               indexpath.chapter < (self?.bookModel.contents.count ?? 0) {
-                self?.hideWithType()
-                self?.bookModel.indexPath.chapter += 1
-                self?.bookModel.indexPath.page = 0
-                if let page = self?.bookModel.currPage(),
-                   let pageView = self?.useingPageView() {
-                    pageView.loadPage(page)
-                    self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
-                }
-            }else {
-                JMTextToast.share.jmShowString(text: "已经是最后一章", seconds: 1)
-            }
+            self?.nextCharpter()
         }, next: false)
         
         // 上一章
         jmRegisterEvent(eventName: kEventNameMenuActionPrevCharpter, block: { [weak self](_) in
-            if let indexpath = self?.bookModel.indexPath, indexpath.chapter > 0 {
-                self?.hideWithType()
-                self?.bookModel.indexPath.chapter -= 1
-                self?.bookModel.indexPath.page = 0
-                if let page = self?.bookModel.currPage(),
-                   let pageView = self?.useingPageView() {
-                    pageView.loadPage(page)
-                    self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
-                }
-            }else {
-                JMTextToast.share.jmShowString(text: "已经是第一章", seconds: 1)
-            }
+            self?.prevCharpter()
         }, next: false)
         
         // 滑动滑杆跳到指定章节
@@ -392,5 +380,97 @@ extension JMReadPageContrller {
                 self?.toast.isHidden = false
             }
         }, next: false)
+    }
+    
+    // MARK: -- 听书 --
+    func registerEventPlay() {
+        // 播放 暂停
+        jmRegisterEvent(eventName: kEventNameMenuPlayBookPlay, block: { [weak self](item) in
+            if let speech = self?.speech {
+                if speech.play {
+                    self?.speech.pause()
+                }else {
+                    if speech.synthesizer.isPaused {
+                        self?.speech.resume()
+                    }else {
+                        if let page = self?.bookModel.currPage(), page.attribute.length > 10 {
+                            self?.speech.readImmediately(page.attribute, clear: false)
+                        }
+                    }
+                }
+            }
+        }, next: false)
+        
+        // 上一页
+        jmRegisterEvent(eventName: kEventNameMenuPlayBookPrev, block: { [weak self](item) in
+            self?.prevPage()
+        }, next: false)
+        
+        // 下一页
+        jmRegisterEvent(eventName: kEventNameMenuPlayBookNext, block: { [weak self](value) in
+            self?.nextPage()
+        }, next: false)
+        
+        // 听书实时返回range刷新文字
+        jmReciverMsg(msgName: kMsgNamePlayBookRefashText) { [weak self](msg) -> MsgObjc? in
+            if let characterRange = msg as? NSRange, let usePage = self?.useingPageView(true) {
+                print(characterRange)
+                usePage.pageView.refreshText(range: characterRange)
+            }
+            return nil
+        }
+        
+        // 听书实时返回range刷新文字
+        jmReciverMsg(msgName: kMsgNamePlayBookEnd) { (msg) -> MsgObjc? in
+            if let characterRange = msg as? NSRange {
+                print(characterRange)
+            }
+            return nil
+        }
+    }
+}
+
+// MARK: -- 手动处理翻页，上一章/页，下一章/页。 --
+extension JMReadPageContrller {
+    // 下一章节
+    private func nextCharpter() {
+        hideWithType()
+        if let page = bookModel.nextCharpter(), let pageView = useingPageView() {
+            pageView.loadPage(page)
+            pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
+        }else {
+            JMTextToast.share.jmShowString(text: "已经是最后一章", seconds: 1)
+        }
+    }
+    
+    // 上一章节
+    private func prevCharpter() {
+        hideWithType()
+        if let page = bookModel.prevCharpter(), let pageView = useingPageView() {
+            pageView.loadPage(page)
+            pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
+        }else {
+            JMTextToast.share.jmShowString(text: "已经是第一章", seconds: 1)
+        }
+    }
+    
+    // 下一页
+    private func nextPage() {
+        if let page = bookModel.nextPage(), let pageView = useingPageView() {
+            pageView.loadPage(page)
+            pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
+        }else {
+            JMTextToast.share.jmShowString(text: "已经是最后一页", seconds: 1)
+        }
+    }
+    
+    // 上一页
+    private func prevPage() {
+        if let page = bookModel.prevPage(), let pageView = useingPageView() {
+            pageView.loadPage(page)
+            pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
+        }else {
+            JMTextToast.share.jmShowString(text: "已经是最后一页", seconds: 1)
+        }
     }
 }

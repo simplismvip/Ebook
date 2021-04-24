@@ -7,7 +7,6 @@
 
 import UIKit
 import ZJMKit
-import RxSwift
 
 public enum JMDirection: Int {
     case vertical
@@ -42,80 +41,80 @@ public class JMReadConfig: NSObject {
     // MARK: Colors
     /// Base header custom TintColor
     open var tintColor = UIColor(rgba: "#6ACC50")
-    
-    /// Menu background color
-    open var menuBackgroundColor = BehaviorSubject(value: UIColor.white)
 
-    /// Menu separator Color
-    open var menuSeparatorColor = BehaviorSubject(value: UIColor(rgba: "#D7D7D7"))
-
-    /// Menu text color
-    open var menuTextColor = BehaviorSubject(value: UIColor(rgba: "#767676"))
-
-    /// Menu text color
-    open var menuTextColorSelected = BehaviorSubject(value: UIColor(rgba: "#6ACC50"))
-    
-    // Day mode nav color
-    open var daysModeNavBackground = BehaviorSubject(value: UIColor.white)
-    
-    // Day mode nav color
-    open var nightModeNavBackground = BehaviorSubject(value: UIColor(rgba: "#131313"))
-    
-    /// Night mode background color
-    open var nightModeBackground = BehaviorSubject(value: UIColor(rgba: "#131313"))
-
-    /// Night mode menu background color
-    open var nightModeMenuBackground = BehaviorSubject(value: UIColor(rgba: "#1E1E1E"))
-
-    /// Night mode separator color
-    open var nightModeSeparatorColor = BehaviorSubject(value: UIColor(white: 0.5, alpha: 0.2))
-
-    /// Media overlay or TTS selection color
-    open lazy var mediaOverlayColor = self.tintColor
-
-    // MARK: Custom actions
-
-    /// 设置默认隐藏导航栏和底部状态视图
-    /// hide the navigation bar and the bottom status view
-    public var hideBars = BehaviorSubject(value: true)
-
-    /// 设置滚动方向
-    open var scrollDirection: JMDirection = .horizontal
-
-    /// Enable or disable hability to user change scroll direction on menu.
-    open var canChangeScrollDirection = BehaviorSubject(value: true)
-
-    /// Enable or disable hability to user change font style on menu.
-    open var canChangeFontStyle = BehaviorSubject(value: true)
-    
-    /// 点击屏幕是否允许因此导航栏
-    open var shouldHideNavigationOnTap = BehaviorSubject(value: true)
-
-    /// 是否允许分享选项，否则隐藏所有分享按钮
-    /// Allow sharing option, if `false` will hide all sharing icons and options
-    open var allowSharing = BehaviorSubject(value: true)
-
-    /// Enable TTS (Text To Speech)
-    open var enableTTS = BehaviorSubject(value: true)
-    
-    /// 是否展示标题在导航栏
-    open var displayTitle = BehaviorSubject(value: false)
-
-    /// 隐藏进度指示条
-    open var hidePageIndicator = BehaviorSubject(value: false)
-
-    /// 去保存位置打开书时
-    /// Go to saved position when open a book
-    open var loadSavedPositionForCurrentBook = BehaviorSubject(value: true)
-    
-    // MARK: Quote image share
-
-    /// 自定义引用logo
-    /// Custom Quote logo
-    open var quoteCustomLogoImage = "icon-logo".image
-
-    /// Enable or disable default Quote Image backgrounds
-    open var quotePreserveDefaultBackgrounds = BehaviorSubject(value: true)
+//    /// Menu background color
+//    open var menuBackgroundColor = BehaviorSubject(value: UIColor.white)
+//
+//    /// Menu separator Color
+//    open var menuSeparatorColor = BehaviorSubject(value: UIColor(rgba: "#D7D7D7"))
+//
+//    /// Menu text color
+//    open var menuTextColor = BehaviorSubject(value: UIColor(rgba: "#767676"))
+//
+//    /// Menu text color
+//    open var menuTextColorSelected = BehaviorSubject(value: UIColor(rgba: "#6ACC50"))
+//
+//    // Day mode nav color
+//    open var daysModeNavBackground = BehaviorSubject(value: UIColor.white)
+//
+//    // Day mode nav color
+//    open var nightModeNavBackground = BehaviorSubject(value: UIColor(rgba: "#131313"))
+//
+//    /// Night mode background color
+//    open var nightModeBackground = BehaviorSubject(value: UIColor(rgba: "#131313"))
+//
+//    /// Night mode menu background color
+//    open var nightModeMenuBackground = BehaviorSubject(value: UIColor(rgba: "#1E1E1E"))
+//
+//    /// Night mode separator color
+//    open var nightModeSeparatorColor = BehaviorSubject(value: UIColor(white: 0.5, alpha: 0.2))
+//
+//    /// Media overlay or TTS selection color
+//    open lazy var mediaOverlayColor = self.tintColor
+//
+//    // MARK: Custom actions
+//
+//    /// 设置默认隐藏导航栏和底部状态视图
+//    /// hide the navigation bar and the bottom status view
+//    public var hideBars = BehaviorSubject(value: true)
+//
+//    /// 设置滚动方向
+//    open var scrollDirection: JMDirection = .horizontal
+//
+//    /// Enable or disable hability to user change scroll direction on menu.
+//    open var canChangeScrollDirection = BehaviorSubject(value: true)
+//
+//    /// Enable or disable hability to user change font style on menu.
+//    open var canChangeFontStyle = BehaviorSubject(value: true)
+//
+//    /// 点击屏幕是否允许因此导航栏
+//    open var shouldHideNavigationOnTap = BehaviorSubject(value: true)
+//
+//    /// 是否允许分享选项，否则隐藏所有分享按钮
+//    /// Allow sharing option, if `false` will hide all sharing icons and options
+//    open var allowSharing = BehaviorSubject(value: true)
+//
+//    /// Enable TTS (Text To Speech)
+//    open var enableTTS = BehaviorSubject(value: true)
+//
+//    /// 是否展示标题在导航栏
+//    open var displayTitle = BehaviorSubject(value: false)
+//
+//    /// 隐藏进度指示条
+//    open var hidePageIndicator = BehaviorSubject(value: false)
+//
+//    /// 去保存位置打开书时
+//    /// Go to saved position when open a book
+//    open var loadSavedPositionForCurrentBook = BehaviorSubject(value: true)
+//
+//    // MARK: Quote image share
+//
+//    /// 自定义引用logo
+//    /// Custom Quote logo
+//    open var quoteCustomLogoImage = "icon-logo".image
+//
+//    /// Enable or disable default Quote Image backgrounds
+//    open var quotePreserveDefaultBackgrounds = BehaviorSubject(value: true)
 
     // MARK: Localized strings
 
@@ -187,11 +186,11 @@ public class JMReadConfig: NSObject {
 
      - returns: The right value based on direction.
      */
-    func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
-        switch self.scrollDirection {
-        case .vertical, .defaultVertical:       return vertical
-        case .horizontal:                       return horizontal
-        case .horizontalWithVerticalContent:    return horizontalContentVertical
-        }
-    }
+//    func isDirection<T> (_ vertical: T, _ horizontal: T, _ horizontalContentVertical: T) -> T {
+//        switch self.scrollDirection {
+//        case .vertical, .defaultVertical:       return vertical
+//        case .horizontal:                       return horizontal
+//        case .horizontalWithVerticalContent:    return horizontalContentVertical
+//        }
+//    }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import ZJMKit
 
 public class JMSpeechModel {
     public var preDelay: TimeInterval = 0.0
@@ -18,11 +19,11 @@ public class JMSpeechModel {
 }
 
 final public class JMSpeechParse: NSObject {
-    private var queue = [AVSpeechUtterance]()
+    private var queue = [String]()
     private var utterance: AVSpeechUtterance?
-    private var synthesizer = AVSpeechSynthesizer()
     private var audioSession =  AVAudioSession()
-    private var play = false
+    public var synthesizer = AVSpeechSynthesizer()
+    public var play = false
     public let model: JMSpeechModel
     public var duckOthers = true {
         willSet {
@@ -41,7 +42,6 @@ final public class JMSpeechParse: NSObject {
     public init(_ model: JMSpeechModel) {
         self.model = model
         self.duckOthers = true
-        self.play = true
         super.init()
         synthesizer.delegate = self
         do {
@@ -52,8 +52,9 @@ final public class JMSpeechParse: NSObject {
     }
     
     public func readImmediately(_ attri: NSAttributedString, clear: Bool) {
+        queue = attri.string.split(separator: "\n").map({ "\($0)" })
         synthesizer.stopSpeaking(at: .immediate)
-        if play && !synthesizer.isSpeaking {
+        if !play && !synthesizer.isSpeaking {
             let utterance = createUtter(attri)
             synthesizer.speak(utterance)
         }
@@ -87,7 +88,15 @@ final public class JMSpeechParse: NSObject {
 
 extension JMSpeechParse: AVSpeechSynthesizerDelegate {
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
+//        jmSendMsg(msgName: kMsgNamePlayBookRefashText, info: characterRange as MsgObjc)
+        let rangeStr = utterance.attributedSpeechString.attributedSubstring(from: characterRange)
+//        print(utterance.attributedSpeechString)
         print(characterRange)
+        print(rangeStr)
+    }
+    
+    private func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        jmSendMsg(msgName: kMsgNamePlayBookEnd, info: nil)
     }
     
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
