@@ -18,59 +18,40 @@ class ViewController: UIViewController {
     var dataSource = [EbookModel]()
     var bookModel: JMBookParse?
     var flipCount = 0
+    let adView = UIView(frame: CGRect.Rect(0, 0, 0, 64))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        register()
         let items = [["title":"TianXiaDaoZong","type":"epub"],
          ["title":"没有你，什么都不甜蜜","type":"epub"],
          ["title":"每天懂一点好玩心理学","type":"epub"],
          ["title":"mdjyml", "type":"txt"]]
         dataSource.append(contentsOf: items.map { return EbookModel($0["title"]!, $0["type"]!) })
+        adView.backgroundColor = UIColor.red
     }
     
-    func register() {
-        let router = JMRouter()
-        jmSetAssociatedMsgRouter(router: router)
-        jmReciverMsg(msgName: kMsgNameStartOpeningBook) { (msg) -> MsgObjc? in
-            if let text = msg as? String {
-                Toast.toast(text)
-            }
-            return nil
-        }
-        
-        jmReciverMsg(msgName: kMsgNameOpenBookSuccess) { [weak self](bookModel) -> MsgObjc? in
-            if let model = bookModel as? JMBookModel {
-                Toast.toast("😀😀😀打开 \(model.title)成功")
-                let vc = JMReadPageContrller(model)
-                vc.delegate = self
-                self?.push(vc)
-            }
-            return nil
-        }
-        
-        jmReciverMsg(msgName: kMsgNameOpenBookFail) { (msg) -> MsgObjc? in
-            if let text = msg as? String {
-                Toast.toast(text)
-            }
-            return nil
-        }
-    }
     
     @IBAction func openBooks(_ sender: Any) {
         
     }
 }
 
-extension ViewController: JMReadProtocol {
-    // 返回需要展示的
-    func currentReadVC(_ forward: Bool) -> UIViewController? {
-        if forward {
-            flipCount += 1
-            return (flipCount % 5 == 0) ? JMEpubViewController() : nil
-        }else {
-            return nil
-        }
+extension ViewController: JMBookParserProtocol {
+    
+    func midReadPageVC(charpter: Int, page: Int) -> UIViewController? {
+        return (page % 5 == 5) ? JMEpubViewController() : nil
+    }
+    
+    func startOpeningBook(_ desc: String) {
+        Toast.toast(desc)
+    }
+    
+    func openBookSuccess(_ bottomView: UIView) {
+        Toast.toast("😀😀😀打开 \(bottomView.description)成功")
+    }
+    
+    func openBookFailed(_ desc: String) {
+        Toast.toast(desc)
     }
 }
 
@@ -90,10 +71,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let model = dataSource[indexPath.row]
         if let path = Bundle.main.path(forResource: model.name, ofType: model.type) {
             bookModel = JMBookParse(path)
-            if let router = self.msgRouter {
-                bookModel?.jmSetAssociatedMsgRouter(router: router)
-                bookModel?.startRead()
-            }
+            bookModel?.delegate = self
+            bookModel?.pushReader(pushVC: self)
         }
     }
 }

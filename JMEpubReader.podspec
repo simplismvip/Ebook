@@ -30,6 +30,9 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '10.0'
   s.public_header_files = 'Pod/Classes/Config/*.h'
+  s.swift_version = '4.0'
+  s.platform      = :ios, '10.0'
+  
   s.source_files = [
     'Classes/*.{h,swift}',
     'Classes/Comps/*.swift',
@@ -56,10 +59,7 @@ Pod::Spec.new do |s|
   s.dependency 'FMDB'
   s.dependency 'SnapKit'
   s.dependency 'ZJMKit'
-#  s.dependency 'RxSwift'
-#  s.dependency 'RxCocoa'
   s.dependency 'HandyJSON'
-#  s.dependency 'BSText'
   s.dependency 'YYText'
   
 end

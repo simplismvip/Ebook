@@ -29,7 +29,7 @@ public class JMReadPageContrller: JMBaseController {
     let bookTitle = JMBookTitleView() // 标题
     let battery = JMBatteryView() // 电池
     let toast = JMMenuToastView() // toast
-    
+    let bottomAdView = UIView() // 底部View
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
     
@@ -58,6 +58,7 @@ public class JMReadPageContrller: JMBaseController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.jmHexColor(JMBookConfig.share.bkgColor)
+        bottomAdView.backgroundColor = UIColor.red
         associatRouter()
         setupPageVC()
         setupviews()
@@ -186,7 +187,7 @@ public class JMReadPageContrller: JMBaseController {
 extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC(false) {
+        if let vc = delegate?.currentReadVC(charpter: bookModel.indexPath.chapter, page: bookModel.indexPath.page) {
             return vc
         }else {
             print("😀😀😀Before")
@@ -196,7 +197,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     
     // 往后翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC(true) {
+        if let vc = delegate?.currentReadVC(charpter: bookModel.indexPath.chapter, page: bookModel.indexPath.page) {
             return vc
         }else {
             print("😀😀😀After")

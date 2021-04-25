@@ -11,10 +11,11 @@ import EPUBKit
 
 // MARK: -- 解析图书类，这个类允许重写覆盖
 public class JMBookParse: NSObject {
+    public weak var delegate: JMBookParserProtocol?
     public let path: String // 图书路径
     public let pathUrl: URL // 图书URL
     public let bookType: JMBookType // 图书类型
-    
+    private var parserCallback: ((JMReadPageContrller)->())?
     public init(_ path: String) {
         self.path = path
         self.pathUrl = URL(fileURLWithPath: path)
@@ -23,9 +24,24 @@ public class JMBookParse: NSObject {
         let _ = JMBookDataBase.share
     }
     
+    // parsent 控制器
+    public func presentReader(parentVC: UIViewController) {
+        startRead { (pagevc) in
+            parentVC.present(pagevc)
+        }
+    }
+    
+    /// push 控制器
+    public func pushReader(pushVC: UIViewController) {
+        startRead { (pagevc) in
+            pushVC.push(pagevc)
+        }
+    }
+    
     /// 开始读书
-    public func startRead() {
-        self.jmSendMsg(msgName: kMsgNameStartOpeningBook, info: "开始解析" as MsgObjc)
+    public func startRead(parser: @escaping (JMReadPageContrller)->()) {
+        self.parserCallback = parser
+        delegate?.startOpeningBook("正在打开图书loading")
         DispatchQueue.global().async {
             if self.bookType == .Epub {
                 self.parseEpubBook()
@@ -41,11 +57,14 @@ public class JMBookParse: NSObject {
             let document = try EPUBParser().parse(documentAt: pathUrl)
             let bookModel = JMBookModel(document: document)
             DispatchQueue.main.async {
-                self.jmSendMsg(msgName: kMsgNameOpenBookSuccess, info: bookModel as MsgObjc)
+                let pageView = JMReadPageContrller(bookModel)
+                pageView.delegate = self
+                self.delegate?.openBookSuccess(pageView.bottomAdView)
+                self.parserCallback?(pageView)
             }
         }catch {
             DispatchQueue.main.async {
-                self.jmSendMsg(msgName: kMsgNameOpenBookFail, info: "🆘🆘🆘打开 \(error.localizedDescription)失败" as MsgObjc)
+                self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
             }
         }
     }
@@ -53,10 +72,16 @@ public class JMBookParse: NSObject {
     // Txt
     private func parseTxtBook() {
         do {
-            let document = try JMTxtParser().parser(url: pathUrl)
+            let _ = try JMTxtParser().parser(url: pathUrl)
         }catch let error as NSError {
             print(error)
         }
+    }
+}
+
+extension JMBookParse: JMReadProtocol {
+    public func currentReadVC(charpter: Int, page: Int) -> UIViewController? {
+        return delegate?.midReadPageVC(charpter: charpter, page: page)
     }
 }
 

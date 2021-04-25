@@ -56,15 +56,18 @@ extension JMReadPageContrller {
             }
         }
         
+        view.addSubview(bottomAdView)
+        bottomAdView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(view.snp.bottom)
+            make.left.width.equalTo(view)
+            make.height.equalTo(64)
+        }
+        
         view.addSubview(battery)
         battery.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
             make.height.equalTo(20)
-            if #available(iOS 11.0, *) {
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            } else {
-                make.bottom.equalTo(view.snp.bottom)
-            }
+            make.bottom.equalTo(bottomAdView.snp.top).offset(-8)
         }
         
         topContainer.backgroundColor = UIColor.menuBkg

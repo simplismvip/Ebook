@@ -325,16 +325,6 @@ extension UIColor {
     }
 }
 
-extension Array {
-    public func jmRemove(by items: [Element], _ transFrom: (Element, Element)-> Bool) -> [Element] {
-        return filter { (model) -> Bool in
-            return !items.contains { (item) -> Bool in
-                return transFrom(model, item)
-            }
-        }
-    }
-}
-
 func delay(_ delay:Double, closure:@escaping ()->()) {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
