@@ -37,9 +37,9 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: JMBookParserProtocol {
-    
-    func midReadPageVC(charpter: Int, page: Int) -> UIViewController? {
-        return (page % 5 == 5) ? JMEpubViewController() : nil
+    func midReadPageVC(_ after: Bool) -> UIViewController? {
+        flipCount = after ? (flipCount + 1) : (flipCount - 1)
+        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
     }
     
     func startOpeningBook(_ desc: String) {
@@ -70,7 +70,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let model = dataSource[indexPath.row]
         if let path = Bundle.main.path(forResource: model.name, ofType: model.type) {
-            bookModel = JMBookParse(path)
+            let view = UIView()
+            view.backgroundColor = UIColor.red
+            let config = JMBookConfig()
+            bookModel = JMBookParse(path, config: config)
             bookModel?.delegate = self
             bookModel?.pushReader(pushVC: self)
         }

@@ -9,12 +9,12 @@ import Foundation
 
 @objc public protocol JMReadProtocol {
     /// 提供一个自定义页面展示自定义内容
-    func currentReadVC(charpter: Int, page: Int) -> UIViewController?
+    func currentReadVC(_ after: Bool) -> UIViewController?
 }
 
 @objc public protocol JMBookParserProtocol {
     /// 提供一个自定义页面展示自定义内容
-    func midReadPageVC(charpter: Int, page: Int) -> UIViewController?
+    func midReadPageVC(_ after: Bool) -> UIViewController?
     /// 开始打开图书
     func startOpeningBook(_ desc: String)
     /// 打开成功

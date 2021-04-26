@@ -61,7 +61,6 @@ public class JMBookParse: NSObject {
             DispatchQueue.main.async {
                 let pageView = JMReadPageContrller(bookModel)
                 pageView.delegate = self
-                self.delegate?.openBookSuccess(pageView.bottomAdView)
                 self.parserCallback?(pageView)
             }
         }catch {
@@ -82,8 +81,8 @@ public class JMBookParse: NSObject {
 }
 
 extension JMBookParse: JMReadProtocol {
-    public func currentReadVC(charpter: Int, page: Int) -> UIViewController? {
-        return delegate?.midReadPageVC(charpter: charpter, page: page)
+    public func currentReadVC(_ after: Bool) -> UIViewController? {
+        return delegate?.midReadPageVC(after)
     }
 }
 

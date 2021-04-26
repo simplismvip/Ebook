@@ -13,6 +13,9 @@ public class JMBookIndex {
     var chapter: Int = 0 // 章
     var page: Int = 0    // 页
     var loc: Int = 0     // 页中第几个字符
+    var indexPath: IndexPath {
+        return IndexPath(row: page, section: chapter)
+    }
     
     init(_ chapter: Int, _ page: Int) {
         self.chapter = chapter
@@ -22,6 +25,7 @@ public class JMBookIndex {
     func descrtion() {
         print("chapter:\(chapter) page:\(page)")
     }
+    
 }
 
 // MARK: -- 分享

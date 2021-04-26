@@ -42,8 +42,8 @@ extension JMReadPageContrller {
     }
     
     func setupviews() {
-        view.backgroundColor = UIColor.jmHexColor(bookModel.config.bkgColor)
-        set.fontSize.updateFontValue(value: Float(bookModel.config.fontSize))
+        view.backgroundColor = bookModel.config.bkgColor()
+        set.fontSize.updateFontValue(value: Float(bookModel.config.fontSize()))
         battery.batteryColor = UIColor.darkText
         chapter.isHidden = true
         toast.isHidden = true
@@ -58,18 +58,32 @@ extension JMReadPageContrller {
             }
         }
         
-        view.addSubview(bottomAdView)
-        bottomAdView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(view.snp.bottom)
-            make.left.width.equalTo(view)
-            make.height.equalTo(64)
-        }
-        
-        view.addSubview(battery)
-        battery.snp.makeConstraints { (make) in
-            make.left.width.equalTo(view)
-            make.height.equalTo(20)
-            make.bottom.equalTo(bottomAdView.snp.top)
+        // 底部是否有广告View
+        if let bottomAdView = bookModel.config.bottomView  {
+            view.addSubview(bottomAdView)
+            bottomAdView.snp.makeConstraints { (make) in
+                make.bottom.equalTo(view.snp.bottom)
+                make.left.width.equalTo(view)
+                make.height.equalTo(64)
+            }
+            
+            view.addSubview(battery)
+            battery.snp.makeConstraints { (make) in
+                make.left.width.equalTo(view)
+                make.height.equalTo(20)
+                make.bottom.equalTo(bottomAdView.snp.top).offset(-2)
+            }
+        }else {
+            view.addSubview(battery)
+            battery.snp.makeConstraints { (make) in
+                make.left.width.equalTo(view)
+                make.height.equalTo(20)
+                if #available(iOS 11.0, *) {
+                    make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+                } else {
+                    make.bottom.equalTo(view.snp.bottom)
+                }
+            }
         }
         
         topContainer.backgroundColor = UIColor.menuBkg

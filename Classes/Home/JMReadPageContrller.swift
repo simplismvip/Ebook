@@ -29,7 +29,6 @@ public class JMReadPageContrller: JMBaseController {
     let bookTitle = JMBookTitleView() // 标题
     let battery = JMBatteryView() // 电池
     let toast = JMMenuToastView() // toast
-    let bottomAdView = UIView() // 底部View
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
     
@@ -114,16 +113,16 @@ public class JMReadPageContrller: JMBaseController {
     private func setupPageVC() {
         var style: UIPageViewController.TransitionStyle = .scroll
         var orientation: UIPageViewController.NavigationOrientation = .horizontal
-        if bookModel.config.flipType == .HoriCurl {
+        if bookModel.config.flipType() == .HoriCurl {
             style = .pageCurl
             orientation = .horizontal
-        }else if bookModel.config.flipType == .VertCurl {
+        }else if bookModel.config.flipType() == .VertCurl {
             style = .pageCurl
             orientation = .vertical
-        }else if bookModel.config.flipType == .HoriScroll {
+        }else if bookModel.config.flipType() == .HoriScroll {
             style = .scroll
             orientation = .horizontal
-        }else if bookModel.config.flipType == .VertScroll {
+        }else if bookModel.config.flipType() == .VertScroll {
             style = .scroll
             orientation = .vertical
         }
@@ -185,7 +184,7 @@ public class JMReadPageContrller: JMBaseController {
 extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC(charpter: bookModel.indexPath.chapter, page: bookModel.indexPath.page) {
+        if let vc = delegate?.currentReadVC(false) {
             return vc
         }else {
             print("😀😀😀Before")
@@ -195,7 +194,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     
     // 往后翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC(charpter: bookModel.indexPath.chapter, page: bookModel.indexPath.page) {
+        if let vc = delegate?.currentReadVC(true) {
             return vc
         }else {
             print("😀😀😀After")
@@ -347,7 +346,7 @@ extension JMReadPageContrller {
         // 修改背景颜色
         jmRegisterEvent(eventName: kEventNameMenuPageBkgColor, block: { [weak self](item) in
             if let color = (item as? JMReadMenuItem)?.bkgColor {
-                self?.bookModel.config.bkgColor = color
+                self?.bookModel.config.config.bkgColor = color
                 if let controllers = self?.dataSource {
                     for vc in controllers {
                         vc.view.backgroundColor = UIColor.jmHexColor(color)
@@ -360,7 +359,7 @@ extension JMReadPageContrller {
         // 设置翻页
         jmRegisterEvent(eventName: kEventNameMenuPageFlipType, block: { [weak self](item) in
             if let typeStr = (item as? JMReadMenuItem)?.identify.rawValue {
-                self?.bookModel.config.flipType = JMFlipType.typeFrom(typeStr)
+                self?.bookModel.config.config.flipType = JMFlipType.typeFrom(typeStr)
                 if let page = self?.bookModel.currPage(), let pageView = self?.useingPageView() {
                     self?.pageVC?.view.removeFromSuperview()
                     self?.pageVC?.removeFromParentViewController()
@@ -377,7 +376,7 @@ extension JMReadPageContrller {
             if let fontSize = value as? CGFloat {
                 self?.toast.updateToast(("字体大小\(Int(fontSize))"))
                 self?.toast.isHidden = false
-                self?.bookModel.config.fontSize = fontSize
+                self?.bookModel.config.config.fontSize = fontSize
             }
         }, next: false)
     }

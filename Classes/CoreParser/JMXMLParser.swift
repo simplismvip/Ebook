@@ -84,8 +84,8 @@ public class JMXMLParser {
             if xmlNode.tag == "img" {
                 let path = href.deletingLastPathComponent().appendingPathComponent(xmlNode.content)
                 if let data = try? Data(contentsOf: path), let image = UIImage(data: data) {
-                    if image.size.width > config.width, let cgimage = image.cgImage {
-                        let rate = image.size.width / config.width
+                    if image.size.width > config.width(), let cgimage = image.cgImage {
+                        let rate = image.size.width / config.width()
                         let tempIma = UIImage(cgImage: cgimage, scale: rate, orientation: .up)
                         let attachText = attachMent(image: tempIma, font: config.font())
                         text.append(attachText)
@@ -98,8 +98,8 @@ public class JMXMLParser {
                 }
             }else {
                 let conText = NSMutableAttributedString(string: xmlNode.content)
-                conText.yy_lineSpacing = config.lineSpace
-                conText.yy_paragraphSpacing = config.lineSpace * 1.2
+                conText.yy_lineSpacing = config.lineSpace()
+                conText.yy_paragraphSpacing = config.lineSpace() * 1.2
                 conText.yy_font = xmlNode.media ? UIFont.jmMedium(20) : config.font()
                 conText.yy_firstLineHeadIndent = 20
                 text.append(conText)
