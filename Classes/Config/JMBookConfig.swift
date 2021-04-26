@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import ZJMKit
 
 // MARK: -- 配置信息类
 public class JMBookConfig {
+    /// 配置
     var config = JMConfig()
     /// 底部显示广告的View，高度64
     var bottomView: UIView?
@@ -23,7 +25,10 @@ public class JMBookConfig {
         }else{
             self.height = UIScreen.main.bounds.height - UIDevice.headerSafeAreaHeight - 20 - 50 - 64
         }
+        
+        deCodeConfig()
     }
+    
     
     /// 当前字体
     func font() -> UIFont {
@@ -78,6 +83,24 @@ public class JMBookConfig {
     /// 亮度
     func brightness() -> CGFloat {
         return config.brightness
+    }
+    
+    func codeConfig() {
+        if let path = JMTools.jmDocuPath() {
+            let fullpath = path.appendingPathComponent(".bookconfig")
+            JMModelStore.share.encodeObject(config, cachePath: fullpath)
+        }
+    }
+    
+    func deCodeConfig() {
+        if let path = JMTools.jmDocuPath() {
+            let fullpath = path.appendingPathComponent(".bookconfig")
+            JMModelStore.share.decodeObject(cachePath: fullpath) { (config: JMConfig?) in
+                if let config = config {
+                    self.config = config
+                }
+            }
+        }
     }
 }
 

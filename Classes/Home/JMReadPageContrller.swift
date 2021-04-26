@@ -166,9 +166,9 @@ public class JMReadPageContrller: JMBaseController {
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
-        
         // 保存当前进度
         JMBookDataBase.insertData(isTag: false, book: bookModel)
+        bookModel.config.codeConfig()
     }
     
     required init?(coder: NSCoder) {
