@@ -57,8 +57,6 @@ public class JMReadPageContrller: JMBaseController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.jmHexColor(JMBookConfig.share.bkgColor)
-        bottomAdView.backgroundColor = UIColor.red
         associatRouter()
         setupPageVC()
         setupviews()
@@ -116,16 +114,16 @@ public class JMReadPageContrller: JMBaseController {
     private func setupPageVC() {
         var style: UIPageViewController.TransitionStyle = .scroll
         var orientation: UIPageViewController.NavigationOrientation = .horizontal
-        if JMBookConfig.share.flipType == .HoriCurl {
+        if bookModel.config.flipType == .HoriCurl {
             style = .pageCurl
             orientation = .horizontal
-        }else if JMBookConfig.share.flipType == .VertCurl {
+        }else if bookModel.config.flipType == .VertCurl {
             style = .pageCurl
             orientation = .vertical
-        }else if JMBookConfig.share.flipType == .HoriScroll {
+        }else if bookModel.config.flipType == .HoriScroll {
             style = .scroll
             orientation = .horizontal
-        }else if JMBookConfig.share.flipType == .VertScroll {
+        }else if bookModel.config.flipType == .VertScroll {
             style = .scroll
             orientation = .vertical
         }
@@ -153,7 +151,7 @@ public class JMReadPageContrller: JMBaseController {
         }
     }
     
-    // 惯量router
+    // 关联router
     private func associatRouter() {
         let router = JMRouter()
         jmSetAssociatedMsgRouter(router: router)
@@ -349,7 +347,7 @@ extension JMReadPageContrller {
         // 修改背景颜色
         jmRegisterEvent(eventName: kEventNameMenuPageBkgColor, block: { [weak self](item) in
             if let color = (item as? JMReadMenuItem)?.bkgColor {
-                JMBookConfig.share.bkgColor = color
+                self?.bookModel.config.bkgColor = color
                 if let controllers = self?.dataSource {
                     for vc in controllers {
                         vc.view.backgroundColor = UIColor.jmHexColor(color)
@@ -362,7 +360,7 @@ extension JMReadPageContrller {
         // 设置翻页
         jmRegisterEvent(eventName: kEventNameMenuPageFlipType, block: { [weak self](item) in
             if let typeStr = (item as? JMReadMenuItem)?.identify.rawValue {
-                JMBookConfig.share.flipType = JMFlipType.typeFrom(typeStr)
+                self?.bookModel.config.flipType = JMFlipType.typeFrom(typeStr)
                 if let page = self?.bookModel.currPage(), let pageView = self?.useingPageView() {
                     self?.pageVC?.view.removeFromSuperview()
                     self?.pageVC?.removeFromParentViewController()
@@ -376,9 +374,10 @@ extension JMReadPageContrller {
         
         // 设置翻页
         jmRegisterEvent(eventName: kEventNameMenuSliderValueChange, block: { [weak self](value) in
-            if let typeStr = value as? String {
-                self?.toast.updateToast(typeStr)
+            if let fontSize = value as? CGFloat {
+                self?.toast.updateToast(("字体大小\(Int(fontSize))"))
                 self?.toast.isHidden = false
+                self?.bookModel.config.fontSize = fontSize
             }
         }, next: false)
     }

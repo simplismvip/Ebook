@@ -24,12 +24,13 @@ final public class JMBookModel {
     public var lastTime: String? // 阅读的最后时间
     public var onBookshelf = false // 是否在书架上
     public var isDownload = false // 是否已下载
-    
-    init(document: EPUBDocument) {
+    public let config: JMBookConfig // 配置
+    init(document: EPUBDocument, config: JMBookConfig) {
         self.title = document.title ?? ""
         self.bookId = document.metadata.identifier ?? (document.title ?? "").jmTransformChinese()
         self.author = document.author ?? ""
         self.coverImg = document.cover
+        self.config = config
         self.directory = document.directory
         self.contentDirectory = document.contentDirectory
         self.desc = document.metadata.description
@@ -115,7 +116,7 @@ final public class JMBookModel {
         for (index, spine) in document.spine.items.enumerated() {
             if spine.linear, let href = document.manifest.items[spine.idref]?.path {
                 let fullHref = document.contentDirectory.appendingPathComponent(href)
-                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0))
+                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0), config: config)
                 // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
                 if let path = document.manifest.items[spine.idref]?.path {
                     charpter.charpTitle = document.findTarget(target: path)?.label
@@ -227,12 +228,14 @@ public class JMBookCharpter {
     public let parser = JMXMLParser()
     /// 当前章节
     public let location: JMBookIndex
-    
-    init(spine: EPUBSpineItem, fullHref: URL, loc: JMBookIndex) {
+    /// 配置文件
+    public let config: JMBookConfig
+    init(spine: EPUBSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
         self.idref = spine.idref
         self.linear = spine.linear
         self.fullHref = fullHref
         self.location = loc
+        self.config = config
     }
         
     /// 读取本章节，计算页数
@@ -240,8 +243,8 @@ public class JMBookCharpter {
         if parser.xmlNodes.isEmpty {
             parser.content(fullHref)
         }
-        let attr = parser.attributeStr(JMBookConfig.share)
-        pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: JMBookConfig.share.bounds())
+        let attr = parser.attributeStr(config)
+        pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: config.bounds())
     }
     
     /// 本章多少字：=小节总字数

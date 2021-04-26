@@ -59,7 +59,8 @@ public class JMBookConfig: Codable {
     var brightness: CGFloat
     /// 白天、夜晚模式
     var isDayMode = true
-    static let share: JMBookConfig = { return JMBookConfig() }()
+    
+    
     
     public init(){
         self.width = UIScreen.main.bounds.size.width - 40

@@ -42,6 +42,8 @@ extension JMReadPageContrller {
     }
     
     func setupviews() {
+        view.backgroundColor = UIColor.jmHexColor(bookModel.config.bkgColor)
+        set.fontSize.updateFontValue(value: Float(bookModel.config.fontSize))
         battery.batteryColor = UIColor.darkText
         chapter.isHidden = true
         toast.isHidden = true
@@ -67,7 +69,7 @@ extension JMReadPageContrller {
         battery.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
             make.height.equalTo(20)
-            make.bottom.equalTo(bottomAdView.snp.top).offset(-8)
+            make.bottom.equalTo(bottomAdView.snp.top)
         }
         
         topContainer.backgroundColor = UIColor.menuBkg

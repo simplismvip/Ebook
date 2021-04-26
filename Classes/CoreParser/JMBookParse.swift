@@ -15,11 +15,13 @@ public class JMBookParse: NSObject {
     public let path: String // 图书路径
     public let pathUrl: URL // 图书URL
     public let bookType: JMBookType // 图书类型
+    public let config: JMBookConfig // 配置
     private var parserCallback: ((JMReadPageContrller)->())?
-    public init(_ path: String) {
+    public init(_ path: String, config: JMBookConfig) {
         self.path = path
         self.pathUrl = URL(fileURLWithPath: path)
         self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
+        self.config = config
         super.init()
         let _ = JMBookDataBase.share
     }
@@ -55,7 +57,7 @@ public class JMBookParse: NSObject {
     private func parseEpubBook() {
         do{
             let document = try EPUBParser().parse(documentAt: pathUrl)
-            let bookModel = JMBookModel(document: document)
+            let bookModel = JMBookModel(document: document,config: config)
             DispatchQueue.main.async {
                 let pageView = JMReadPageContrller(bookModel)
                 pageView.delegate = self
