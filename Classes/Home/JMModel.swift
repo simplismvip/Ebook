@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import EPUBKit
 import ZJMKit
 
 public class JMBookIndex {
@@ -37,7 +36,6 @@ public struct JMBookShareItem {
 }
 
 
-
 // MARK: -- 目录, ncx中读取的目录 ------- 暂时用不到 -------
 public struct JMBookChapter {
     public var title: String
@@ -45,7 +43,7 @@ public struct JMBookChapter {
     public let src: String
     public let fullHref: URL
     public var subTable: [JMBookChapter]?
-    init(_ tableOfContents: EPUBTableOfContents, baseHref: URL) {
+    init(_ tableOfContents: JMEpubTOC, baseHref: URL) {
         self.id = tableOfContents.id
         self.title = tableOfContents.label
         self.src = tableOfContents.item ?? ""

@@ -45,13 +45,13 @@ extension JMParserError: LocalizedError {
     public var recoverySuggestion: String? {
         switch self {
         case .unzipFailed:
-            return "Make sure your archive is a valid .epub archive"
+            return "解压.epub文件失败🆘🆘🆘"
         case .containerMissing:
-            return "Make sure the path to container.xml is correct, and the file itself is present."
+            return "container.xml 文件缺失❗️❗️❗️"
         case .contentPathMissing:
-            return "Path to content may be in different place in container.xml then normally."
+            return "container.xml 路径不正确❗️❗️❗️"
         case .tableOfContentsMissing:
-            return "Make sure to check if the '<spine>' contains the ID for TOC"
+            return "TOC 解析错误🆘🆘🆘"
         }
     }
 }

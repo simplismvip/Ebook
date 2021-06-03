@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EPUBKit
 import JMEpubReader
 import SnapKit
 import ZJMKit

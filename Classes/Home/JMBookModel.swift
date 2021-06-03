@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import EPUBKit
 import ZJMKit
 
 // MARK: -- 书本📖模型
@@ -25,7 +24,7 @@ final public class JMBookModel {
     public var onBookshelf = false // 是否在书架上
     public var isDownload = false // 是否已下载
     public let config: JMBookConfig // 配置
-    init(document: EPUBDocument, config: JMBookConfig) {
+    init(document: JMEpubBook, config: JMBookConfig) {
         self.title = document.title ?? ""
         self.bookId = document.metadata.identifier ?? (document.title ?? "").jmTransformChinese()
         self.author = document.author ?? ""
@@ -112,7 +111,7 @@ final public class JMBookModel {
     }
     
     // 初始化章节
-    private func initCharter(document: EPUBDocument) {
+    private func initCharter(document: JMEpubBook) {
         for (index, spine) in document.spine.items.enumerated() {
             if spine.linear, let href = document.manifest.items[spine.idref]?.path {
                 let fullHref = document.contentDirectory.appendingPathComponent(href)
@@ -230,7 +229,7 @@ public class JMBookCharpter {
     public let location: JMBookIndex
     /// 配置文件
     public let config: JMBookConfig
-    init(spine: EPUBSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
+    init(spine: JMEpubSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
         self.idref = spine.idref
         self.linear = spine.linear
         self.fullHref = fullHref

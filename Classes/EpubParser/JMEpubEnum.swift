@@ -5,7 +5,7 @@
 //  Created by JunMing on 2021/4/23.
 //
 
-import UIKit
+import Foundation
 
 public enum JMEpubMediaType: String {
     case gif = "image/gif"
