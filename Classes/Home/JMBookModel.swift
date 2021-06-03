@@ -35,7 +35,7 @@ final public class JMBookModel {
         self.contentDirectory = epub.contentDirectory
         self.desc = epub.metadata.description
         self.indexPath = JMBookIndex(0, 0)
-        self.initCharter(epub: epub)
+        self.charterFromEpub(epub: epub)
         
         // 初始化章节完成后转跳到相应页
         if let book = JMBookDataBase.share.fetchRate(bookid: bookId) {
@@ -58,7 +58,7 @@ final public class JMBookModel {
         self.directory = txt.directory
         self.contentDirectory = txt.directory
         self.indexPath = JMBookIndex(0, 0)
-//        self.initCharter(epub: epub)
+        self.charterFromTxt(txt: txt)
         
         // 初始化章节完成后转跳到相应页
         if let book = JMBookDataBase.share.fetchRate(bookid: bookId) {
@@ -135,7 +135,7 @@ final public class JMBookModel {
     }
     
     // 初始化章节
-    private func initCharter(epub: JMEpubBook) {
+    private func charterFromEpub(epub: JMEpubBook) {
         for (index, spine) in epub.spine.items.enumerated() {
             if spine.linear, let href = epub.manifest.items[spine.idref]?.path {
                 let fullHref = epub.contentDirectory.appendingPathComponent(href)
@@ -148,6 +148,16 @@ final public class JMBookModel {
                 }
                 self.contents.append(charpter)
             }
+        }
+    }
+    
+    // 初始化章节
+    private func charterFromTxt(txt: JMTxtBook) {
+        for (index, txtChapter) in txt.chapters.enumerated() {
+            let fullHref = txt.contentDirectory.appendingPathComponent(txtChapter.path)
+            let charpter = JMBookCharpter(charpter: txtChapter, fullHref: fullHref, loc: JMBookIndex(index,0), config: config)
+            charpter.charpTitle = txtChapter.title
+            self.contents.append(charpter)
         }
     }
 }
@@ -253,22 +263,41 @@ public class JMBookCharpter {
     public let location: JMBookIndex
     /// 配置文件
     public let config: JMBookConfig
-    
+    /// 文件类型
+    public let booktype: JMBookType
+    /// Epub格式初始化
     init(spine: JMEpubSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
         self.idref = spine.idref
         self.linear = spine.linear
         self.fullHref = fullHref
         self.location = loc
         self.config = config
+        self.booktype = .Epub
+    }
+    
+    /// Txt格式初始化
+    init(charpter: JMTxtChapter, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
+        self.idref = charpter.path
+        self.linear = false
+        self.fullHref = fullHref
+        self.location = loc
+        self.config = config
+        self.booktype = .Txt
     }
         
     /// 读取本章节，计算页数
     public func countPages() {
-        if parser.xmlNodes.isEmpty {
-            parser.content(fullHref)
+        if booktype == .Epub {
+            if parser.xmlNodes.isEmpty {
+                parser.content(fullHref)
+            }
+            let attr = parser.attributeStr(config)
+            pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: config.bounds())
+        } else if booktype == .Txt {
+            if let attr = JMTxtParser.attributeStr(fullHref: fullHref, config: config) {
+                pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: config.bounds())
+            }
         }
-        let attr = parser.attributeStr(config)
-        pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: config.bounds())
     }
     
     /// 本章多少字：=小节总字数

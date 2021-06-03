@@ -7,30 +7,42 @@
 // txt 文本解析逻辑为首次加载时根据各章节分割为小文件，以后再加载时只需加载小文件，无需加载
 // 并且会生成xml格式的目录文件，再次加载时根据目录加载即可
 
-import UIKit
+import Foundation
 import AEXML
+import ZJMKit
 
 public struct JMTxtParser {
-    
+    /// 解析txt文本文件
     public func parser(url: URL) throws -> JMTxtBook {
-        do {
-            let content = try String(contentsOf: url, encoding: coding())
-            let chapters = separateChapter(content)
-            if chapters.count > 0 {
-                return JMTxtBook(chapters: chapters, path: url)
-            }else {
-                throw NSError(domain: "解析错误", code: 0, userInfo: nil)
+        let filename = url.lastPathComponent.deletingPathExtension
+        if let folderPath = JMTools.jmDocuPath()?.appendingPathComponent(filename) {
+            if FileManager.default.fileExists(atPath: folderPath) {
+                // 已经存在，不用再次解析
+                let xmlPath = folderPath.full(f: "opf", l: "xml")
+                if let book = parserXml(xmlPath: URL(fileURLWithPath: xmlPath)) {
+                    return book
+                } else {
+                    throw NSError(domain: "🆘🆘🆘解析opf.xml文件错误", code: 0, userInfo: nil)
+                }
+            } else {
+                // 第一次加载，解析生成文件
+                JMFileTools.jmCreateFolder(folderPath)
+                if let content = try? String(contentsOf: url, encoding: coding()) {
+                    parserContent(folderPath: folderPath, content: content)
+                } else {
+                    throw NSError(domain: "🆘🆘🆘解码txt文件发生错误", code: 0, userInfo: nil)
+                }
             }
-        } catch {
-            print("error")
+        } else {
+            throw NSError(domain: "🆘🆘🆘创建folderpath错误", code: 0, userInfo: nil)
         }
-        
-        throw NSError(domain: "解析错误", code: 0, userInfo: nil)
+        throw NSError(domain: "🆘🆘🆘解析txt文件错误", code: 0, userInfo: nil)
     }
     
-    func separateChapter(_ content: String) -> [JMTxtChapter] {
+    // 解析txt全文
+    func parserContent(folderPath: String, content: String) {
+        var writeChapters = [JMTxtChapter]()
         let nsString = content as NSString
-        var chapters = [JMTxtChapter]()
         let pattern = "第[0-9一二三四五六七八九十百千]*[章回].*"
         let stringRange = NSRange(location: 0, length: content.count)
         do {
@@ -45,18 +57,19 @@ public struct JMTxtParser {
                     if pageIndex == 0 {
                         let title = "开始"
                         let content = nsString.substring(with: NSRange(location: 0, length: targetTange.location))
-                        let chapter = JMTxtChapter(content: content, title: title, page: pageIndex, pageCount: content.count)
-                        chapters.append(chapter)
+                        writeTxt(textPath: folderPath.full(f: title, l: "txt"), content: content)
+                        let charpter = JMTxtChapter(title: title, page: "\(pageIndex)", count: "\(content.count)")
+                        writeChapters.append(charpter)
                     }
                     if pageIndex > 0 {
                         let title = nsString.substring(with: lastRange)
                         let loc = lastRange.location + lastRange.length
                         let len = targetTange.location - loc
                         let content = nsString.substring(with: NSRange(location: loc, length: len))
-                        let chapter = JMTxtChapter(content: content, title: title, page: pageIndex, pageCount: content.count)
-                        chapters.append(chapter)
+                        writeTxt(textPath: folderPath.full(f: title, l: "txt"), content: content)
+                        let charpter = JMTxtChapter(title: title, page: "\(pageIndex)", count: "\(content.count)")
+                        writeChapters.append(charpter)
                     }
-                    
                     lastRange = targetTange
                     pageIndex += 1
                 }
@@ -67,30 +80,100 @@ public struct JMTxtParser {
             if location < nsString.length {
                 let title = nsString.substring(with: lastRange)
                 let content = nsString.substring(with: NSRange(location: location, length: nsString.length - location))
-                let chapter = JMTxtChapter(content: content, title: title, page: pageIndex, pageCount: content.count)
-                chapters.append(chapter)
+                writeTxt(textPath: folderPath.full(f: title, l: "txt"), content: content)
+                let charpter = JMTxtChapter(title: title, page: "\(pageIndex)", count: "\(content.count)")
+                writeChapters.append(charpter)
             }
-            
         } catch {
             print("error")
         }
-        return chapters
+        
+        // 写入xml
+        writeXml(path: folderPath.full(f: "opf", l: "xml"), charpters: writeChapters)
     }
     
-    func write(path: String, content: String) {
-        if !FileManager.default.fileExists(atPath: path) {
-            let data = content.data(using: coding())
+    // 解析txt文件的xml信息文件
+    private func parserXml(xmlPath: URL) -> JMTxtBook? {
+        guard let data = try? Data(contentsOf: xmlPath) else {
+            return nil
+        }
+        
+        if let xmlDoc = try? AEXMLDocument(xml: data) {
+            print(xmlDoc.xml)
+            var chapters = [JMTxtChapter]()
+            let title = xmlDoc.root["manifest"]["dc:title"].string
+            let creator = xmlDoc.root["manifest"]["dc:creator"].string
+            let identifier = xmlDoc.root["manifest"]["dc:identifier"].string
+            if let items = xmlDoc.root["manifest"]["item"].all {
+                for item in items {
+                    let title = item.attributes["title"] ?? ""
+                    let page = item.attributes["page"] ?? ""
+                    let pageCount = item.attributes["count"] ?? ""
+                    let chapter = JMTxtChapter(title: title, page: page, count: pageCount)
+                    chapters.append(chapter)
+                    print(item.attributes)
+                }
+            }
+            return JMTxtBook(title: title, bookId: identifier, author: creator, chapters: chapters, path: xmlPath)
+        } else {
+            return nil
+        }
+    }
+    
+    // 生成txt文件目录
+    private func writeXml(path: String, charpters: [JMTxtChapter]) {
+        let root = AEXMLDocument()
+        let attributes = ["xmlns:dc" : "https://github.com/simplismvip/Ebook", "xmlns:opf" : "opf"]
+        let body = root.addChild(name: "body")
+        let metadata = body.addChild(name: "metadata", attributes: attributes)
+        metadata.addChild(name: "dc:title", value: "标题")
+        metadata.addChild(name: "dc:creator", value: "作者")
+        metadata.addChild(name: "dc:identifier", value: "唯一ID")
+        let manifest = body.addChild(name: "manifest")
+        for charpter in charpters {
+            let attributes = ["title" : charpter.title, "href" : charpter.path, "page" : charpter.page, "count" : charpter.count]
+            manifest.addChild(name: "item", attributes: attributes)
+        }
+        writeTxt(textPath: path, content: root.xml)
+    }
+    
+    // 写入文本信息
+    private func writeTxt(textPath: String, content: String) {
+        if !FileManager.default.fileExists(atPath: textPath) {
+            let data = content.data(using: .utf8)
             do {
-                try data?.write(to: URL(fileURLWithPath: path))
+                try data?.write(to: URL(fileURLWithPath: textPath))
             } catch {
                 print("error")
             }
         }
     }
     
-    func coding() -> String.Encoding {
+    private func coding() -> String.Encoding {
         let cfEnc = CFStringEncodings.GB_18030_2000
         let enc = CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(cfEnc.rawValue))
         return String.Encoding(rawValue: enc)
+    }
+}
+
+extension JMTxtParser {
+    static public func attributeStr(fullHref: URL, config: JMBookConfig) -> NSMutableAttributedString? {
+        if let content = try? String(contentsOf: fullHref, encoding: .utf8) {
+            let conText = NSMutableAttributedString(string: content)
+            conText.yy_lineSpacing = config.lineSpace()
+            conText.yy_paragraphSpacing = config.lineSpace() * 1.2
+            conText.yy_font = config.font()
+            conText.yy_firstLineHeadIndent = 20
+            return conText
+        }
+        
+        return nil
+    }
+}
+
+
+extension String {
+    func full(f: String, l: String) -> String {
+        return self.appendingPathComponent(f).appendingPathExtension(l)
     }
 }

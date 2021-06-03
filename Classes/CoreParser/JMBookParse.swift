@@ -72,7 +72,8 @@ public class JMBookParse: NSObject {
     // Txt
     private func parseTxtBook() {
         do {
-            let _ = try JMTxtParser().parser(url: pathUrl)
+            let txt = try JMTxtParser().parser(url: pathUrl)
+            let bookModel = JMBookModel(txt: txt, config: config)
             DispatchQueue.main.async {
 //                let pageView = JMReadPageContrller(bookModel)
 //                pageView.delegate = self
