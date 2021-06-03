@@ -41,6 +41,8 @@ Pod::Spec.new do |s|
     'Classes/Home/*.swift',
     'Classes/CoreParser/*.{swift,h,m}',
     'Classes/EpubParser/*.{swift}',
+    'Classes/TextParser/*.{swift}',
+    'Classes/Tools/*.{swift}',
     'Classes/MenView/*.{swift}'
   ]
   
@@ -55,7 +57,6 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-#  s.dependency 'EPUBKit'
   s.dependency 'Zip'
   s.dependency 'AEXML'
   s.dependency 'FMDB'

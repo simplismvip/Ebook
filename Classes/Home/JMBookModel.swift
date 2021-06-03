@@ -24,17 +24,41 @@ final public class JMBookModel {
     public var onBookshelf = false // 是否在书架上
     public var isDownload = false // 是否已下载
     public let config: JMBookConfig // 配置
-    init(document: JMEpubBook, config: JMBookConfig) {
-        self.title = document.title ?? ""
-        self.bookId = document.metadata.identifier ?? (document.title ?? "").jmTransformChinese()
-        self.author = document.author ?? ""
-        self.coverImg = document.cover
+    
+    init(epub: JMEpubBook, config: JMBookConfig) {
+        self.title = epub.title
+        self.bookId = epub.bookId
+        self.author = epub.author
+        self.coverImg = epub.cover
         self.config = config
-        self.directory = document.directory
-        self.contentDirectory = document.contentDirectory
-        self.desc = document.metadata.description
+        self.directory = epub.directory
+        self.contentDirectory = epub.contentDirectory
+        self.desc = epub.metadata.description
         self.indexPath = JMBookIndex(0, 0)
-        self.initCharter(document: document)
+        self.initCharter(epub: epub)
+        
+        // 初始化章节完成后转跳到相应页
+        if let book = JMBookDataBase.share.fetchRate(bookid: bookId) {
+            lastTime = book.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
+            indexPath.chapter = book.charter
+            contents[indexPath.chapter].countPages()
+            if let pageindex = contents[indexPath.chapter].pages?.jmIndex({
+                $0.attribute.string.contains(book.text)
+            }) {
+                indexPath.page = pageindex
+            }
+        }
+    }
+    
+    init(txt: JMTxtBook, config: JMBookConfig) {
+        self.title = txt.title
+        self.bookId = txt.bookId
+        self.author = txt.author
+        self.config = config
+        self.directory = txt.directory
+        self.contentDirectory = txt.directory
+        self.indexPath = JMBookIndex(0, 0)
+//        self.initCharter(epub: epub)
         
         // 初始化章节完成后转跳到相应页
         if let book = JMBookDataBase.share.fetchRate(bookid: bookId) {
@@ -111,14 +135,14 @@ final public class JMBookModel {
     }
     
     // 初始化章节
-    private func initCharter(document: JMEpubBook) {
-        for (index, spine) in document.spine.items.enumerated() {
-            if spine.linear, let href = document.manifest.items[spine.idref]?.path {
-                let fullHref = document.contentDirectory.appendingPathComponent(href)
+    private func initCharter(epub: JMEpubBook) {
+        for (index, spine) in epub.spine.items.enumerated() {
+            if spine.linear, let href = epub.manifest.items[spine.idref]?.path {
+                let fullHref = epub.contentDirectory.appendingPathComponent(href)
                 let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0), config: config)
                 // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
-                if let path = document.manifest.items[spine.idref]?.path {
-                    charpter.charpTitle = document.findTarget(target: path)?.label
+                if let path = epub.manifest.items[spine.idref]?.path {
+                    charpter.charpTitle = epub.findTarget(target: path)?.label
                 }else {
                     charpter.charpTitle = title
                 }
@@ -229,6 +253,7 @@ public class JMBookCharpter {
     public let location: JMBookIndex
     /// 配置文件
     public let config: JMBookConfig
+    
     init(spine: JMEpubSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
         self.idref = spine.idref
         self.linear = spine.linear

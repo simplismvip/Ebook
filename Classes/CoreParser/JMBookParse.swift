@@ -55,8 +55,8 @@ public class JMBookParse: NSObject {
     // Epub, 读取目录
     private func parseEpubBook() {
         do{
-            let document = try JMEpubParser().parse(documentAt: pathUrl)
-            let bookModel = JMBookModel(document: document,config: config)
+            let epub = try JMEpubParser().parse(documentAt: pathUrl)
+            let bookModel = JMBookModel(epub: epub, config: config)
             DispatchQueue.main.async {
                 let pageView = JMReadPageContrller(bookModel)
                 pageView.delegate = self
@@ -73,8 +73,15 @@ public class JMBookParse: NSObject {
     private func parseTxtBook() {
         do {
             let _ = try JMTxtParser().parser(url: pathUrl)
+            DispatchQueue.main.async {
+//                let pageView = JMReadPageContrller(bookModel)
+//                pageView.delegate = self
+//                self.parserCallback?(pageView)
+            }
         }catch let error as NSError {
-            print(error)
+            DispatchQueue.main.async {
+                self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
+            }
         }
     }
 }

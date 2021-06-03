@@ -17,15 +17,23 @@ public struct JMEpubBook {
 }
 
 extension JMEpubBook {
-    public var title: String? {
-        return metadata.title
+    
+    public var bookId: String {
+        return metadata.identifier ?? title.jmTransformChinese()
     }
-    public var author: String? {
-        return metadata.creator?.name
+    
+    public var title: String {
+        return metadata.title ?? ""
     }
-    public var publisher: String? {
-        return metadata.publisher
+    
+    public var author: String {
+        return metadata.creator?.name ?? ""
     }
+    
+    public var publisher: String {
+        return metadata.publisher ?? ""
+    }
+    
     public var cover: URL? {
         guard let coverId = metadata.coverId, let path = manifest.items[coverId]?.path else {
             return nil
