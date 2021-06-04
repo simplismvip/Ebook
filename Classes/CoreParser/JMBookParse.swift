@@ -46,8 +46,10 @@ public class JMBookParse: NSObject {
         DispatchQueue.global().async {
             if self.bookType == .Epub {
                 self.parseEpubBook()
-            }else if self.bookType == .Txt {
+            } else if self.bookType == .Txt {
                 self.parseTxtBook()
+            } else {
+                print("❗️❗️❗️暂不支持格式")
             }
         }
     }
@@ -75,9 +77,9 @@ public class JMBookParse: NSObject {
             let txt = try JMTxtParser().parser(url: pathUrl)
             let bookModel = JMBookModel(txt: txt, config: config)
             DispatchQueue.main.async {
-//                let pageView = JMReadPageContrller(bookModel)
-//                pageView.delegate = self
-//                self.parserCallback?(pageView)
+                let pageView = JMReadPageContrller(bookModel)
+                pageView.delegate = self
+                self.parserCallback?(pageView)
             }
         }catch let error as NSError {
             DispatchQueue.main.async {

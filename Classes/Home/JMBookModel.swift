@@ -265,6 +265,7 @@ public class JMBookCharpter {
     public let config: JMBookConfig
     /// 文件类型
     public let booktype: JMBookType
+    
     /// Epub格式初始化
     init(spine: JMEpubSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
         self.idref = spine.idref

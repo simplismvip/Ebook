@@ -1,27 +1,27 @@
 [
     {
-        "title":"Andada",
+        "title":"系统",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
-        "identify":"Andada"
+        "identify":"kaitiGB2312.ttf"
     },{
-        "title":"Lato",
+        "title":"楷体",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
-        "identify":"Lato"
+        "identify":"kaitiGB2312.ttf"
     },{
-        "title":"Lora",
+        "title":"晨妹子",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
-        "identify":"Lora"
+        "identify":"HYChenMeiZiJ.ttf"
     },{
-        "title":"Raleway",
+        "title":"悠然体",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
-        "identify":"Raleway"
+        "identify":"HYYouRanTiJ.ttf"
     }
 ]

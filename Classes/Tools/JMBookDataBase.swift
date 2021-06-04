@@ -33,10 +33,10 @@ struct JMBookDataBase {
                 "charter integer," +
                 "text varchar(300))"
                 try db.executeUpdate(bookRate, values: nil)
-            }catch {
+            } catch {
                 print(db.lastErrorMessage())
             }
-        }else {
+        } else {
             print("🆘🆘🆘打开DB失败！")
         }
     }
@@ -94,7 +94,7 @@ struct JMBookDataBase {
                     tempArray.append(JMChapterTag(text: text, timeStr: timeStr, charter: Int(charter)))
                 }
             }
-        }catch {
+        } catch {
             print(db.lastErrorMessage())
         }
         return tempArray
@@ -111,7 +111,7 @@ struct JMBookDataBase {
                     return JMChapterTag(text: text, timeStr: timeStr, charter: Int(charter))
                 }
             }
-        }catch {
+        } catch {
             print(db.lastErrorMessage())
         }
         
@@ -123,7 +123,7 @@ struct JMBookDataBase {
         let sql = String(format: "SELECT bookid FROM bookRate WHERE bookid = '%@'", bookid)
         if let set = try? db.executeQuery(sql, values: nil), set.next() {
             return true
-        }else{
+        } else {
             print(db.lastErrorMessage())
             return false
         }
@@ -134,7 +134,7 @@ struct JMBookDataBase {
         let sql = String(format: "SELECT bookid FROM bookCharterTag WHERE text = '%@'", text)
         if let set = try? db.executeQuery(sql, values: nil), set.next() {
             return true
-        }else{
+        } else {
             print(db.lastErrorMessage())
             return false
         }
@@ -145,7 +145,7 @@ struct JMBookDataBase {
         do{
             let deleteSql = "DELETE FROM \(tableName) WHERE bookid = ?"
             try db.executeUpdate(deleteSql, values: [bookid])
-        }catch {
+        } catch {
             print(db.lastErrorMessage())
         }
     }
@@ -154,7 +154,7 @@ struct JMBookDataBase {
     func update(tableName: String, bookid: String, updateFieldName: String, updateField: Any) {
         do{
             try db.executeUpdate("UPDATE \(tableName) SET \(updateFieldName) = ? where bookid = ?", values: [updateField, bookid])
-        }catch {
+        } catch {
             print(db.lastErrorMessage())
         }
     }
@@ -163,7 +163,7 @@ struct JMBookDataBase {
     func deleteAllLocalDB() {
         do{
             try db.executeUpdate("truncate table localEpubInfo", values: nil)
-        }catch {
+        } catch {
             print(db.lastErrorMessage())
         }
     }

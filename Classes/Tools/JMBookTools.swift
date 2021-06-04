@@ -5,9 +5,9 @@
 //  Created by JunMing on 2021/4/22.
 //
 
-import UIKit
+import Foundation
 
-class JMBookTools: UIView {
+class JMBookTools {
     private let hightLabel = UILabel()
     private var contSize = Dictionary<String, CGSize>()
     private let width = UIScreen.main.bounds.size.width

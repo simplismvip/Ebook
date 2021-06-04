@@ -140,7 +140,7 @@ public struct JMTxtParser {
     // 写入文本信息
     private func writeTxt(textPath: String, content: String) {
         if !FileManager.default.fileExists(atPath: textPath) {
-            let data = content.data(using: .utf8)
+            let data = content.replacingOccurrences(of: "\r\n\r\n", with: "\r\n").data(using: .utf8)
             do {
                 try data?.write(to: URL(fileURLWithPath: textPath))
             } catch {
