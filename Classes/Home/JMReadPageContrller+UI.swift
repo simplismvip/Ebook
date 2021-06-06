@@ -157,6 +157,37 @@ extension JMReadPageContrller {
         let curr = Float(bookModel.indexPath.chapter)/Float(bookModel.contents.count)
         progress.setSlider(max: max, curr: curr)
     }
+    
+    /// 更新按钮状态
+    func updateItemStatus() {
+        let config = bookModel.config
+        for item in set.allItems() {
+            if item.identify == config.fontName() {
+                item.isSelect = true
+            }
+            
+            if item.identify == config.flipType() {
+                item.isSelect = true
+            }
+        }
+        
+        for item in light.allItems() {
+            if item.identify == config.bkgColorStr {
+                item.isSelect = true
+                jmRouterEvent(eventName: kEventNameMenuPageBkgColor, info: item)
+            }
+        }
+        
+        for item in play.allItems() {
+            if item.identify == config.playStatus {
+                item.isSelect = true
+            }
+            
+            if item.identify == config.playRate {
+                item.isSelect = true
+            }
+        }
+    }
 }
 
 extension JMReadPageContrller {

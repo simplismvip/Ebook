@@ -15,26 +15,6 @@ public enum JMEpubStatus {
     case OpenInit // 初始状态
 }
 
-// MARK: -- 翻页类型
-public enum JMFlipType: String, Codable {
-    case VertScroll = "vertScroll" // 竖直滚动
-    case VertCurl = "vertCurl" // 竖直翻页
-    case HoriScroll = "horiScroll" // 横向滚动
-    case HoriCurl = "horiCurl" // 横向翻页
-    
-    static func typeFrom(_ typeStr: String) -> JMFlipType {
-        if typeStr == "vertScroll" {
-            return .VertScroll
-        }else if typeStr == "vertCurl" {
-            return .VertCurl
-        }else if typeStr == "horiScroll" {
-            return .HoriScroll
-        }else {
-            return .HoriCurl
-        }
-    }
-}
-
 // MARK: -- 系统亮度
 public enum JMBrightness {
     case System // 系统亮度
@@ -127,11 +107,13 @@ public enum JMMenuType: String, HandyJSONEnum {
 }
 
 /// 按钮类型
-public enum JMMenuStyle: String, HandyJSONEnum {
-    case BkgColor = "color1" // 背景色
-    case BkgColor1 = "color2" // 背景色
-    case BkgColor2 = "color3" // 背景色
-    case BkgColor3 = "color4" // 背景色
+public enum JMMenuStyle: String, Codable, HandyJSONEnum {
+    case BkgColor = "#000000" // 背景色
+    case BkgColor1 = "#696969" // 背景色
+    case BkgColor2 = "#A0522D" // 背景色
+    case BkgColor3 = "#E1C4C4" // 背景色
+    case BkgColor4 = "#708090" // 背景色
+    case BkgColor5 = "#FFFFFF" // 背景色
     
     case MainBotCatalog = "bookCatalog" // 主页底部
     case MainBotDayNight = "dayornight" // 主页底部
@@ -145,15 +127,15 @@ public enum JMMenuStyle: String, HandyJSONEnum {
     case TRightWifi = "sharewifi"// 主页顶部右侧
     case TRightMore = "actionmore"// 主页顶部右侧
     
-    case PFlipHoriScrolll = "horiScroll"// 翻页
-    case PFlipHoriCurl = "horiCurl"// 翻页
-    case PFlipVertScroll = "vertScroll"// 翻页
-    case PFlipVertCurl = "vertCurl"// 翻页
+    case PFlipVertScroll = "vertScroll" // 竖直滚动
+    case PFlipVertCurl = "vertCurl" // 竖直翻页
+    case PFlipHoriScroll = "horiScroll" // 横向滚动
+    case PFlipHoriCurl = "horiCurl" // 横向翻页
     
-    case PFont = "Andada"// 字体
-    case PFont1 = "Lato"// 字体
-    case PFont2 = "Lora"// 字体
-    case PFont3 = "Raleway"// 字体
+    case PFont = "PingFangSC-Regular"// 字体
+    case PFont1 = "kaitiGB2312.ttf"// 字体
+    case PFont2 = "HYChenMeiZiJ.ttf"// 字体
+    case PFont3 = "HYYouRanTiJ.ttf"// 字体
     
     case PLightSys = "system"// 亮度
     case PLightCus = "custom"// 亮度
@@ -175,24 +157,4 @@ public enum JMMenuStyle: String, HandyJSONEnum {
     case CharterTag = "charterTag"// 播放或暂停
     
     case nonetype = "nonetype"// 播放或暂停
-}
-
-// MARK: -- epub资源类型
-public enum JMReadMediaType: String {
-    case gif = "image/gif"
-    case jpeg = "image/jpeg"
-    case png = "image/png"
-    case svg = "image/svg+xml"
-    case xHTML = "application/xhtml+xml"
-    case rfc4329 = "application/javascript"
-    case opf2 = "application/x-dtbncx+xml"
-    case openType = "application/font-sfnt"
-    case woff = "application/font-woff"
-    case mediaOverlays = "application/smil+xml"
-    case pls = "application/pls+xml"
-    case mp3 = "audio/mpeg"
-    case mp4 = "audio/mp4"
-    case css = "text/css"
-    case woff2 = "font/woff2"
-    case unknown
 }

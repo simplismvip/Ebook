@@ -37,4 +37,8 @@ public extension String {
     func appendingPathExtension(_ str: String) -> String {
         return (self as NSString).appendingPathExtension(str) ?? self+"."+str
     }
+    
+    func rangeOf(_ targrt: String) -> NSRange {
+        return (self as NSString).range(of: targrt)
+    }
 }

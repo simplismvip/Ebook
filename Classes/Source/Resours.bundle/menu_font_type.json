@@ -4,7 +4,7 @@
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
-        "identify":"kaitiGB2312.ttf"
+        "identify":"PingFangSC-Regular"
     },{
         "title":"楷体",
         "event":"kEventNameMenuFontType",
@@ -12,7 +12,7 @@
         "type":"pagefont",
         "identify":"kaitiGB2312.ttf"
     },{
-        "title":"晨妹子",
+        "title":"妹子体",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",

@@ -22,6 +22,7 @@ struct JMBookDataBase {
                 "bookid varchar(20)," +
                 "timeStr varchar(30)," +
                 "charter integer," +
+                "location integer," +
                 "text varchar(300))"
                 try db.executeUpdate(bookTag, values: nil)
                 
@@ -31,6 +32,7 @@ struct JMBookDataBase {
                 "bookid varchar(20)," +
                 "timeStr varchar(30)," +
                 "charter integer," +
+                "location integer," +
                 "text varchar(300))"
                 try db.executeUpdate(bookRate, values: nil)
             } catch {
@@ -41,25 +43,30 @@ struct JMBookDataBase {
         }
     }
     
+    /// isTag: 是否是书签🔖
     static func insertData(isTag: Bool, book: JMBookModel) {
         if let targetPage = book.currPage()?.attribute.string, targetPage.count > (isTag ? 30 : 10) {
             let text = String(targetPage.prefix(isTag ? 30 : 10))
             if isTag {
-                JMBookDataBase.share.insertData(isTag: isTag, name: book.title, bookid: book.bookId, charter: book.indexPath.chapter, text: text)
+                let location = book.currLocation(target: text)
+                JMBookDataBase.share.insertData(isTag: isTag, name: book.title, bookid: book.bookId, charter: book.indexPath.chapter, location: location, text: text)
             }else {
                 if JMBookDataBase.share.isFieldExistsForRate(book.bookId) {
                     JMBookDataBase.share.update(tableName: "bookRate", bookid: book.bookId, updateFieldName: "charter", updateField: book.indexPath.chapter)
                     JMBookDataBase.share.update(tableName: "bookRate", bookid: book.bookId, updateFieldName: "text", updateField: text)
+                    let location = book.currLocation(target: text)
+                    JMBookDataBase.share.update(tableName: "bookRate", bookid: book.bookId, updateFieldName: "location", updateField: location)
                     print("⚠️⚠️⚠️更新表 bookRate")
-                }else {
-                    JMBookDataBase.share.insertData(isTag: isTag, name: book.title, bookid: book.bookId, charter: book.indexPath.chapter, text: text)
+                } else {
+                    let location = book.currLocation(target: text)
+                    JMBookDataBase.share.insertData(isTag: isTag, name: book.title, bookid: book.bookId, charter: book.indexPath.chapter, location: location, text: text)
                 }
             }
         }
     }
     
     /// 插入数据
-    func insertData(isTag: Bool, name: String, bookid: String, charter: Int, text: String) {
+    func insertData(isTag: Bool, name: String, bookid: String, charter: Int, location: Int, text: String) {
         if isTag {
             if isFieldExistsForTag(text: text) {
                 print("⚠️⚠️⚠️表bookCharterTag已经存在")
@@ -74,8 +81,8 @@ struct JMBookDataBase {
         
         do {
             let timeStr = Date.jmCreateTspString()
-            let insetSql = "INSERT INTO \(isTag ? "bookCharterTag" : "bookRate")(name,bookid,charter,text,timeStr)values(?,?,?,?,?)"
-            let values = [name,bookid,charter,text,timeStr] as [Any]
+            let insetSql = "INSERT INTO \(isTag ? "bookCharterTag" : "bookRate")(name,bookid,charter,location,text,timeStr)values(?,?,?,?,?,?)"
+            let values = [name, bookid, charter, location, text, timeStr] as [Any]
             try db.executeUpdate(insetSql, values: values)
         }catch {
             print(db.lastErrorMessage())
@@ -91,7 +98,8 @@ struct JMBookDataBase {
                 if let text = set.string(forColumn: "text"),
                    let timeStr = set.string(forColumn: "timeStr") {
                     let charter = set.int(forColumn: "charter")
-                    tempArray.append(JMChapterTag(text: text, timeStr: timeStr, charter: Int(charter)))
+                    let location = set.int(forColumn: "location")
+                    tempArray.append(JMChapterTag(text: text, timeStr: timeStr, charter: Int(charter), location: Int(location)))
                 }
             }
         } catch {
@@ -108,7 +116,8 @@ struct JMBookDataBase {
                 if let text = set.string(forColumn: "text"),
                    let timeStr = set.string(forColumn: "timeStr") {
                     let charter = set.int(forColumn: "charter")
-                    return JMChapterTag(text: text, timeStr: timeStr, charter: Int(charter))
+                    let location = set.int(forColumn: "location")
+                    return JMChapterTag(text: text, timeStr: timeStr, charter: Int(charter), location: Int(location))
                 }
             }
         } catch {

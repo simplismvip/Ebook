@@ -38,14 +38,13 @@ final public class JMBookModel {
         self.charterFromEpub(epub: epub)
         
         // 初始化章节完成后转跳到相应页
-        if let book = JMBookDataBase.share.fetchRate(bookid: bookId) {
-            lastTime = book.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
-            indexPath.chapter = book.charter
+        if let bookTag = JMBookDataBase.share.fetchRate(bookid: bookId) {
+            lastTime = bookTag.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
+            indexPath.chapter = bookTag.charter
             contents[indexPath.chapter].countPages()
-            if let pageindex = contents[indexPath.chapter].pages?.jmIndex({
-                $0.attribute.string.contains(book.text)
-            }) {
-                indexPath.page = pageindex
+            // 查找阅读到的Page
+            if let targetPage = newPageLoc(location: bookTag.location, text: bookTag.text) {
+                indexPath.page = targetPage.page
             }
         }
     }
@@ -61,14 +60,13 @@ final public class JMBookModel {
         self.charterFromTxt(txt: txt)
         
         // 初始化章节完成后转跳到相应页
-        if let book = JMBookDataBase.share.fetchRate(bookid: bookId) {
-            lastTime = book.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
-            indexPath.chapter = book.charter
+        if let bookTag = JMBookDataBase.share.fetchRate(bookid: bookId) {
+            lastTime = bookTag.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
+            indexPath.chapter = bookTag.charter
             contents[indexPath.chapter].countPages()
-            if let pageindex = contents[indexPath.chapter].pages?.jmIndex({
-                $0.attribute.string.contains(book.text)
-            }) {
-                indexPath.page = pageindex
+            // 查找阅读到的Page
+            if let targetPage = newPageLoc(location: bookTag.location, text: bookTag.text) {
+                indexPath.page = targetPage.page
             }
         }
     }
@@ -107,8 +105,24 @@ final public class JMBookModel {
     }
     
     /// 获取重新计算分页后的目标页
-    public func newPageLoc(text: String) -> JMBookPage? {
-        return contents[indexPath.chapter].pages?.filter({ $0.attribute.string.contains(text) }).first
+    public func newPageLoc(location: Int, text: String) -> JMBookPage? {
+        reCountCharpter() // 重新修改字体，计算页数
+        if let pages = contents[indexPath.chapter].pages {
+            if let page = pages.filter({ $0.attribute.string.contains(text) }).first {
+                return page
+            } else {
+                var loc = 0
+                for page in pages {
+                    loc += page.word
+                    if location <= loc {
+                        return page
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        return nil
     }
     
     /// 当前页
@@ -116,12 +130,29 @@ final public class JMBookModel {
         return self[indexPath]
     }
     
-    /// 当前页
+    /// 当前章节
     public func currCharpter() -> JMBookCharpter? {
         if indexPath.chapter < contents.count {
             return contents[indexPath.chapter]
         }
         return nil
+    }
+    
+    /// 当前位置
+    public func currLocation(target: String) -> Int {
+        var location = 0
+        if let cCharptre = currCharpter()?.pages, let cPage = currPage() {
+            for page in cCharptre {
+                location += page.word
+                if page.page == cPage.page
+                    && page.word == cPage.word
+                    && page.title == cPage.title
+                    && page.attribute == cPage.attribute {
+                    break
+                }
+            }
+        }
+        return location
     }
     
     // 当前页数
@@ -164,7 +195,6 @@ final public class JMBookModel {
 
 // MARK: -- 处理章节、页数 --
 extension JMBookModel {
-    
     /// 下一章节
     func nextCharpter() -> JMBookPage? {
         if indexPath.chapter < contents.count {
@@ -320,8 +350,40 @@ public struct JMBookPage {
     /// 文本类型
     init(_ attribute: NSAttributedString, title: String, page: Int) {
         self.attribute = attribute
-        self.word = attribute.length
+        self.word = attribute.string.count
         self.page = page
         self.title = title
+        
+//        var uth_string = attribute.string
+//        uth_string = uth_string.trimmingCharacters(in: NSCharacterSet.whitespaces);
+//        uth_string = uth_string.trimmingCharacters(in: NSCharacterSet.newlines);
+//        self.word = uth_string.count
     }
+}
+
+// MARK: -- 索引模型 ---
+public class JMBookIndex {
+    var chapter: Int = 0 // 章
+    var page: Int = 0    // 页
+    var loc: Int = 0     // 页中第几个字符
+    var indexPath: IndexPath {
+        return IndexPath(row: page, section: chapter)
+    }
+    
+    init(_ chapter: Int, _ page: Int) {
+        self.chapter = chapter
+        self.page = page
+    }
+    
+    func descrtion() {
+        print("chapter:\(chapter) page:\(page)")
+    }
+}
+
+// MARK: -- 分享模型 --
+public struct JMBookShareItem {
+    public var title: String?
+    public var url: String?
+    public var img: String?
+    public var desc: String?
 }

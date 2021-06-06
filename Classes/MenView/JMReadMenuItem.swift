@@ -17,7 +17,6 @@ public class JMReadMenuItem: HandyJSON {
     var type = JMMenuType.nonetype
     
     /// 是否是设置背景模型
-    var bkgColor: String?
     var borderWidth: CGFloat?
     var cornerRadius: CGFloat?
     var borderColor: UIColor?
@@ -28,4 +27,20 @@ public class JMReadMenuItem: HandyJSON {
     }
     var didSelectAction: ((Bool)->())?
     required public init () { }
+}
+
+
+@propertyWrapper
+struct JMMenuSelect {
+    private var status: Bool = false
+    
+    private var projectValue: Bool = false
+    
+    var wrappedValue: Bool {
+        set {
+            projectValue = newValue
+            status = newValue
+        }
+        get { return status }
+    }
 }

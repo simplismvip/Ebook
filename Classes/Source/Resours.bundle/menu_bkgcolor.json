@@ -1,36 +1,27 @@
 [
     {
         "event":"kEventNameMenuPageBkgColor",
-        "bkgColor":"#66B3FF",
         "type":"color",
-        "identify":"color1"
+        "identify":"#000000"
     },{
         "event":"kEventNameMenuPageBkgColor",
         "type":"color",
-        "bkgColor":"#FFFFFF",
-        "identify":"color2"
-    },{
-        
-        "event":"kEventNameMenuPageBkgColor",
-        "type":"color",
-        "bkgColor":"#FFE4CA",
-        "identify":"color3"
-    },{
-        
-        "event":"kEventNameMenuPageBkgColor",
-        "type":"color",
-        "bkgColor":"#FFE4CA",
-        "identify":"color3"
-    },{
-        
-        "event":"kEventNameMenuPageBkgColor",
-        "type":"color",
-        "bkgColor":"#FFE4CA",
-        "identify":"color3"
+        "identify":"#696969"
     },{
         "event":"kEventNameMenuPageBkgColor",
         "type":"color",
-        "bkgColor":"#E1C4C4",
-        "identify":"color4"
+        "identify":"#A0522D"
+    },{
+        "event":"kEventNameMenuPageBkgColor",
+        "type":"color",
+        "identify":"#E1C4C4"
+    },{
+        "event":"kEventNameMenuPageBkgColor",
+        "type":"color",
+        "identify":"#708090"
+    },{
+        "event":"kEventNameMenuPageBkgColor",
+        "type":"color",
+        "identify":"#FFFFFF"
     }
 ]

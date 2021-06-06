@@ -66,6 +66,7 @@ public class JMReadPageContrller: JMBaseController {
         registerEventPlay()
         registerJumpEvent()
         updateProgress()
+        updateItemStatus()
     }
     
     private func initdatas() {
@@ -113,16 +114,16 @@ public class JMReadPageContrller: JMBaseController {
     private func setupPageVC() {
         var style: UIPageViewController.TransitionStyle = .scroll
         var orientation: UIPageViewController.NavigationOrientation = .horizontal
-        if bookModel.config.flipType() == .HoriCurl {
+        if bookModel.config.flipType() == .PFlipHoriCurl {
             style = .pageCurl
             orientation = .horizontal
-        }else if bookModel.config.flipType() == .VertCurl {
+        }else if bookModel.config.flipType() == .PFlipVertCurl {
             style = .pageCurl
             orientation = .vertical
-        }else if bookModel.config.flipType() == .HoriScroll {
+        }else if bookModel.config.flipType() == .PFlipHoriScroll {
             style = .scroll
             orientation = .horizontal
-        }else if bookModel.config.flipType() == .VertScroll {
+        }else if bookModel.config.flipType() == .PFlipVertScroll {
             style = .scroll
             orientation = .vertical
         }
@@ -139,11 +140,11 @@ public class JMReadPageContrller: JMBaseController {
     private func reCalculationPage() {
         // 获取当前页的第一段文字
         if let targetPage = bookModel.currPage()?.attribute.string, targetPage.count > 10 {
-            // 重新修改字体，计算页数
-            bookModel.reCountCharpter()
             // 完成后遍历所有页对比前获取的页数，定位到阅读页
             let text = String(targetPage.prefix(10))
-            if let page = bookModel.newPageLoc(text: text),
+            // 当前位置
+            let cLoc = bookModel.currLocation(target: text)
+            if let page = bookModel.newPageLoc(location: cLoc, text: text),
                let pageView = useingPageView(true) {
                 pageView.loadPage(page)
             }
@@ -313,6 +314,13 @@ extension JMReadPageContrller {
                     pageView.loadPage(page)
                     self?.pageVC?.setViewControllers([pageView], direction: .forward, animated: true, completion: nil)
                 }
+            } else if let charpterTag = value as? JMChapterTag {
+                // 当前位置
+                let cLoc = self?.bookModel.currLocation(target: charpterTag.text) ?? charpterTag.location
+                if let page = self?.bookModel.newPageLoc(location: cLoc, text: charpterTag.text),
+                   let pageView = self?.useingPageView(true) {
+                    pageView.loadPage(page)
+                }
             }
         }, next: false)
         
@@ -345,21 +353,20 @@ extension JMReadPageContrller {
     func registerSubMenuEvent() {
         // 修改背景颜色
         jmRegisterEvent(eventName: kEventNameMenuPageBkgColor, block: { [weak self](item) in
-            if let color = (item as? JMReadMenuItem)?.bkgColor {
+            if let color = (item as? JMReadMenuItem)?.identify {
                 self?.bookModel.config.config.bkgColor = color
                 if let controllers = self?.dataSource {
                     for vc in controllers {
-                        vc.view.backgroundColor = UIColor.jmHexColor(color)
+                        vc.view.backgroundColor = UIColor.jmHexColor(color.rawValue)
                     }
                 }
             }
-            
         }, next: false)
         
         // 设置翻页
         jmRegisterEvent(eventName: kEventNameMenuPageFlipType, block: { [weak self](item) in
-            if let typeStr = (item as? JMReadMenuItem)?.identify.rawValue {
-                self?.bookModel.config.config.flipType = JMFlipType.typeFrom(typeStr)
+            if let typeStr = (item as? JMReadMenuItem)?.identify {
+                self?.bookModel.config.config.flipType = typeStr
                 if let page = self?.bookModel.currPage(), let pageView = self?.useingPageView() {
                     self?.pageVC?.view.removeFromSuperview()
                     self?.pageVC?.removeFromParentViewController()
@@ -368,7 +375,6 @@ extension JMReadPageContrller {
                     self?.pageVC?.setViewControllers([pageView], direction: .reverse, animated: true, completion: nil)
                 }
             }
-            
         }, next: false)
         
         // 设置翻页

@@ -16,6 +16,7 @@ public class JMBookConfig {
     var bottomView: UIView?
     /// 文本高度
     var height: CGFloat
+    
     public init(_ bottomView: UIView? = nil) {
         self.bottomView = bottomView
         // let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
@@ -32,7 +33,7 @@ public class JMBookConfig {
     
     /// 当前字体
     func font() -> UIFont {
-        return UIFont(name: config.fontName, size: config.fontSize) ?? UIFont.systemFont(ofSize: 17)
+        return UIFont(name: config.fontName.rawValue, size: config.fontSize) ?? UIFont.systemFont(ofSize: 17)
     }
     
     /// 文本显示大小
@@ -56,7 +57,7 @@ public class JMBookConfig {
     }
     
     /// 字体名称
-    func fontName() -> String {
+    func fontName() -> JMMenuStyle {
         return config.fontName
     }
     
@@ -67,7 +68,12 @@ public class JMBookConfig {
     
     /// 背景颜色
     func bkgColor() -> UIColor {
-        return UIColor(rgba: config.bkgColor)
+        return UIColor(rgba: config.bkgColor.rawValue)
+    }
+    
+    /// 背景颜色
+    var bkgColorStr: JMMenuStyle {
+        return config.bkgColor
     }
     
     /// 选择文本颜色
@@ -76,8 +82,18 @@ public class JMBookConfig {
     }
     
     /// 翻页类型
-    func flipType() -> JMFlipType {
+    func flipType() -> JMMenuStyle {
         return config.flipType
+    }
+    
+    /// 播放状态
+    var playStatus: JMMenuStyle {
+        return config.playStatus
+    }
+    
+    /// 播放速率
+    var playRate: JMMenuStyle {
+        return config.playRate
     }
     
     /// 亮度
@@ -110,7 +126,7 @@ class JMConfig: Codable {
     /// 字体大小
     var fontSize: CGFloat
     /// 字体名称
-    var fontName: String
+    var fontName: JMMenuStyle
     /// 字体行间距
     var lineSpace: CGFloat
     /// 字体颜色
@@ -118,22 +134,27 @@ class JMConfig: Codable {
     /// 选中字体颜色
     var selectColor: String
     /// 主题颜色
-    var bkgColor: String
+    var bkgColor: JMMenuStyle
     /// 翻页类型
-    var flipType: JMFlipType
+    var flipType: JMMenuStyle
     /// 亮度
     var brightness: CGFloat
-    /// 白天、夜晚模式
-    var isDayMode = true
+    /// 播放状态
+    var playStatus: JMMenuStyle
+    /// 播放速率
+    var playRate: JMMenuStyle
+    
     public init() {
         self.width = UIScreen.main.bounds.size.width - 40
         self.fontSize = 16.0
         self.lineSpace = 8.0
-        self.fontName = "PingFangSC-Regular"
+        self.fontName = .PFont
         self.textColor = "#131313"
         self.selectColor = "#131313"
-        self.bkgColor = "#ffffff"
-        self.flipType = .HoriCurl
+        self.bkgColor = .BkgColor
+        self.flipType = .PFlipHoriCurl
+        self.playStatus = .nonetype
+        self.playRate = .PlayRate1
         self.brightness = UIScreen.main.brightness
     }
 }

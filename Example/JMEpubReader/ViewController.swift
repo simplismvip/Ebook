@@ -71,8 +71,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         if let path = Bundle.main.path(forResource: model.name, ofType: model.type) {
             let view = UIView()
             view.backgroundColor = UIColor.red
-            let config = JMBookConfig()
-            bookModel = JMBookParse(path, config: config)
+            bookModel = JMBookParse(path)
             bookModel?.delegate = self
             bookModel?.pushReader(pushVC: self)
         }

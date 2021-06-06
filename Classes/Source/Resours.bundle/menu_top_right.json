@@ -9,10 +9,5 @@
         "event":"kEventNameMenuActionShare",
         "type":"topright",
         "identify":"sharebook"
-    },{
-        "image":"epub_more",
-        "event":"kEventNameMenuActionMore",
-        "type":"topright",
-        "identify":"actionmore"
     }
 ]

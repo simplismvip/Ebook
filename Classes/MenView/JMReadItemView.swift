@@ -54,13 +54,12 @@ final class JMReadItemView: JMBaseView {
     func configItem(_ btn: UIButton, _ model: JMReadMenuItem) {
         switch model.type {
         case .BkgColor:
-            if let colorStr = model.bkgColor {
-                btn.layer.cornerRadius = 15
-                btn.backgroundColor = UIColor(rgba: colorStr)
-                model.didSelectAction = { select in
-                    btn.layer.borderWidth = select ? 1 : 0
-                    btn.layer.borderColor = UIColor.menuTintColor.cgColor
-                }
+            let colorStr = model.identify.rawValue
+            btn.layer.cornerRadius = 15
+            btn.backgroundColor = UIColor(rgba: colorStr)
+            model.didSelectAction = { select in
+                btn.layer.borderWidth = select ? 1 : 0
+                btn.layer.borderColor = UIColor.menuTintColor.cgColor
             }
             
         case .MainBottom:

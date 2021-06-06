@@ -16,11 +16,12 @@ public class JMBookParse: NSObject {
     public let bookType: JMBookType // 图书类型
     public let config: JMBookConfig // 配置
     private var parserCallback: ((JMReadPageContrller)->())?
-    public init(_ path: String, config: JMBookConfig) {
+    
+    public init(_ path: String, config: JMBookConfig? = nil) {
         self.path = path
         self.pathUrl = URL(fileURLWithPath: path)
         self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
-        self.config = config
+        self.config = (config == nil) ? JMBookConfig() : config!
         super.init()
         let _ = JMBookDataBase.share
     }

@@ -12,6 +12,7 @@ struct JMChapterTag {
     var text: String
     var timeStr: String
     var charter: Int = 0
+    var location: Int = 0
 }
 
 final class JMChapterTagView: JMBaseView {
