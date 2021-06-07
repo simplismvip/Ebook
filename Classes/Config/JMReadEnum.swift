@@ -126,6 +126,7 @@ public enum JMMenuStyle: String, Codable, HandyJSONEnum {
     case TRightListen = "listenBook"// 主页顶部右侧
     case TRightWifi = "sharewifi"// 主页顶部右侧
     case TRightMore = "actionmore"// 主页顶部右侧
+    case TRightTag = "tagbook" // 添加书签🔖
     
     case PFlipVertScroll = "vertScroll" // 竖直滚动
     case PFlipVertCurl = "vertCurl" // 竖直翻页

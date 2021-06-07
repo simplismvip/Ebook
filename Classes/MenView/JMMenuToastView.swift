@@ -43,4 +43,10 @@ final class JMMenuToastView: JMBaseView {
     func updateToast(_ text: String) {
         name.text = text
     }
+    
+    func remove() {
+        delay(1) { [weak self] in
+            self?.isHidden = true
+        }
+    }
 }

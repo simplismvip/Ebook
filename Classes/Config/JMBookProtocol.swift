@@ -23,37 +23,7 @@ import Foundation
     func openBookFailed(_ desc: String)
 }
 
-// MARK: -- 图书数据模型
-public class JMEpubWapper<T> {
-    let item: T
-    init(_ item: T) {
-        self.item = item
-    }
+@objc public protocol JMBookProtocol {
+    
 }
 
-
-public protocol VMProtocol {
-    associatedtype Input
-    associatedtype Output
-    func transform(input: Input) -> Output
-}
-
-public protocol ModelType {
-    associatedtype Item
-    var items: [Item] { get }
-    init(items: [Item])
-}
-
-protocol ApiProtocol {
-    associatedtype ApiType
-    static func currApiType(index: Int) -> ApiType
-}
-
-public struct JMWapper<T,W> {
-    var t: T?
-    var w: W?
-    init(_ tValue: T?, _ wValue: W?) {
-        self.t = tValue
-        self.w = wValue
-    }
-}

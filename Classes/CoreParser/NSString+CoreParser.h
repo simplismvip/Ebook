@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (CoreParser)
 - (NSMutableAttributedString *)parserEpub:(NSURL *)baseUrl spacing:(CGFloat)spacing font:(UIFont *)font;
-- (UIFont *)fontWithSize:(NSInteger)fontSize;
+- (UIFont *)fontWithSize:(CGFloat)fontSize;
 @end
 
 NS_ASSUME_NONNULL_END

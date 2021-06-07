@@ -17,6 +17,8 @@ public class JMBookConfig {
     /// 文本高度
     var height: CGFloat
     
+    private var tempFont: UIFont?
+    
     public init(_ bottomView: UIView? = nil) {
         self.bottomView = bottomView
         // let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
@@ -30,10 +32,19 @@ public class JMBookConfig {
         deCodeConfig()
     }
     
-    
     /// 当前字体
     func font() -> UIFont {
-        return UIFont(name: config.fontName.rawValue, size: config.fontSize) ?? UIFont.systemFont(ofSize: 17)
+        let fontSize = config.fontSize
+        if config.fontName == .PFont {
+            return UIFont.jmRegular(fontSize)
+        } else {
+            if let bundle = Bundle.resouseBundle?.bundlePath {
+                let fontPath = bundle + "/" + config.fontName.rawValue
+                return fontPath.fontWith(fontSize)
+            } else {
+                return UIFont.systemFont(ofSize: fontSize)
+            }
+        }
     }
     
     /// 文本显示大小
@@ -146,7 +157,7 @@ class JMConfig: Codable {
     
     public init() {
         self.width = UIScreen.main.bounds.size.width - 40
-        self.fontSize = 16.0
+        self.fontSize = 17.0
         self.lineSpace = 8.0
         self.fontName = .PFont
         self.textColor = "#131313"

@@ -41,4 +41,8 @@ public extension String {
     func rangeOf(_ targrt: String) -> NSRange {
         return (self as NSString).range(of: targrt)
     }
+    
+    func fontWith(_ fontSize: CGFloat) -> UIFont {
+        return (self as NSString).font(withSize: fontSize)
+    }
 }

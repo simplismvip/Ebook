@@ -75,7 +75,7 @@
     return conText;
 }
 
-- (UIFont *)fontWithSize:(NSInteger)fontSize {
+- (UIFont *)fontWithSize:(CGFloat)fontSize {
     NSURL * url = [[NSURL alloc] initFileURLWithPath:self];
     UIFont * font = [self customFontWithFontUrl:url size:fontSize];
     return font;

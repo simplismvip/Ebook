@@ -95,12 +95,6 @@ final public class JMBookModel {
         if indexPath.chapter < contents.count {
             // 重新计算当前章页数
             contents[indexPath.chapter].countPages()
-//            // 异步重新计算已读章页数
-//            DispatchQueue.global().async {
-//                for i in  0 ..< self.indexPath.chapter {
-//                    self.contents[i].countPages()
-//                }
-//            }
         }
     }
     
@@ -211,12 +205,15 @@ final public class JMBookModel {
 extension JMBookModel {
     /// 下一章节
     func nextCharpter() -> JMBookPage? {
-        if indexPath.chapter < contents.count {
+        if indexPath.chapter < contents.count - 1 {
             indexPath.chapter += 1
             indexPath.page = 0
             return currPage()
+        } else {
+            print("😀😀😀已读到最后一章节")
+            return nil
         }
-        return nil
+        
     }
     
     /// 上一章节
@@ -225,8 +222,10 @@ extension JMBookModel {
             indexPath.chapter -= 1
             indexPath.page = 0
             return currPage()
+        } else {
+            print("😀😀😀已回到第一章节")
+            return nil
         }
-        return nil
     }
     
     /// 下一页
@@ -245,7 +244,7 @@ extension JMBookModel {
                 indexPath.page = 0
                 indexPath.chapter += 1
                 return self[indexPath]
-            }else {
+            } else {
                 indexPath.page += 1
                 return self[indexPath]
             }
@@ -377,9 +376,12 @@ public struct JMBookPage {
 
 // MARK: -- 索引模型 ---
 public class JMBookIndex {
-    var chapter: Int = 0 // 章
-    var page: Int = 0    // 页
-    var loc: Int = 0     // 页中第几个字符
+    // 章
+    var chapter: Int = 0
+    // 页
+    var page: Int = 0
+    // 页中第几个字符
+    var loc: Int = 0
     var indexPath: IndexPath {
         return IndexPath(row: page, section: chapter)
     }

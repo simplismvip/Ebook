@@ -40,17 +40,13 @@ class JMReadView: JMBaseView {
         contentL.highlightTapAction = { view, text, range, rect in
             print(text.string)
         }
-        
         gadView.backgroundColor = UIColor.jmRandColor
-        
     }
     
     /// 将文本画到View上
     func reDrewText(content: NSAttributedString?) {
         if let content = content {
             contentL.attributedText = content
-//            print(contentL.textLayout?.range)
-//            print(contentL.textLayout?.textBoundingRect)
             if let textsize = contentL.textLayout?.textBoundingSize {
                 let maxY = textsize.height + 20
                 let maxH = jmHeight - maxY - 50
@@ -63,13 +59,12 @@ class JMReadView: JMBaseView {
             }else {
                 gadView.isHidden = true
             }
-            
-            print(contentL.textLayout?.textBoundingSize)
         }
     }
     
     /// 刷新文字样式
     func refreshText(range: NSRange) {
+        let range = YYTextRange(range: range)
 //        if let attri = contentL.attributedText {
 //            let mutabAttri = NSMutableAttributedString(attributedString: attri)
 //            mutabAttri.yy_setStroke(UIColor.menuSelColor, range: range)

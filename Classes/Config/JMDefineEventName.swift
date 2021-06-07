@@ -27,6 +27,8 @@ public let kEventNameMenuActionSwipeRight = "kEventNameMenuActionSwipeRight"
 public let kEventNameMenuActionBack = "kEventNameMenuActionBack"
 /// 分享
 public let kEventNameMenuActionShare = "kEventNameMenuActionShare"
+/// 添加书签🔖
+public let kEventNameMenuActionAddTag = "kEventNameMenuActionAddTag"
 /// 听书
 public let kEventNameMenuActionListenBook = "kEventNameMenuActionListenBook"
 /// 进度

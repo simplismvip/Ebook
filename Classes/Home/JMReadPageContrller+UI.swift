@@ -153,9 +153,11 @@ extension JMReadPageContrller {
     
     /// 更新阅读进度
     func updateProgress() {
-        let max = Float(bookModel.contents.count)
-        let curr = Float(bookModel.indexPath.chapter)/Float(bookModel.contents.count)
-        progress.setSlider(max: max, curr: curr)
+        if let pages = bookModel.currCharpter()?.pages {
+            let max = Float(pages.count)
+            let curr = Float(bookModel.indexPath.page)
+            progress.setSlider(max: max, curr: curr)
+        }
     }
     
     /// 更新按钮状态

@@ -27,11 +27,19 @@ class ViewController: UIViewController {
          ["title":"mdjyml", "type":"txt"]]
         dataSource.append(contentsOf: items.map { return EbookModel($0["title"]!, $0["type"]!) })
         adView.backgroundColor = UIColor.red
+        registerEvent()
     }
     
+    func registerEvent() {
+        jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { [weak self](_) in
+            self?.jmShareImageToFriends(shareID: "分享图书📖到", image: nil, completionHandler: { (_, status) in
+                print("分享成功")
+            })
+        }, next: false)
+    }
     
     @IBAction func openBooks(_ sender: Any) {
-        
+        jmSendMsg(msgName: kEventNameMenuActionShare, info: nil)
     }
 }
 

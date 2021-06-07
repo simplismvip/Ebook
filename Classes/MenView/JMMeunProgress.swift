@@ -63,13 +63,11 @@ class JMMeunProgress: JMBaseView {
     
     @objc func touchSliderStart(_ slider: UISlider) {
         let value = Int(slider.value)
-        print("touchSliderStart\(value)")
-        jmRouterEvent(eventName: kEventNameMenuSliderValueChange, info: ("转跳到第\(value)章") as MsgObjc)
+        jmRouterEvent(eventName: kEventNameMenuSliderValueChange, info: ("转跳到第\(value+1)页") as MsgObjc)
     }
     
     @objc func touchSliderEnd(_ slider: UISlider) {
         let value = Int(slider.value)
-        print("touchSliderEnd\(value)")
         jmRouterEvent(eventName: kEventNameMenuActionTargetCharpter, info: value as MsgObjc)
     }
     
@@ -83,7 +81,5 @@ class JMMeunProgress: JMBaseView {
             slider.maximumValue = max
         }
     }
-    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
-
 }
