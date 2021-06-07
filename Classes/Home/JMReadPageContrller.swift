@@ -398,23 +398,31 @@ extension JMReadPageContrller {
                     if speech.synthesizer.isPaused {
                         self?.speech.resume()
                     }else {
-                        if let page = self?.bookModel.currPage(), page.attribute.length > 10 {
-                            self?.speech.readImmediately(page.attribute, clear: false)
+                        if let pages = self?.bookModel.unreadPage() {
+                            self?.speech.readImmediately(pages, clear: false)
                         }
                     }
                 }
             }
         }, next: false)
         
-        // 上一页
-        jmRegisterEvent(eventName: kEventNameMenuPlayBookPrev, block: { [weak self](item) in
+        // 上一页（手动点击）
+        jmRegisterEvent(eventName: kEventNameMenuPlayBookPrev, block: { [weak self](_) in
             self?.prevPage()
+            self?.speech.play(nextPage: true)
         }, next: false)
         
-        // 下一页
-        jmRegisterEvent(eventName: kEventNameMenuPlayBookNext, block: { [weak self](value) in
+        // 下一页（手动点击）
+        jmRegisterEvent(eventName: kEventNameMenuPlayBookNext, block: { [weak self](_) in
             self?.nextPage()
+            self?.speech.play(nextPage: false)
         }, next: false)
+        
+        // 播放下一页（发送msg）
+        jmReciverMsg(msgName: kMsgNamePlayBookNextPage) { [weak self](_) -> MsgObjc? in
+            self?.nextPage()
+            return nil
+        }
         
         // 听书实时返回range刷新文字
         jmReciverMsg(msgName: kMsgNamePlayBookRefashText) { [weak self](msg) -> MsgObjc? in
@@ -425,7 +433,7 @@ extension JMReadPageContrller {
             return nil
         }
         
-        // 听书实时返回range刷新文字
+        // 听书播放完成✅
         jmReciverMsg(msgName: kMsgNamePlayBookEnd) { (msg) -> MsgObjc? in
             if let characterRange = msg as? NSRange {
                 print(characterRange)

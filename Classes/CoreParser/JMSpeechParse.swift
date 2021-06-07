@@ -19,11 +19,20 @@ public class JMSpeechModel {
 }
 
 final public class JMSpeechParse: NSObject {
-    private var queue = [String]()
+    private var queue = [JMBookPage]()
+    private var playIndex: Int = 0
     private var utterance: AVSpeechUtterance?
     private var audioSession =  AVAudioSession()
     public var synthesizer = AVSpeechSynthesizer()
-    public var play = false
+    public var play = false {
+        willSet {
+            if newValue {
+                jmSendMsg(msgName: kMsgNamePlayBookStarting, info: nil)
+            } else {
+                jmSendMsg(msgName: kMsgNamePlayBookEnd, info: nil)
+            }
+        }
+    }
     public let model: JMSpeechModel
     public var duckOthers = true {
         willSet {
@@ -51,12 +60,31 @@ final public class JMSpeechParse: NSObject {
         }
     }
     
-    public func readImmediately(_ attri: NSAttributedString, clear: Bool) {
-        queue = attri.string.split(separator: "\n").map({ "\($0)" })
+    public func readImmediately(_ pages: [JMBookPage], clear: Bool) {
+        if pages.isEmpty {
+            return
+        }
+        
+        queue.removeAll()
+        queue.append(contentsOf: pages)
         synthesizer.stopSpeaking(at: .immediate)
-        if !play && !synthesizer.isSpeaking {
+        
+        let utterance = createUtter(queue[playIndex].attribute)
+        synthesizer.speak(utterance)
+    }
+    
+    public func play(nextPage: Bool) {
+        synthesizer.stopSpeaking(at: .immediate)
+        nextPage ? (playIndex += 1) : (playIndex -= 1)
+        if !play && !synthesizer.isSpeaking && playIndex < queue.count && playIndex > -1 {
+            let attri = queue[playIndex].attribute
             let utterance = createUtter(attri)
             synthesizer.speak(utterance)
+            jmSendMsg(msgName: kMsgNamePlayBookNextPage, info: nil)
+        } else {
+            playIndex = 0
+            play = false
+            print("播放完成")
         }
     }
     
@@ -89,17 +117,24 @@ final public class JMSpeechParse: NSObject {
 extension JMSpeechParse: AVSpeechSynthesizerDelegate {
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
 //        jmSendMsg(msgName: kMsgNamePlayBookRefashText, info: characterRange as MsgObjc)
-        let rangeStr = utterance.attributedSpeechString.attributedSubstring(from: characterRange)
+//        let rangeStr = utterance.attributedSpeechString.attributedSubstring(from: characterRange)
 //        print(utterance.attributedSpeechString)
-        print(characterRange)
-        print(rangeStr)
-    }
-    
-    private func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        jmSendMsg(msgName: kMsgNamePlayBookEnd, info: nil)
+//        print(characterRange)
+//        print(rangeStr)
     }
     
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
         print("didStart")
+//        queue.removeFirst()
+    }
+    
+    public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        if playIndex < queue.count {
+            play(nextPage: true)
+            jmSendMsg(msgName: kMsgNamePlayBookNextPage, info: nil)
+        } else {
+            play = false
+            jmSendMsg(msgName: kMsgNamePlayBookEnd, info: nil)
+        }
     }
 }

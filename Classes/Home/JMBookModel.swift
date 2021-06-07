@@ -127,7 +127,10 @@ final public class JMBookModel {
     
     /// 当前页
     public func currPage() -> JMBookPage? {
-        return self[indexPath]
+        if let page = self[indexPath], page.attribute.length > 10 {
+            return page
+        }
+        return nil
     }
     
     /// 当前章节
@@ -155,7 +158,18 @@ final public class JMBookModel {
         return location
     }
     
-    // 当前页数
+    /// 本章节未读页
+    public func unreadPage() -> [JMBookPage] {
+        var unreadPages = [JMBookPage]()
+        if let cCharptre = currCharpter()?.pages {
+            for (index, page) in cCharptre.enumerated() where index >= indexPath.page {
+                unreadPages.append(page)
+            }
+        }
+        return unreadPages
+    }
+    
+    // 当前章节页数
     private func pageCount() -> Int {
         if let pages = contents[indexPath.chapter].pages {
             return pages.count

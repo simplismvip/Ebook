@@ -100,10 +100,12 @@ public let kEventNameMenuShowCharter = "kEventNameMenuShowCharter"
 /// 展示书签
 public let kEventNameMenuShowCharterTag = "kEventNameMenuShowCharterTag"
 
-
+/////////////////////////////// kEvent Msg /////////////////////////////////////////////////
 /// 听书刷新阅读进度
 public let kMsgNamePlayBookRefashText = "kMsgNamePlayBookRefashText"
 /// 开始听书
 public let kMsgNamePlayBookStarting = "kMsgNamePlayBookStarting"
 /// 结束听书
 public let kMsgNamePlayBookEnd = "kMsgNamePlayBookEnd"
+/// 听书下一页
+public let kMsgNamePlayBookNextPage = "kMsgNamePlayBookNextPage"
