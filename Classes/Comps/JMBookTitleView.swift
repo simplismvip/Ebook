@@ -8,15 +8,14 @@
 import UIKit
 import ZJMKit
 
-final class JMBookTitleView: JMBaseView {
+final class JMBookTitleView: JMBookBaseView {
     var title = UILabel()
     private let back = UIButton(type: .system)
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(title)
         addSubview(back)
-        back.setImage("ebook_back".image?.origin, for: .normal)
+        back.setImage("ebook_back".image, for: .normal)
         back.jmAddAction { [weak self](_) in
             self?.jmRouterEvent(eventName: kEventNameMenuActionBack, info: nil)
         }
@@ -35,8 +34,12 @@ final class JMBookTitleView: JMBaseView {
         }
     }
     
+    override func changeBkgColor(config: JMBookConfig) {
+        title.textColor = config.textColor()
+        back.tintColor = config.textColor()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }

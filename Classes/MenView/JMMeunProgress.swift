@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-class JMMeunProgress: JMBaseView {
+class JMMeunProgress: JMBookBaseView {
     private let leftBtn = UIButton(type: .system)
     private let rightBtn = UIButton(type: .system)
     private var slider: UISlider = {

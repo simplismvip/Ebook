@@ -121,7 +121,7 @@ final public class JMBookModel {
     
     /// 当前页
     public func currPage() -> JMBookPage? {
-        if let page = self[indexPath], page.attribute.length > 10 {
+        if let page = self[indexPath] {
             return page
         }
         return nil
@@ -178,7 +178,7 @@ final public class JMBookModel {
         for (index, spine) in epub.spine.items.enumerated() {
             if spine.linear, let href = epub.manifest.items[spine.idref]?.path {
                 let fullHref = epub.contentDirectory.appendingPathComponent(href)
-                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index,0), config: config)
+                let charpter = JMBookCharpter(spine: spine, fullHref: fullHref, loc: JMBookIndex(index, 0), config: config)
                 // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
                 if let path = epub.manifest.items[spine.idref]?.path {
                     charpter.charpTitle = epub.findTarget(target: path)?.label
@@ -194,7 +194,7 @@ final public class JMBookModel {
     private func charterFromTxt(txt: JMTxtBook) {
         for (index, txtChapter) in txt.chapters.enumerated() {
             let fullHref = txt.contentDirectory.appendingPathComponent(txtChapter.path)
-            let charpter = JMBookCharpter(charpter: txtChapter, fullHref: fullHref, loc: JMBookIndex(index,0), config: config)
+            let charpter = JMBookCharpter(charpter: txtChapter, fullHref: fullHref, loc: JMBookIndex(index, 0), config: config)
             charpter.charpTitle = txtChapter.title
             self.contents.append(charpter)
         }
@@ -282,7 +282,6 @@ extension JMBookModel {
             if let page = contents[indexPath.chapter].pages?[indexPath.page] {
                 return page
             }
-            
             return nil
         }
     }
@@ -360,6 +359,10 @@ public struct JMBookPage {
     public let page: Int
     /// 本页内容
     public let attribute: NSAttributedString
+    /// 本页内容
+    public var string: String {
+        return attribute.string
+    }
     /// 文本类型
     init(_ attribute: NSAttributedString, title: String, page: Int) {
         self.attribute = attribute

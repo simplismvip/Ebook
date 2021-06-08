@@ -9,7 +9,7 @@ import UIKit
 import ZJMKit
 import SnapKit
 
-final class JMMenuSetView: JMBaseView {
+final class JMMenuSetView: JMBookBaseView {
     let fontSize = FontSizeView()
     let pageFlip = PageFlipView()
     let fontType = FontTypeView()
@@ -19,7 +19,6 @@ final class JMMenuSetView: JMBaseView {
         addSubview(fontSize)
         addSubview(pageFlip)
         addSubview(fontType)
-        backgroundColor = UIColor.menuBkg
         
         pageFlip.snp.makeConstraints({ (make) in
             make.width.equalTo(self)
@@ -45,16 +44,22 @@ final class JMMenuSetView: JMBaseView {
         return [pageFlip.bkgView.models, fontType.bkgView.models].flatMap { $0 }
     }
     
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        fontSize.changeBkgColor(config: config)
+        pageFlip.changeBkgColor(config: config)
+        fontType.changeBkgColor(config: config)
+    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
 // MARK: -- 背景设置 --
-final class BkgColorView: JMBaseView {
+final class BkgColorView: JMBookBaseView {
     private let name = UILabel()
     internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.menuBkg
         name.text = "阅读背景"
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -79,11 +84,16 @@ final class BkgColorView: JMBaseView {
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
     }
     
+    override func changeBkgColor(config: JMBookConfig) {
+        changeBkgColor(config: config)
+        name.textColor = config.textColor()
+    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
 // MARK: -- 字体大小 --
-final class FontSizeView: JMBaseView {
+final class FontSizeView: JMBookBaseView {
     private var name = UILabel()
     private var slider: UISlider = {
         let slider = UISlider()
@@ -96,7 +106,6 @@ final class FontSizeView: JMBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.menuBkg
         addSubview(name)
         
         addSubview(slider)
@@ -137,16 +146,20 @@ final class FontSizeView: JMBaseView {
             make.centerY.equalTo(snp.centerY)
         }
     }
+    
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        name.textColor = config.textColor()
+    }
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
 // MARK: -- 翻页模式 --
-final class PageFlipView: JMBaseView {
+final class PageFlipView: JMBookBaseView {
     private let name = UILabel()
     internal let bkgView = JMReadItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.menuBkg
         name.text = "翻页设置"
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -171,17 +184,21 @@ final class PageFlipView: JMBaseView {
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_flip_type"))
     }
     
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        name.textColor = config.textColor()
+    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
 // MARK: -- 字体类型 --
-final class FontTypeView: JMBaseView {
+final class FontTypeView: JMBookBaseView {
     private var name = UILabel()
     internal let bkgView = JMReadItemView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.menuBkg
         name.text = "字体设置"
         name.jmConfigLabel(alig: .center, font: UIFont.jmAvenir(14), color: UIColor.menuTextColor)
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -206,5 +223,10 @@ final class FontTypeView: JMBaseView {
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_font_type"))
     }
 
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        name.textColor = config.textColor()
+    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }

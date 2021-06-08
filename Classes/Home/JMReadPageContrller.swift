@@ -34,8 +34,8 @@ public class JMReadPageContrller: JMBaseController {
     
     // 第N章-N小节-N页，表示当前读到的位置
     public let cPage = JMBookIndex(0, 0)
-    let speech: JMSpeechParse
-    
+    // 朗读
+    private let speech: JMSpeechParse
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
     
@@ -86,6 +86,8 @@ public class JMReadPageContrller: JMBaseController {
             pageView.loadPage(page)
             flipPage(pageView, direction: .reverse)
             initdatas()
+        } else {
+            print("❌❌❌❌发生严重错误")
         }
     }
     
@@ -146,7 +148,7 @@ public class JMReadPageContrller: JMBaseController {
     // 重新计算分页
     private func reCalculationPage() {
         // 获取当前页的第一段文字
-        if let targetPage = bookModel.currPage()?.attribute.string {
+        if let targetPage = bookModel.currPage()?.string {
             // 完成后遍历所有页对比前获取的页数，定位到阅读页
             let text = String(targetPage.prefix(10))
             // 当前位置
@@ -354,10 +356,15 @@ extension JMReadPageContrller {
         jmRegisterEvent(eventName: kEventNameMenuPageBkgColor, block: { [weak self](item) in
             if let color = (item as? JMReadMenuItem)?.identify {
                 self?.bookModel.config.config.bkgColor = color
+                self?.reCalculationPage()
                 if let controllers = self?.dataSource {
                     for vc in controllers {
                         vc.view.backgroundColor = UIColor.jmHexColor(color.rawValue)
                     }
+                }
+                
+                if let config = self?.bookModel.config {
+                    self?.updateAllItemsBkg(config: config)
                 }
             }
         }, next: false)

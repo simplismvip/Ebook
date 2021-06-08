@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMChapterContainer: JMBaseView {
+final class JMChapterContainer: JMBookBaseView {
     private let titleLabel = UILabel()
     private let chapterCount = UILabel()
     private let sortBtn = UIButton(type: .system)
@@ -32,12 +32,9 @@ final class JMChapterContainer: JMBaseView {
         setupViews()
         regiEvent()
         sortBtn.setTitle("排序↑", for: .normal)
-        backgroundColor = UIColor.black.jmComponent(0.5)
-        bkgView.backgroundColor = UIColor.menuBkg
-        chapter.backgroundColor = UIColor.menuBkg
+        
         titleLabel.font = UIFont.jmMedium(20)
         chapterCount.font = UIFont.jmRegular(14)
-        sortBtn.tintColor = UIColor.black
         switchView.margin = 50
         switchView.updateViews(JMJsonParse.parseJson(name: "menu_charper"))
     }
@@ -150,6 +147,22 @@ final class JMChapterContainer: JMBaseView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        backgroundColor = config.subViewBkgColor().jmComponent(0.5)
+        sortBtn.tintColor = config.textColor()
+        scrollView.backgroundColor = config.subViewBkgColor()
+        switchView.backgroundColor = config.subViewBkgColor()
+        chapter.backgroundColor = config.subViewBkgColor()
+        chapterTag.backgroundColor = config.subViewBkgColor()
+        titleLabel.textColor = config.textColor()
+        chapterCount.textColor = config.textColor()
+        bkgView.backgroundColor = config.subViewBkgColor()
+        
+        chapterTag.changeBkgColor(config: config)
+        chapter.changeBkgColor(config: config)
     }
 }
 

@@ -108,12 +108,12 @@ public enum JMMenuType: String, HandyJSONEnum {
 
 /// 按钮类型
 public enum JMMenuStyle: String, Codable, HandyJSONEnum {
-    case BkgColor = "#000000" // 背景色
+    case BkgBlack = "#000000" // 背景色
     case BkgColor1 = "#696969" // 背景色
     case BkgColor2 = "#A0522D" // 背景色
-    case BkgColor3 = "#E1C4C4" // 背景色
+    case BkgColor3 = "#979797" // 背景色
     case BkgColor4 = "#708090" // 背景色
-    case BkgColor5 = "#FFFFFF" // 背景色
+    case BkgWhite = "#FFFFFF" // 背景色
     
     case MainBotCatalog = "bookCatalog" // 主页底部
     case MainBotDayNight = "dayornight" // 主页底部
@@ -133,7 +133,7 @@ public enum JMMenuStyle: String, Codable, HandyJSONEnum {
     case PFlipHoriScroll = "horiScroll" // 横向滚动
     case PFlipHoriCurl = "horiCurl" // 横向翻页
     
-    case PFont = "PingFangSC-Regular"// 字体
+    case SystemFont = "PingFangSC-Regular" // 系统
     case PFont1 = "kaitiGB2312.ttf"// 字体
     case PFont2 = "HYChenMeiZiJ.ttf"// 字体
     case PFont3 = "HYYouRanTiJ.ttf"// 字体
@@ -151,11 +151,11 @@ public enum JMMenuStyle: String, Codable, HandyJSONEnum {
     case PlayStyle2 = "style3"// 播放风格
     
     case PlayOrPause = "curr"// 播放或暂停
-    case PlayPrev = "prev"// 播放或暂停
-    case PlayNext = "next"// 播放或暂停
+    case PlayPrev = "prev"// 播放上一页
+    case PlayNext = "next"// 播放下一页
     
-    case Charter = "charter"// 播放或暂停
-    case CharterTag = "charterTag"// 播放或暂停
+    case Charter = "charter"// 章节
+    case CharterTag = "charterTag"// 书签
     
-    case nonetype = "nonetype"// 播放或暂停
+    case nonetype = "nonetype"// 未发现
 }

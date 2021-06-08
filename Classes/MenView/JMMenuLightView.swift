@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMMenuLightView: JMBaseView {
+final class JMMenuLightView: JMBookBaseView {
     private let leftBtn = UIButton(type: .system)
     private let rightBtn = UIButton(type: .system)
     private let bkgView = JMReadItemView()

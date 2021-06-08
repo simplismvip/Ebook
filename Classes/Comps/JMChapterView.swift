@@ -8,17 +8,17 @@
 import UIKit
 import ZJMKit
 
-final class JMChapterView: JMBaseView {
+final class JMChapterView: JMBookBaseView {
     private let s_width = UIScreen.main.bounds.size.width - 60
     private var dataSource = [JMBookCharpter]()
     private var currCharter = 0
+    private var config: JMBookConfig?
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: bounds, style: .plain)
         tableView.register(JMBookChapterCell.self, forCellReuseIdentifier: "kReuseCellIdentifier")
         tableView.separatorInset = UIEdgeInsets.zero
         tableView.estimatedRowHeight = 50
         tableView.separatorColor = UIColor.clear
-        tableView.backgroundColor = UIColor.menuBkg
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.delegate = self
@@ -47,6 +47,13 @@ final class JMChapterView: JMBaseView {
         tableView.reloadData()
     }
 
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        self.config = config
+        tableView.backgroundColor = config.subViewBkgColor()
+        tableView.reloadData()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -72,6 +79,9 @@ extension JMChapterView: UITableViewDelegate, UITableViewDataSource  {
         if cell == nil { cell = JMBookChapterCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMBookChapterCell
         newCell.setup(dataSource[indexPath.row],currCharter)
+        if let config = self.config {
+            newCell.changeBkgColor(config: config)
+        }
         return newCell
     }
     
@@ -126,6 +136,12 @@ class JMBookChapterCell: JMBaseTableViewCell {
         }else {
             index.textColor = UIColor.charterTextColor
         }
+    }
+    
+    func changeBkgColor(config: JMBookConfig) {
+        index.textColor = config.textColor()
+        lock.textColor = config.textColor()
+        backgroundColor = config.subViewBkgColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

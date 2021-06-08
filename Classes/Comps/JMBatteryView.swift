@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMBatteryView: JMBaseView {
+final class JMBatteryView: JMBookBaseView {
     private let b_width: CGFloat = 20
     private let b_height: CGFloat = 10
     private let b_lineW: CGFloat = 1
@@ -127,6 +127,13 @@ final class JMBatteryView: JMBaseView {
             return containsA.location != NSNotFound
         }
         return false
+    }
+    
+    override func changeBkgColor(config: JMBookConfig) {
+        batteryColor = config.textColor()
+        title.textColor = config.textColor()
+        timeLabel.textColor = config.textColor()
+        progress.textColor = config.textColor()
     }
     
     required init?(coder: NSCoder) {

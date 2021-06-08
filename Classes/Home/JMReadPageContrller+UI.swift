@@ -42,9 +42,7 @@ extension JMReadPageContrller {
     }
     
     func setupviews() {
-        view.backgroundColor = bookModel.config.bkgColor()
         set.fontSize.updateFontValue(value: Float(bookModel.config.fontSize()))
-        battery.batteryColor = UIColor.darkText
         chapter.isHidden = true
         toast.isHidden = true
         view.addSubview(bookTitle)
@@ -86,12 +84,12 @@ extension JMReadPageContrller {
             }
         }
         
-        topContainer.backgroundColor = UIColor.menuBkg
+//        topContainer.backgroundColor = UIColor.menuBkg
         view.addSubview(topContainer)
         topContainer.addSubview(topLeft)
         topContainer.addSubview(topRight)
         
-        bottomContainer.backgroundColor = topContainer.backgroundColor
+//        bottomContainer.backgroundColor = topContainer.backgroundColor
         view.addSubview(bottomContainer)
         bottomContainer.addSubview(bottom)
         
@@ -174,7 +172,7 @@ extension JMReadPageContrller {
         }
         
         for item in light.allItems() {
-            if item.identify == config.bkgColorStr {
+            if item.identify == config.bkgColor {
                 item.isSelect = true
                 jmRouterEvent(eventName: kEventNameMenuPageBkgColor, info: item)
             }
@@ -189,6 +187,23 @@ extension JMReadPageContrller {
                 item.isSelect = true
             }
         }
+    }
+    
+    func updateAllItemsBkg(config: JMBookConfig) {
+        topContainer.backgroundColor = config.subViewBkgColor()
+        bottomContainer.backgroundColor = config.subViewBkgColor()
+        
+        bottom.changeBkgColor(config: config)
+        topLeft.changeBkgColor(config: config)
+        topRight.changeBkgColor(config: config)
+        
+        play.changeBkgColor(config: config)
+        light.changeBkgColor(config: config)
+        
+        set.changeBkgColor(config: config)
+        chapter.changeBkgColor(config: config)
+        bookTitle.changeBkgColor(config: config)
+        battery.changeBkgColor(config: config)
     }
 }
 

@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMTextMagnifierView: JMBaseView {
+final class JMTextMagnifierView: JMBookBaseView {
     var pageView: JMReadView?
     var startPoint: CGPoint? {
         willSet {

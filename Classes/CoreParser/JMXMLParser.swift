@@ -90,18 +90,19 @@ public class JMXMLParser {
                         let attachText = attachMent(image: tempIma, font: config.font())
                         text.append(attachText)
                         text.append(NSAttributedString(string: "\n"))
-                    }else {
+                    } else {
                         let attachText = attachMent(image: image, font: config.font())
                         text.append(attachText)
                         text.append(NSAttributedString(string: "\n"))
                     }
                 }
-            }else {
+            } else {
                 let conText = NSMutableAttributedString(string: xmlNode.content)
                 conText.yy_lineSpacing = config.lineSpace()
                 conText.yy_paragraphSpacing = config.lineSpace() * 1.2
                 conText.yy_font = xmlNode.media ? UIFont.jmMedium(20) : config.font()
                 conText.yy_firstLineHeadIndent = 20
+                conText.yy_color = config.textColor()
                 text.append(conText)
                 text.append(NSAttributedString(string: "\n"))
             }

@@ -21,10 +21,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let items = [["title":"TianXiaDaoZong","type":"epub"],
+        let items = [["title":"天下刀宗","type":"epub"],
          ["title":"没有你，什么都不甜蜜","type":"epub"],
          ["title":"每天懂一点好玩心理学","type":"epub"],
-         ["title":"mdjyml", "type":"txt"]]
+         ["title":"民调局异闻", "type":"txt"]]
         dataSource.append(contentsOf: items.map { return EbookModel($0["title"]!, $0["type"]!) })
         adView.backgroundColor = UIColor.red
         registerEvent()

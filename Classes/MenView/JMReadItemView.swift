@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMReadItemView: JMBaseView {
+final class JMReadItemView: JMBookBaseView {
     public var margin: CGFloat = 5
     public var models = [JMReadMenuItem]()
     final public func updateViews(_ items: [JMReadMenuItem]) {

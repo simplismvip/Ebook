@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMMenuToastView: JMBaseView {
+final class JMMenuToastView: JMBookBaseView {
     private let name = UILabel()
     private let bkgView = UIView()
     override init(frame: CGRect) {

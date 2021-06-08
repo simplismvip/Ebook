@@ -45,7 +45,7 @@ struct JMBookDataBase {
     
     /// isTag: 是否是书签🔖
     static func insertData(isTag: Bool, book: JMBookModel) {
-        if let targetPage = book.currPage()?.attribute.string, targetPage.count > (isTag ? 30 : 10) {
+        if let targetPage = book.currPage()?.string {
             let text = String(targetPage.prefix(isTag ? 30 : 10))
             if isTag {
                 let location = book.currLocation(target: text)

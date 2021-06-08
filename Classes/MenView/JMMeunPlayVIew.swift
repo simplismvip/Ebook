@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMMeunPlayVIew: JMBaseView {
+final class JMMeunPlayVIew: JMBookBaseView {
     private let playControl = JMReadItemView()
     private let playRate = JMReadItemView()
     

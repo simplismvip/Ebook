@@ -15,16 +15,18 @@ struct JMChapterTag {
     var location: Int = 0
 }
 
-final class JMChapterTagView: JMBaseView {
+final class JMChapterTagView: JMBookBaseView {
     private let s_width = UIScreen.main.bounds.size.width - 60
     private var dataSource = [JMChapterTag]()
+    private var config: JMBookConfig?
+    private var bkgColor: UIColor = UIColor.menuBkg
+    private var textColor: UIColor = UIColor.charterTextColor
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: bounds, style: .plain)
         tableView.register(JMChapterTagCell.self, forCellReuseIdentifier: "kReuseCellIdentifier")
         tableView.separatorInset = UIEdgeInsets.zero
         tableView.estimatedRowHeight = 50
         tableView.separatorColor = UIColor.clear
-        tableView.backgroundColor = UIColor.menuBkg
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.delegate = self
@@ -45,6 +47,15 @@ final class JMChapterTagView: JMBaseView {
             dataSource = items
             tableView.reloadData()
         }
+    }
+    
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        self.config = config
+        bkgColor = config.subViewBkgColor()
+        textColor = config.textColor()
+        tableView.backgroundColor = bkgColor
+        tableView.reloadData()
     }
 
     required init?(coder: NSCoder) {
@@ -68,6 +79,9 @@ extension JMChapterTagView: UITableViewDelegate, UITableViewDataSource  {
         if cell == nil { cell = JMChapterTagCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMChapterTagCell
         newCell.setup(dataSource[indexPath.row])
+        if let config = self.config {
+            newCell.changeBkgColor(config: config)
+        }
         return newCell
     }
     
@@ -85,7 +99,6 @@ class JMChapterTagCell: JMBaseTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor.menuBkg
         selectionStyle = .none
         textL.numberOfLines = 0
         textL.jmConfigLabel(font: .jmAvenir(15), color: UIColor.charterTextColor)
@@ -120,6 +133,13 @@ class JMChapterTagCell: JMBaseTableViewCell {
         textL.text = item.text
         timeL.text = item.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
         charter.text = "第\(item.charter)章"
+    }
+    
+    func changeBkgColor(config: JMBookConfig) {
+        textL.textColor = config.textColor()
+        timeL.textColor = config.textColor()
+        charter.textColor = config.textColor()
+        backgroundColor = config.subViewBkgColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

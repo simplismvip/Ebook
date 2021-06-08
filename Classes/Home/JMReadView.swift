@@ -9,7 +9,7 @@ import UIKit
 import ZJMKit
 import YYText
 
-class JMReadView: JMBaseView {
+class JMReadView: JMBookBaseView {
     let contentL = YYLabel()
     let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
     let selectView = YYTextSelectionView()

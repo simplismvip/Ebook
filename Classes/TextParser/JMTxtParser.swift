@@ -126,9 +126,10 @@ public struct JMTxtParser {
         let attributes = ["xmlns:dc" : "https://github.com/simplismvip/Ebook", "xmlns:opf" : "opf"]
         let body = root.addChild(name: "body")
         let metadata = body.addChild(name: "metadata", attributes: attributes)
-        metadata.addChild(name: "dc:title", value: "标题")
-        metadata.addChild(name: "dc:creator", value: "作者")
-        metadata.addChild(name: "dc:identifier", value: "唯一ID")
+        let title = path.lastPathComponent
+        metadata.addChild(name: "dc:title", value: title)
+        metadata.addChild(name: "dc:creator", value: "JMEpubReader")
+        metadata.addChild(name: "dc:identifier", value: title)
         let manifest = body.addChild(name: "manifest")
         for charpter in charpters {
             let attributes = ["title" : charpter.title, "href" : charpter.path, "page" : charpter.page, "count" : charpter.count]

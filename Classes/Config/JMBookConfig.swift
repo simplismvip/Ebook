@@ -16,9 +16,7 @@ public class JMBookConfig {
     var bottomView: UIView?
     /// 文本高度
     var height: CGFloat
-    
-    private var tempFont: UIFont?
-    
+
     public init(_ bottomView: UIView? = nil) {
         self.bottomView = bottomView
         // let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
@@ -35,7 +33,7 @@ public class JMBookConfig {
     /// 当前字体
     func font() -> UIFont {
         let fontSize = config.fontSize
-        if config.fontName == .PFont {
+        if config.fontName == .SystemFont {
             return UIFont.jmRegular(fontSize)
         } else {
             if let bundle = Bundle.resouseBundle?.bundlePath {
@@ -70,26 +68,6 @@ public class JMBookConfig {
     /// 字体名称
     func fontName() -> JMMenuStyle {
         return config.fontName
-    }
-    
-    /// 文本颜色
-    func textColor() -> UIColor {
-        return UIColor(rgba: config.textColor)
-    }
-    
-    /// 背景颜色
-    func bkgColor() -> UIColor {
-        return UIColor(rgba: config.bkgColor.rawValue)
-    }
-    
-    /// 背景颜色
-    var bkgColorStr: JMMenuStyle {
-        return config.bkgColor
-    }
-    
-    /// 选择文本颜色
-    func selectColor() -> UIColor {
-        return UIColor(rgba: config.selectColor)
     }
     
     /// 翻页类型
@@ -131,6 +109,43 @@ public class JMBookConfig {
     }
 }
 
+// 颜色
+extension JMBookConfig {
+    /// 背景颜色
+    var bkgColor: JMMenuStyle {
+        return config.bkgColor
+    }
+    
+    /// 文本颜色
+    func textColor() -> UIColor {
+        switch config.bkgColor {
+        case .BkgWhite:
+            return UIColor(rgba: config.textColor)
+        case .BkgBlack:
+            return UIColor(rgba: "#666666")
+        default:
+            return UIColor(rgba: "#FAF5F5")
+        }
+    }
+    
+    /// 子View背景颜色
+    func subViewBkgColor() -> UIColor {
+        switch config.bkgColor {
+        case .BkgWhite:
+            return UIColor.menuBkg // UIColor(rgba: config.textColor)
+        case .BkgBlack:
+            return UIColor(rgba: "#18181A")
+        default:
+            return UIColor(rgba: "#B2B0B0")
+        }
+    }
+    
+    /// 选择文本颜色
+    func selectColor() -> UIColor {
+        return UIColor(rgba: config.selectColor)
+    }
+}
+
 class JMConfig: Codable {
     /// 文本宽度
     var width: CGFloat
@@ -159,10 +174,10 @@ class JMConfig: Codable {
         self.width = UIScreen.main.bounds.size.width - 40
         self.fontSize = 17.0
         self.lineSpace = 8.0
-        self.fontName = .PFont
+        self.fontName = .SystemFont
         self.textColor = "#131313"
         self.selectColor = "#131313"
-        self.bkgColor = .BkgColor
+        self.bkgColor = .BkgBlack
         self.flipType = .PFlipHoriCurl
         self.playStatus = .nonetype
         self.playRate = .PlayRate1
