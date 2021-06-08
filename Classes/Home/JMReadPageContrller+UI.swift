@@ -204,6 +204,7 @@ extension JMReadPageContrller {
         chapter.changeBkgColor(config: config)
         bookTitle.changeBkgColor(config: config)
         battery.changeBkgColor(config: config)
+        setNeedsStatusBarAppearanceUpdate()
     }
 }
 

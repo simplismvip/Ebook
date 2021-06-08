@@ -47,13 +47,7 @@
                             <constraint firstItem="mUU-qS-s4V" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="RTC-UE-KdX"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="EPUB" id="3Fe-cK-wXC">
-                        <barButtonItem key="rightBarButtonItem" title="打开图书" id="vmu-gh-3rq">
-                            <connections>
-                                <action selector="openBooks:" destination="vXZ-lx-hvc" id="YHN-4P-iBo"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="EPUB" id="3Fe-cK-wXC"/>
                     <connections>
                         <outlet property="tableView" destination="mUU-qS-s4V" id="j1w-a4-3Xi"/>
                     </connections>

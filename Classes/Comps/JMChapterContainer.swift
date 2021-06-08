@@ -19,9 +19,9 @@ final class JMChapterContainer: JMBookBaseView {
     private let s_width = UIScreen.main.bounds.size.width - 60
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView(frame: CGRect.zero)
-        scrollView.delegate = self
         scrollView.backgroundColor = UIColor.menuBkg
         scrollView.isPagingEnabled = true
+        scrollView.isScrollEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
@@ -166,26 +166,7 @@ final class JMChapterContainer: JMBookBaseView {
     }
 }
 
-extension JMChapterContainer: UIScrollViewDelegate {
-    // 任何滚动结束
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        sortBtn.isHidden = scrollView.contentOffset.x > (s_width/3)
-    }
-    
-    // 滚动结束
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating {
-            switchStatus(scrollView.contentOffset.x > (s_width/3))
-        }
-    }
-    
-    // 滚动结束
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate && scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating {
-            switchStatus(scrollView.contentOffset.x > (s_width/3))
-        }
-    }
-    
+extension JMChapterContainer {
     private func switchStatus(_ status: Bool) {
         for item in switchView.models {
             if item.identify == .CharterTag {
@@ -194,6 +175,5 @@ extension JMChapterContainer: UIScrollViewDelegate {
                 item.isSelect = !status
             }
         }
-        print(status)
     }
 }

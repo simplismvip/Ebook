@@ -20,7 +20,8 @@ final class JMBookTitleView: JMBookBaseView {
             self?.jmRouterEvent(eventName: kEventNameMenuActionBack, info: nil)
         }
         back.snp.makeConstraints { (make) in
-            make.width.height.equalTo(16)
+            make.width.equalTo(16)
+            make.height.equalTo(self)
             make.left.equalTo(self).offset(14)
             make.centerY.equalTo(snp.centerY)
         }
@@ -29,7 +30,7 @@ final class JMBookTitleView: JMBookBaseView {
         title.jmConfigLabel(font: UIFont.jmAvenir(13), color: UIColor.jmRGBValue(0x999999))
         title.snp.makeConstraints { (make) in
             make.left.equalTo(back.snp.right).offset(5)
-            make.height.equalTo(12)
+            make.height.equalTo(self)
             make.centerY.equalTo(snp.centerY)
         }
     }

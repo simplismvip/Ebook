@@ -39,8 +39,14 @@ public class JMReadPageContrller: JMBaseController {
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
     
+    /// 状态栏
     public override var prefersStatusBarHidden: Bool {
         return currType == .ViewType_NONE
+    }
+    
+    /// 状态栏
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (bookModel.config.bkgColor == .BkgWhite) ? .default : .lightContent
     }
     
     // 翻页控制器
@@ -266,7 +272,13 @@ extension JMReadPageContrller {
                 JMBookDataBase.insertData(isTag: true, book: book)
             }
         }, next: false)
-                
+           
+        jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { [weak self](_) in
+            self?.jmShareImageToFriends(shareID: "分享图书📖到", image: nil, completionHandler: { (_, status) in
+                print("分享成功")
+            })
+        }, next: false)
+        
         jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { [weak self](model) in
             if let item = model as? JMReadMenuItem {
                 self?.view.backgroundColor = item.isSelect ? UIColor.jmRGB(60, 60, 60) : UIColor.white

@@ -171,16 +171,16 @@ class JMConfig: Codable {
     var playRate: JMMenuStyle
     
     public init() {
-        self.width = UIScreen.main.bounds.size.width - 40
         self.fontSize = 17.0
         self.lineSpace = 8.0
         self.fontName = .SystemFont
+        self.selectColor = "#66B3FF"
         self.textColor = "#131313"
-        self.selectColor = "#131313"
-        self.bkgColor = .BkgBlack
+        self.bkgColor = .BkgWhite
         self.flipType = .PFlipHoriCurl
         self.playStatus = .nonetype
         self.playRate = .PlayRate1
+        self.width = UIScreen.main.bounds.size.width - 40
         self.brightness = UIScreen.main.brightness
     }
 }

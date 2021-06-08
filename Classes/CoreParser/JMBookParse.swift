@@ -82,9 +82,10 @@ public class JMBookParse: NSObject {
                 pageView.delegate = self
                 self.parserCallback?(pageView)
             }
-        }catch let error as NSError {
+        } catch let error as NSError {
             DispatchQueue.main.async {
-                self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
+                self.parseTxtBook()
+                // self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
             }
         }
     }

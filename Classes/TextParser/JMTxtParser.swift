@@ -17,9 +17,8 @@ public struct JMTxtParser {
         let filename = url.lastPathComponent.deletingPathExtension
         if let folderPath = JMTools.jmDocuPath()?.appendingPathComponent(filename) {
             if FileManager.default.fileExists(atPath: folderPath) {
-                // 已经存在，不用再次解析
-                let xmlPath = folderPath.full(f: "opf", l: "xml")
-                if let book = parserXml(xmlPath: URL(fileURLWithPath: xmlPath)) {
+                // 解析
+                if let book = parserOpf(folderPath: folderPath) {
                     return book
                 } else {
                     throw NSError(domain: "🆘🆘🆘解析opf.xml文件错误", code: 0, userInfo: nil)
@@ -29,6 +28,12 @@ public struct JMTxtParser {
                 JMFileTools.jmCreateFolder(folderPath)
                 if let content = try? String(contentsOf: url, encoding: coding()) {
                     parserContent(folderPath: folderPath, content: content)
+                    // 解析
+                    if let book = parserOpf(folderPath: folderPath) {
+                        return book
+                    } else {
+                        throw NSError(domain: "🆘🆘🆘解析opf.xml文件错误", code: 0, userInfo: nil)
+                    }
                 } else {
                     throw NSError(domain: "🆘🆘🆘解码txt文件发生错误", code: 0, userInfo: nil)
                 }
@@ -36,7 +41,16 @@ public struct JMTxtParser {
         } else {
             throw NSError(domain: "🆘🆘🆘创建folderpath错误", code: 0, userInfo: nil)
         }
-        throw NSError(domain: "🆘🆘🆘解析txt文件错误", code: 0, userInfo: nil)
+    }
+    
+    // 解析opf.xml
+    private func parserOpf(folderPath: String) -> JMTxtBook? {
+        let xmlPath = folderPath.full(f: "opf", l: "xml")
+        if let book = parserXml(xmlPath: URL(fileURLWithPath: xmlPath)) {
+            return book
+        } else {
+            return nil
+        }
     }
     
     // 解析txt全文
@@ -99,11 +113,10 @@ public struct JMTxtParser {
         }
         
         if let xmlDoc = try? AEXMLDocument(xml: data) {
-            print(xmlDoc.xml)
             var chapters = [JMTxtChapter]()
-            let title = xmlDoc.root["manifest"]["dc:title"].string
-            let creator = xmlDoc.root["manifest"]["dc:creator"].string
-            let identifier = xmlDoc.root["manifest"]["dc:identifier"].string
+            let title = xmlDoc.root["metadata"]["dc:title"].string
+            let creator = xmlDoc.root["metadata"]["dc:creator"].string
+            let identifier = xmlDoc.root["metadata"]["dc:identifier"].string
             if let items = xmlDoc.root["manifest"]["item"].all {
                 for item in items {
                     let title = item.attributes["title"] ?? ""
@@ -111,7 +124,6 @@ public struct JMTxtParser {
                     let pageCount = item.attributes["count"] ?? ""
                     let chapter = JMTxtChapter(title: title, page: page, count: pageCount)
                     chapters.append(chapter)
-                    print(item.attributes)
                 }
             }
             return JMTxtBook(title: title, bookId: identifier, author: creator, chapters: chapters, path: xmlPath)
@@ -126,7 +138,7 @@ public struct JMTxtParser {
         let attributes = ["xmlns:dc" : "https://github.com/simplismvip/Ebook", "xmlns:opf" : "opf"]
         let body = root.addChild(name: "body")
         let metadata = body.addChild(name: "metadata", attributes: attributes)
-        let title = path.lastPathComponent
+        let title = path.deletingLastPathComponent.lastPathComponent
         metadata.addChild(name: "dc:title", value: title)
         metadata.addChild(name: "dc:creator", value: "JMEpubReader")
         metadata.addChild(name: "dc:identifier", value: title)
@@ -165,9 +177,9 @@ extension JMTxtParser {
             conText.yy_paragraphSpacing = config.lineSpace() * 1.2
             conText.yy_font = config.font()
             conText.yy_firstLineHeadIndent = 20
+            conText.yy_color = config.textColor()
             return conText
         }
-        
         return nil
     }
 }

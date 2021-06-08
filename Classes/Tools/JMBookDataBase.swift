@@ -80,7 +80,8 @@ struct JMBookDataBase {
         }
         
         do {
-            let timeStr = Date.jmCreateTspString()
+            let time = Date.jmCurrentTime
+            let timeStr = String(time).components(separatedBy: ".")[0]
             let insetSql = "INSERT INTO \(isTag ? "bookCharterTag" : "bookRate")(name,bookid,charter,location,text,timeStr)values(?,?,?,?,?,?)"
             let values = [name, bookid, charter, location, text, timeStr] as [Any]
             try db.executeUpdate(insetSql, values: values)

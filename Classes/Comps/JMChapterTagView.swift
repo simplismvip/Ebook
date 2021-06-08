@@ -78,10 +78,7 @@ extension JMChapterTagView: UITableViewDelegate, UITableViewDataSource  {
         var cell = tableView.dequeueReusableCell(withIdentifier: "kReuseCellIdentifier")
         if cell == nil { cell = JMChapterTagCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMChapterTagCell
-        newCell.setup(dataSource[indexPath.row])
-        if let config = self.config {
-            newCell.changeBkgColor(config: config)
-        }
+        newCell.setup(dataSource[indexPath.row], config: config)
         return newCell
     }
     
@@ -129,17 +126,15 @@ class JMChapterTagCell: JMBaseTableViewCell {
         }
     }
 
-    func setup(_ item: JMChapterTag) {
+    func setup(_ item: JMChapterTag, config: JMBookConfig?) {
         textL.text = item.text
-        timeL.text = item.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
+        timeL.text = item.timeStr.jmFormatTspString("yyyy/MM/dd HH:mm:ss")
         charter.text = "第\(item.charter)章"
-    }
-    
-    func changeBkgColor(config: JMBookConfig) {
-        textL.textColor = config.textColor()
-        timeL.textColor = config.textColor()
-        charter.textColor = config.textColor()
-        backgroundColor = config.subViewBkgColor()
+        
+        textL.textColor = config?.textColor()
+        timeL.textColor = config?.textColor()
+        charter.textColor = config?.textColor()
+        backgroundColor = config?.subViewBkgColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

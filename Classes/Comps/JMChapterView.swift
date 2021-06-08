@@ -38,7 +38,11 @@ final class JMChapterView: JMBookBaseView {
         if dataSource.isEmpty || dataSource.count != items.count {
             dataSource = items
             tableView.reloadData()
+        }
+        
+        if self.currCharter != currCharter {
             self.currCharter = currCharter
+            tableView.reloadData()
         }
     }
     
@@ -78,10 +82,7 @@ extension JMChapterView: UITableViewDelegate, UITableViewDataSource  {
         var cell = tableView.dequeueReusableCell(withIdentifier: "kReuseCellIdentifier")
         if cell == nil { cell = JMBookChapterCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMBookChapterCell
-        newCell.setup(dataSource[indexPath.row],currCharter)
-        if let config = self.config {
-            newCell.changeBkgColor(config: config)
-        }
+        newCell.setup(dataSource[indexPath.row], currCharter, config: config)
         return newCell
     }
     
@@ -128,20 +129,17 @@ class JMBookChapterCell: JMBaseTableViewCell {
         }
     }
 
-    func setup(_ item: JMBookCharpter, _ currCharter: Int) {
+    func setup(_ item: JMBookCharpter, _ currCharter: Int, config: JMBookConfig?) {
         index.text = item.charpTitle
         lock.text = "免费"
         if item.location.chapter == currCharter {
-            index.textColor = UIColor.menuSelColor
+            index.textColor = config?.selectColor()
         }else {
-            index.textColor = UIColor.charterTextColor
+            index.textColor = config?.textColor()
         }
-    }
-    
-    func changeBkgColor(config: JMBookConfig) {
-        index.textColor = config.textColor()
-        lock.textColor = config.textColor()
-        backgroundColor = config.subViewBkgColor()
+        
+        lock.textColor = config?.textColor()
+        backgroundColor = config?.subViewBkgColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

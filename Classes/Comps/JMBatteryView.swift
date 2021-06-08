@@ -58,7 +58,7 @@ final class JMBatteryView: JMBookBaseView {
         
         // 电池内填充
         batteryView.layer.cornerRadius = 1;
-        batteryView.frame = CGRect.Rect(b_x + 1.5,b_y + b_lineW+0.5, 0, b_height - (b_lineW+0.5) * 2);
+        batteryView.frame = CGRect.Rect(b_x + 1.5, b_y + b_lineW + 0.5, 0, b_height - (b_lineW + 0.5) * 2);
         
         timeLabel.jmConfigLabel(font: UIFont.jmAvenir(11), color: UIColor.jmRGBValue(0x999999))
         timeLabel.snp.makeConstraints { (make) in
@@ -101,9 +101,10 @@ final class JMBatteryView: JMBookBaseView {
     
     private func updateValue() {
         UIDevice.current.isBatteryMonitoringEnabled = true
-        let value: CGFloat = CGFloat(UIDevice.current.batteryLevel * 100.0)
+        var level = UIDevice.current.batteryLevel
+        if level < 0 { level = 1.0 }
         var rect = batteryView.frame
-        rect.size.width = (value * (b_width - (b_lineW+0.5) * 2))/100
+        rect.size.width = (CGFloat(level * 100.0) * (b_width - (b_lineW + 0.5) * 2))/100
         batteryView.frame = rect
     }
     
