@@ -9,7 +9,7 @@ import Foundation
 
 class JMBookTools {
     private let hightLabel = UILabel()
-    private var contSize = Dictionary<String, CGSize>()
+    private var contSize = [String: CGSize]()
     private let width = UIScreen.main.bounds.size.width
     public static let share: JMBookTools = {
         let util = JMBookTools()
@@ -35,3 +35,36 @@ class JMBookTools {
     }
 }
     
+public class JMBookCache {
+    private var caches = [String: AnyObject]()
+    public static let share: JMBookCache = {
+        return JMBookCache()
+    }()
+    
+    static public func setObjc(key: String, obj: AnyObject) {
+        if JMBookCache.share.caches[key] == nil {
+            JMBookCache.share.caches[key] = obj
+        }
+    }
+    
+    static public func updateObjc(key: String, obj: AnyObject) {
+        JMBookCache.share.caches[key] = obj
+    }
+    
+    static public func getObjc(key: String) -> AnyObject? {
+        return JMBookCache.share.caches[key]
+    }
+    
+    static public func config() -> JMBookConfig {
+        return JMBookCache.share.caches["jmBookConfig"] as! JMBookConfig
+    }
+}
+  
+public struct JMBookWapper<T: NSObject> {
+    weak var obj: T?
+    var ident: String
+    init(obj: T, ident: String) {
+        self.obj = obj
+        self.ident = ident
+    }
+}

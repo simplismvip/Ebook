@@ -12,7 +12,6 @@ final class JMChapterView: JMBookBaseView {
     private let s_width = UIScreen.main.bounds.size.width - 60
     private var dataSource = [JMBookCharpter]()
     private var currCharter = 0
-    private var config: JMBookConfig?
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: bounds, style: .plain)
         tableView.register(JMBookChapterCell.self, forCellReuseIdentifier: "kReuseCellIdentifier")
@@ -53,8 +52,7 @@ final class JMChapterView: JMBookBaseView {
 
     override func changeBkgColor(config: JMBookConfig) {
         super.changeBkgColor(config: config)
-        self.config = config
-        tableView.backgroundColor = config.subViewBkgColor()
+        tableView.backgroundColor = config.subViewColor()
         tableView.reloadData()
     }
     
@@ -139,7 +137,7 @@ class JMBookChapterCell: JMBaseTableViewCell {
         }
         
         lock.textColor = config?.textColor()
-        backgroundColor = config?.subViewBkgColor()
+        backgroundColor = config?.subViewColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

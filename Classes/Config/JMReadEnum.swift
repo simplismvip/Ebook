@@ -108,12 +108,12 @@ public enum JMMenuType: String, HandyJSONEnum {
 
 /// 按钮类型
 public enum JMMenuStyle: String, Codable, HandyJSONEnum {
-    case BkgBlack = "#000000" // 背景色
-    case BkgColor1 = "#696969" // 背景色
-    case BkgColor2 = "#A0522D" // 背景色
-    case BkgColor3 = "#979797" // 背景色
-    case BkgColor4 = "#708090" // 背景色
-    case BkgWhite = "#FFFFFF" // 背景色
+    case BkgBlack = "#000000" // 黑色
+    case BkgGray = "#696969" // 灰色
+    case BkgBrown = "#A0522D" // 棕色🏾
+    case BkgLightGray = "#979797" // 浅灰色
+    case BkgBlueGray = "#708090" // 蓝灰色
+    case BkgWhite = "#FFFFFF" // 白色
     
     case MainBotCatalog = "bookCatalog" // 主页底部
     case MainBotDayNight = "dayornight" // 主页底部
@@ -158,4 +158,69 @@ public enum JMMenuStyle: String, Codable, HandyJSONEnum {
     case CharterTag = "charterTag"// 书签
     
     case nonetype = "nonetype"// 未发现
+    
+    /// 文本颜色
+    public func textColor() -> UIColor {
+        switch self {
+        case .BkgWhite:
+            return UIColor(rgba: "#131313")
+        case .BkgGray:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgBrown:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgLightGray:
+            return UIColor(rgba: "#FFFFFF")
+        case .BkgBlueGray:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgBlack:
+            return UIColor(rgba: "#666666")
+        default:
+            return UIColor(rgba: "#B2B0B0")
+        }
+    }
+    
+    /// 子View背景颜色
+    public func subViewColor() -> UIColor {
+        return UIColor(rgba: self.rawValue, grad: 10)
+    }
+    
+    /// 选择文本颜色
+    public func selectColor() -> UIColor {
+        switch self {
+        case .BkgWhite:
+            return UIColor.menuBkg
+        case .BkgGray:
+            return UIColor(rgba: "#666666")
+        case .BkgBrown:
+            return UIColor(rgba: "")
+        case .BkgLightGray:
+            return UIColor(rgba: "#666666")
+        case .BkgBlueGray:
+            return UIColor(rgba: "")
+        case .BkgBlack:
+            return UIColor(rgba: "#18181A")
+        default:
+            return UIColor(rgba: "#B2B0B0")
+        }
+    }
+    
+    /// tint颜色
+    public func tintColor() -> UIColor {
+        switch self {
+        case .BkgWhite:
+            return UIColor(rgba: "#979797")
+        case .BkgGray:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgBrown:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgLightGray:
+            return UIColor(rgba: "#FFFFFF")
+        case .BkgBlueGray:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgBlack:
+            return UIColor(rgba: "#979797")
+        default:
+            return UIColor(rgba: "#B2B0B0")
+        }
+    }
 }

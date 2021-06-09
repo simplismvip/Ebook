@@ -85,8 +85,9 @@ final class BkgColorView: JMBookBaseView {
     }
     
     override func changeBkgColor(config: JMBookConfig) {
-        changeBkgColor(config: config)
+        super.changeBkgColor(config: config)
         name.textColor = config.textColor()
+        bkgView.refreshViews()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -100,7 +101,6 @@ final class FontSizeView: JMBookBaseView {
         slider.setThumbImage("green-marker".image, for: .normal)
         slider.minimumValue = 10
         slider.maximumValue = 30
-        slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
         return slider
     }()
     
@@ -150,6 +150,8 @@ final class FontSizeView: JMBookBaseView {
     override func changeBkgColor(config: JMBookConfig) {
         super.changeBkgColor(config: config)
         name.textColor = config.textColor()
+        slider.minimumTrackTintColor = config.selectColor()
+        slider.maximumTrackTintColor = config.textColor()
     }
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
@@ -187,6 +189,7 @@ final class PageFlipView: JMBookBaseView {
     override func changeBkgColor(config: JMBookConfig) {
         super.changeBkgColor(config: config)
         name.textColor = config.textColor()
+        bkgView.refreshViews()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -226,6 +229,7 @@ final class FontTypeView: JMBookBaseView {
     override func changeBkgColor(config: JMBookConfig) {
         super.changeBkgColor(config: config)
         name.textColor = config.textColor()
+        bkgView.refreshViews()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }

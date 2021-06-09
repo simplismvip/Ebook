@@ -18,7 +18,6 @@ struct JMChapterTag {
 final class JMChapterTagView: JMBookBaseView {
     private let s_width = UIScreen.main.bounds.size.width - 60
     private var dataSource = [JMChapterTag]()
-    private var config: JMBookConfig?
     private var bkgColor: UIColor = UIColor.menuBkg
     private var textColor: UIColor = UIColor.charterTextColor
     private lazy var tableView: UITableView = {
@@ -51,8 +50,7 @@ final class JMChapterTagView: JMBookBaseView {
     
     override func changeBkgColor(config: JMBookConfig) {
         super.changeBkgColor(config: config)
-        self.config = config
-        bkgColor = config.subViewBkgColor()
+        bkgColor = config.subViewColor()
         textColor = config.textColor()
         tableView.backgroundColor = bkgColor
         tableView.reloadData()
@@ -134,7 +132,7 @@ class JMChapterTagCell: JMBaseTableViewCell {
         textL.textColor = config?.textColor()
         timeL.textColor = config?.textColor()
         charter.textColor = config?.textColor()
-        backgroundColor = config?.subViewBkgColor()
+        backgroundColor = config?.subViewColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

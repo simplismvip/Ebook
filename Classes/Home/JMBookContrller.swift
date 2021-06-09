@@ -79,8 +79,8 @@ public class JMBookContrller: JMBaseController {
         bookTitle.title.text = bookModel.currTitle()
         updateProgress()
         if let word = bookModel.currCharpter()?.word() {
-            // 正常人阅读一分钟约300字，一秒钟5个字
-            let time = (word / 5).jmCurrentTime
+            // 小说阅读一分钟约600字，一秒钟10个字
+            let time = (word / 10).jmCurrentTime
             battery.title.text = "本章共\(word)字，读完约\(time)"
         }
     }
@@ -109,7 +109,12 @@ public class JMBookContrller: JMBaseController {
     }
     
     // 查找正在使用的View
-    private func useingPageView() -> JMPageController {
+    // using: 是否重用
+    private func useingPageView(_ using: Bool = false) -> JMPageController {
+        if using {
+            return pageVC?.viewControllers?.first as! JMPageController
+        }
+        
         let pageViwe = JMPageController()
         let color = bookModel.config.config.bkgColor
         pageViwe.view.backgroundColor = UIColor.jmHexColor(color.rawValue)
@@ -157,7 +162,7 @@ public class JMBookContrller: JMBaseController {
             // 当前位置
             let cLoc = bookModel.currLocation(target: text)
             if let page = bookModel.newPageLoc(location: cLoc, text: text) {
-                useingPageView().loadPage(page)
+                useingPageView(true).loadPage(page)
             }
         }
     }
@@ -217,6 +222,8 @@ extension JMBookContrller: UIPageViewControllerDelegate, UIPageViewControllerDat
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             print("😀😀😀completed")
+            // 保存当前进度
+            JMBookDataBase.insertData(isTag: false, book: bookModel)
             initdatas()
         } else {
             hideWithType()
@@ -328,7 +335,7 @@ extension JMBookContrller {
                 // 当前位置
                 let cLoc = self?.bookModel.currLocation(target: charpterTag.text) ?? charpterTag.location
                 if let page = self?.bookModel.newPageLoc(location: cLoc, text: charpterTag.text) {
-                    self?.useingPageView().loadPage(page)
+                    self?.useingPageView(true).loadPage(page)
                 }
             }
         }, next: false)
@@ -456,7 +463,7 @@ extension JMBookContrller {
         jmReciverMsg(msgName: kMsgNamePlayBookRefashText) { [weak self](msg) -> MsgObjc? in
             if let characterRange = msg as? NSRange {
                 print(characterRange)
-                self?.useingPageView().refresh(characterRange)
+                self?.useingPageView(true).refresh(characterRange)
             }
             return nil
         }

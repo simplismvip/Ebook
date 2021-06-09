@@ -116,33 +116,54 @@ extension JMBookConfig {
         return config.bkgColor
     }
     
-    /// 文本颜色
-    func textColor() -> UIColor {
-        switch config.bkgColor {
-        case .BkgWhite:
-            return UIColor(rgba: config.textColor)
-        case .BkgBlack:
-            return UIColor(rgba: "#666666")
-        default:
-            return UIColor(rgba: "#FAF5F5")
-        }
+    /// 子View背景颜色
+    public func subViewColor() -> UIColor {
+        return UIColor(rgba: config.bkgColor.rawValue, grad: 10)
     }
     
-    /// 子View背景颜色
-    func subViewBkgColor() -> UIColor {
+    /// tint颜色
+    public func tintColor() -> UIColor {
+        return textColor()
+    }
+
+    /// 文本颜色
+    public func textColor() -> UIColor {
         switch config.bkgColor {
         case .BkgWhite:
-            return UIColor.menuBkg // UIColor(rgba: config.textColor)
+            return UIColor(rgba: "#131313")
+        case .BkgGray:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgBrown:
+            return UIColor(rgba: "#F0F0F0")
+        case .BkgLightGray:
+            return UIColor(rgba: "#FFFFFF")
+        case .BkgBlueGray:
+            return UIColor(rgba: "#F0F0F0")
         case .BkgBlack:
-            return UIColor(rgba: "#18181A")
+            return UIColor(rgba: "#666666")
         default:
             return UIColor(rgba: "#B2B0B0")
         }
     }
     
     /// 选择文本颜色
-    func selectColor() -> UIColor {
-        return UIColor(rgba: config.selectColor)
+    public func selectColor() -> UIColor {
+        switch config.bkgColor {
+        case .BkgWhite:
+            return UIColor.menuSelColor
+        case .BkgGray:
+            return UIColor.menuSelColor
+        case .BkgBrown:
+            return UIColor.menuSelColor
+        case .BkgLightGray:
+            return UIColor.menuSelColor
+        case .BkgBlueGray:
+            return UIColor.menuSelColor
+        case .BkgBlack:
+            return UIColor.menuSelColor
+        default:
+            return UIColor.menuSelColor
+        }
     }
 }
 

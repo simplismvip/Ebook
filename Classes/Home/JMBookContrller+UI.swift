@@ -153,7 +153,7 @@ extension JMBookContrller {
     func updateProgress() {
         if let pages = bookModel.currCharpter()?.pages {
             let max = Float(pages.count)
-            let curr = Float(bookModel.indexPath.page)
+            let curr = Float(bookModel.indexPath.page + 1)
             progress.setSlider(max: max, curr: curr)
         }
     }
@@ -190,8 +190,8 @@ extension JMBookContrller {
     }
     
     func updateAllItemsBkg(config: JMBookConfig) {
-        topContainer.backgroundColor = config.subViewBkgColor()
-        bottomContainer.backgroundColor = config.subViewBkgColor()
+        topContainer.backgroundColor = config.subViewColor()
+        bottomContainer.backgroundColor = config.subViewColor()
         
         bottom.changeBkgColor(config: config)
         topLeft.changeBkgColor(config: config)
@@ -204,6 +204,10 @@ extension JMBookContrller {
         chapter.changeBkgColor(config: config)
         bookTitle.changeBkgColor(config: config)
         battery.changeBkgColor(config: config)
+        
+        bottom.refreshViews()
+        topLeft.refreshViews()
+        topRight.refreshViews()
         setNeedsStatusBarAppearanceUpdate()
     }
 }

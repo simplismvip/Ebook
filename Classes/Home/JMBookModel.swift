@@ -87,7 +87,7 @@ final public class JMBookModel {
     
     /// 当前小节标题
     public func currTitle() -> String {
-        return contents[indexPath.chapter].charpTitle ?? ""
+        return contents[indexPath.chapter].charpTitle ?? title
     }
     
     /// 更新字体大小等后重新计算已读章节

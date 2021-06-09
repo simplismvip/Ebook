@@ -19,7 +19,6 @@ final class JMMenuLightView: JMBookBaseView {
         slider.minimumValue = 0
         slider.maximumValue = 1
         slider.value = Float(UIScreen.main.brightness)
-        slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
         return slider
     }()
     
@@ -97,6 +96,15 @@ final class JMMenuLightView: JMBookBaseView {
             make.height.equalTo(34)
             make.top.equalTo(bkgColor.snp.bottom).offset(20)
         }
+    }
+    
+    override func changeBkgColor(config: JMBookConfig) {
+        super.changeBkgColor(config: config)
+        bkgView.refreshViews()
+        leftBtn.tintColor = config.tintColor()
+        rightBtn.tintColor = config.tintColor()
+        slider.minimumTrackTintColor = config.selectColor()
+        slider.maximumTrackTintColor = config.textColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }

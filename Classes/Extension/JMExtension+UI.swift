@@ -213,7 +213,7 @@ extension UIColor {
         return UIColor(rgba: "#66B3FF")
     }
 
-    convenience init(rgba: String) {
+    convenience init(rgba: String, grad: CGFloat = 0.0) {
         var red:   CGFloat = 0.0
         var green: CGFloat = 0.0
         var blue:  CGFloat = 0.0
@@ -258,7 +258,9 @@ extension UIColor {
         } else {
             print("Invalid RGB string, missing '#' as prefix", terminator: "")
         }
-        self.init(red:red, green:green, blue:blue, alpha:alpha)
+        let gradF = grad / 255.0
+        
+        self.init(red: red - gradF, green: green - gradF, blue: blue - gradF, alpha: alpha)
     }
     
     func hexString(_ includeAlpha: Bool) -> String {

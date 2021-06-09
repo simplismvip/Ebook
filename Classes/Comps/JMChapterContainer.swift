@@ -151,15 +151,15 @@ final class JMChapterContainer: JMBookBaseView {
     
     override func changeBkgColor(config: JMBookConfig) {
         super.changeBkgColor(config: config)
-        backgroundColor = config.subViewBkgColor().jmComponent(0.5)
+        backgroundColor = config.subViewColor().jmComponent(0.5)
         sortBtn.tintColor = config.textColor()
-        scrollView.backgroundColor = config.subViewBkgColor()
-        switchView.backgroundColor = config.subViewBkgColor()
-        chapter.backgroundColor = config.subViewBkgColor()
-        chapterTag.backgroundColor = config.subViewBkgColor()
+        scrollView.backgroundColor = config.subViewColor()
+        switchView.backgroundColor = config.subViewColor()
+        chapter.backgroundColor = config.subViewColor()
+        chapterTag.backgroundColor = config.subViewColor()
         titleLabel.textColor = config.textColor()
         chapterCount.textColor = config.textColor()
-        bkgView.backgroundColor = config.subViewBkgColor()
+        bkgView.backgroundColor = config.subViewColor()
         
         chapterTag.changeBkgColor(config: config)
         chapter.changeBkgColor(config: config)

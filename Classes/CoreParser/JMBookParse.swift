@@ -22,6 +22,7 @@ public class JMBookParse: NSObject {
         self.pathUrl = URL(fileURLWithPath: path)
         self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
         self.config = (config == nil) ? JMBookConfig() : config!
+        JMBookCache.setObjc(key: "jmBookConfig", obj: self.config)
         super.init()
         let _ = JMBookDataBase.share
     }
