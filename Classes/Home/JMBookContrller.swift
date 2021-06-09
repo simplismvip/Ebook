@@ -13,9 +13,9 @@ public class JMBookContrller: JMBaseController {
     public weak var delegate: JMReadProtocol?
     // 数据源
     let bookModel: JMBookModel
-    let topLeft = JMReadItemView()
-    let topRight = JMReadItemView()
-    let bottom = JMReadItemView()
+    let topLeft = JMMenuItemView()
+    let topRight = JMMenuItemView()
+    let bottom = JMMenuItemView()
     
     let set = JMMenuSetView() // 设置
     let light = JMMenuLightView() // 亮度
@@ -34,7 +34,7 @@ public class JMBookContrller: JMBaseController {
     // 第N章-N小节-N页，表示当前读到的位置
     public let cPage = JMBookIndex(0, 0)
     // 朗读
-    private let speech: JMSpeechParse
+    private let speech: JMBookSpeech
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
     
@@ -55,7 +55,7 @@ public class JMBookContrller: JMBaseController {
     public init (_ bookModel: JMBookModel) {
         self.bookModel = bookModel
         let speechModel = JMSpeechModel()
-        self.speech = JMSpeechParse(speechModel)
+        self.speech = JMBookSpeech(speechModel)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -276,7 +276,7 @@ extension JMBookContrller {
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { [weak self](model) in
-            if let item = model as? JMReadMenuItem {
+            if let item = model as? JMMenuItem {
                 self?.view.backgroundColor = item.isSelect ? UIColor.jmRGB(60, 60, 60) : UIColor.white
             }
         }, next: false)
@@ -361,7 +361,7 @@ extension JMBookContrller {
     func registerSubMenuEvent() {
         // 修改背景颜色
         jmRegisterEvent(eventName: kEventNameMenuPageBkgColor, block: { [weak self](item) in
-            if let color = (item as? JMReadMenuItem)?.identify {
+            if let color = (item as? JMMenuItem)?.identify {
                 self?.bookModel.config.config.bkgColor = color
                 self?.reCalculationPage()
                 if let childVCS = self?.pageVC?.childViewControllers {
@@ -377,7 +377,7 @@ extension JMBookContrller {
         
         // 设置翻页
         jmRegisterEvent(eventName: kEventNameMenuPageFlipType, block: { [weak self](item) in
-            if let typeStr = (item as? JMReadMenuItem)?.identify {
+            if let typeStr = (item as? JMMenuItem)?.identify {
                 self?.bookModel.config.config.flipType = typeStr
                 if let page = self?.bookModel.currPage(), let pageView = self?.useingPageView() {
                     self?.pageVC?.view.removeFromSuperview()
@@ -403,7 +403,7 @@ extension JMBookContrller {
         
         // 修改字体
         jmRegisterEvent(eventName: kEventNameMenuFontType, block: { [weak self](item) in
-            if let fontName = (item as? JMReadMenuItem)?.identify {
+            if let fontName = (item as? JMMenuItem)?.identify {
                 self?.bookModel.config.config.fontName = fontName
                 self?.reCalculationPage()
             }

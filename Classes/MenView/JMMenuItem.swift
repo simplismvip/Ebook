@@ -1,5 +1,5 @@
 //
-//  JMReadMenuItem.swift
+//  JMMenuItem.swift
 //  JMEpubReader
 //
 //  Created by JunMing on 2021/3/29.
@@ -8,7 +8,7 @@
 import UIKit
 import HandyJSON
 
-public class JMReadMenuItem: HandyJSON {
+public class JMMenuItem: HandyJSON {
     var title: String?
     var image: String?
     

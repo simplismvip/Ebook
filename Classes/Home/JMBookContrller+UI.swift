@@ -10,9 +10,9 @@ import Foundation
 // MARK: -- Private Method, Setup views
 extension JMBookContrller {
     func loadDats() {
-        let bottomItems: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
-        let top_left: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
-        let top_right: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_right")
+        let bottomItems: [JMMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
+        let top_left: [JMMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
+        let top_right: [JMMenuItem] = JMJsonParse.parseJson(name: "menu_top_right")
         
         bottom.updateViews(bottomItems)
         topLeft.updateViews(top_left)
@@ -317,7 +317,7 @@ extension JMBookContrller {
 
 extension JMBookContrller {
     /// 通过style获取目标Item模型
-    public func findItem(_ menuStyle: JMMenuStyle) -> JMReadMenuItem? {
+    public func findItem(_ menuStyle: JMMenuStyle) -> JMMenuItem? {
         return [set.allItems(),light.allItems(),play.allItems(),bottom.models,topRight.models]
             .flatMap { $0 }
             .filter({ $0.identify == menuStyle })

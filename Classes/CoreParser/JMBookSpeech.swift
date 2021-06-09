@@ -1,5 +1,5 @@
 //
-//  JMSpeechParse.swift
+//  JMBookSpeech.swift
 //  JMEpubReader
 //
 //  Created by JunMing on 2021/4/17.
@@ -18,7 +18,7 @@ public class JMSpeechModel {
     public var lang: String = "zh-CN"
 }
 
-final public class JMSpeechParse: NSObject {
+final public class JMBookSpeech: NSObject {
     private var utterance: AVSpeechUtterance?
     private var audioSession =  AVAudioSession()
     public var synthesizer = AVSpeechSynthesizer()
@@ -96,7 +96,7 @@ final public class JMSpeechParse: NSObject {
     }
 }
 
-extension JMSpeechParse: AVSpeechSynthesizerDelegate {
+extension JMBookSpeech: AVSpeechSynthesizerDelegate {
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
 //        jmSendMsg(msgName: kMsgNamePlayBookRefashText, info: characterRange as MsgObjc)
         let rangeStr = utterance.attributedSpeechString.attributedSubstring(from: characterRange)

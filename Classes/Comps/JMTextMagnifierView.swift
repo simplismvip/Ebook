@@ -9,7 +9,7 @@ import UIKit
 import ZJMKit
 
 final class JMTextMagnifierView: JMBookBaseView {
-    var pageView: JMReadView?
+    var pageView: JMPageView?
     var startPoint: CGPoint? {
         willSet {
             if let value = newValue {

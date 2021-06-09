@@ -9,8 +9,8 @@ import UIKit
 import ZJMKit
 
 final class JMMeunPlayVIew: JMBookBaseView {
-    private let playControl = JMReadItemView()
-    private let playRate = JMReadItemView()
+    private let playControl = JMMenuItemView()
+    private let playRate = JMMenuItemView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +22,7 @@ final class JMMeunPlayVIew: JMBookBaseView {
     }
     
     /// 获取所有显示的Items
-    func allItems() -> [JMReadMenuItem] {
+    func allItems() -> [JMMenuItem] {
         return [playControl.models,playRate.models].flatMap { $0 }
     }
 

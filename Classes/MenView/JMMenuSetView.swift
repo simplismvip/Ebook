@@ -40,7 +40,7 @@ final class JMMenuSetView: JMBookBaseView {
     }
     
     /// 获取所有显示的Items
-    func allItems() -> [JMReadMenuItem] {
+    func allItems() -> [JMMenuItem] {
         return [pageFlip.bkgView.models, fontType.bkgView.models].flatMap { $0 }
     }
     
@@ -57,7 +57,7 @@ final class JMMenuSetView: JMBookBaseView {
 // MARK: -- 背景设置 --
 final class BkgColorView: JMBookBaseView {
     private let name = UILabel()
-    internal let bkgView = JMReadItemView()
+    internal let bkgView = JMMenuItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         name.text = "阅读背景"
@@ -157,7 +157,7 @@ final class FontSizeView: JMBookBaseView {
 // MARK: -- 翻页模式 --
 final class PageFlipView: JMBookBaseView {
     private let name = UILabel()
-    internal let bkgView = JMReadItemView()
+    internal let bkgView = JMMenuItemView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         name.text = "翻页设置"
@@ -195,7 +195,7 @@ final class PageFlipView: JMBookBaseView {
 // MARK: -- 字体类型 --
 final class FontTypeView: JMBookBaseView {
     private var name = UILabel()
-    internal let bkgView = JMReadItemView()
+    internal let bkgView = JMMenuItemView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

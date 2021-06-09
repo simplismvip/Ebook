@@ -9,7 +9,7 @@ import UIKit
 import ZJMKit
 import YYText
 
-class JMReadView: JMBookBaseView {
+class JMPageView: JMBookBaseView {
     let contentL = YYLabel()
     let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
     let selectView = YYTextSelectionView()
@@ -77,6 +77,6 @@ class JMReadView: JMBookBaseView {
     }
 }
 
-extension JMReadView: UIGestureRecognizerDelegate {
+extension JMPageView: UIGestureRecognizerDelegate {
     
 }

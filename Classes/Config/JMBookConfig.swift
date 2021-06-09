@@ -93,14 +93,14 @@ public class JMBookConfig {
     func codeConfig() {
         if let path = JMTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
-            JMModelStore.share.encodeObject(config, cachePath: fullpath)
+            JMBookStore.share.encodeObject(config, cachePath: fullpath)
         }
     }
     
     func deCodeConfig() {
         if let path = JMTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
-            JMModelStore.share.decodeObject(cachePath: fullpath) { (config: JMConfig?) in
+            JMBookStore.share.decodeObject(cachePath: fullpath) { (config: JMConfig?) in
                 if let config = config {
                     self.config = config
                 }

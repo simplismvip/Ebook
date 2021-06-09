@@ -1,5 +1,5 @@
 //
-//  JMModelStore.swift
+//  JMBookStore.swift
 //  JMEpubReader
 //
 //  Created by JunMing on 2021/4/15.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-public class JMModelStore {
+public class JMBookStore {
     private var queue = DispatchQueue(label: "com.search.cacheQueue")
-    public static let share: JMModelStore = {
-        return JMModelStore()
+    public static let share: JMBookStore = {
+        return JMBookStore()
     }()
     
     /// 归档模型

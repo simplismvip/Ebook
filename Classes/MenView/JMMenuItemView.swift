@@ -1,5 +1,5 @@
 //
-//  JMReadItemView.swift
+//  JMMenuItemView.swift
 //  JMEpubReader
 //
 //  Created by JunMing on 2021/3/29.
@@ -8,10 +8,10 @@
 import UIKit
 import ZJMKit
 
-final class JMReadItemView: JMBookBaseView {
+final class JMMenuItemView: JMBookBaseView {
     public var margin: CGFloat = 5
-    public var models = [JMReadMenuItem]()
-    final public func updateViews(_ items: [JMReadMenuItem]) {
+    public var models = [JMMenuItem]()
+    final public func updateViews(_ items: [JMMenuItem]) {
         self.models = items
         for (index, model) in items.enumerated() {
             let btn = UIButton(type: .custom)
@@ -51,7 +51,7 @@ final class JMReadItemView: JMBookBaseView {
         }
     }
     
-    func configItem(_ btn: UIButton, _ model: JMReadMenuItem) {
+    func configItem(_ btn: UIButton, _ model: JMMenuItem) {
         switch model.type {
         case .BkgColor:
             let colorStr = model.identify.rawValue

@@ -12,7 +12,7 @@ final class JMChapterContainer: JMBookBaseView {
     private let titleLabel = UILabel()
     private let chapterCount = UILabel()
     private let sortBtn = UIButton(type: .system)
-    private let switchView = JMReadItemView()
+    private let switchView = JMMenuItemView()
     private let chapter = JMChapterView()
     private let chapterTag = JMChapterTagView()
     private let bkgView = UIView()

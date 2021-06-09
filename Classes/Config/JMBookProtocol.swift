@@ -34,6 +34,6 @@ public protocol JMBookControlProtocol {
     func updateAllItemsBkg(config: JMBookConfig)
     func showWithType(type: JMMenuViewType)
     func hideWithType()
-    func findItem(_ menuStyle: JMMenuStyle) -> JMReadMenuItem?
+    func findItem(_ menuStyle: JMMenuStyle) -> JMMenuItem?
     func showChapter(items: [JMBookCharpter], title: String, currCharter: Int, bookId: String)
 }

@@ -10,7 +10,7 @@ import ZJMKit
 
 final class JMPageController: JMBaseController {
     private var currPage: JMBookPage?
-    private let pageView = JMReadView(frame: CGRect.zero)
+    private let pageView = JMPageView(frame: CGRect.zero)
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,8 +11,8 @@ import ZJMKit
 final class JMMenuLightView: JMBookBaseView {
     private let leftBtn = UIButton(type: .system)
     private let rightBtn = UIButton(type: .system)
-    private let bkgView = JMReadItemView()
-    private let bkgColor = JMReadItemView()
+    private let bkgView = JMMenuItemView()
+    private let bkgColor = JMMenuItemView()
     private var slider: UISlider = {
         let slider = UISlider()
         slider.thumbTintColor = .white
@@ -61,7 +61,7 @@ final class JMMenuLightView: JMBookBaseView {
     }
     
     /// 获取所有显示的Items
-    func allItems() -> [JMReadMenuItem] {
+    func allItems() -> [JMMenuItem] {
         return [bkgColor.models, bkgView.models].flatMap { $0 }
     }
     
