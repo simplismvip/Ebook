@@ -7,12 +7,14 @@
 
 import Foundation
 
-@objc public protocol JMReadProtocol {
+public protocol JMReadProtocol {
     /// 提供一个自定义页面展示自定义内容
     func currentReadVC(_ after: Bool) -> UIViewController?
+    // 控制层View
+    func menuControlView<T: JMBookControlProtocol>() -> T
 }
 
-@objc public protocol JMBookParserProtocol {
+public protocol JMBookParserProtocol {
     /// 提供一个自定义页面展示自定义内容
     func midReadPageVC(_ after: Bool) -> UIViewController?
     /// 开始打开图书
@@ -23,7 +25,7 @@ import Foundation
     func openBookFailed(_ desc: String)
 }
 
-@objc public protocol JMBookProtocol {
+public protocol JMBookProtocol {
     
 }
 

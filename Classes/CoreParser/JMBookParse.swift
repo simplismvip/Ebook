@@ -10,7 +10,7 @@ import ZJMKit
 
 // MARK: -- 解析图书类，这个类允许重写覆盖
 public class JMBookParse: NSObject {
-    public weak var delegate: JMBookParserProtocol?
+    public var delegate: JMBookParserProtocol?
     public let path: String // 图书路径
     public let pathUrl: URL // 图书URL
     public let bookType: JMBookType // 图书类型
@@ -82,7 +82,7 @@ public class JMBookParse: NSObject {
                 pageView.delegate = self
                 self.parserCallback?(pageView)
             }
-        } catch let error as NSError {
+        } catch let _ as NSError {
             DispatchQueue.main.async {
                 self.parseTxtBook()
                 // self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
@@ -92,6 +92,10 @@ public class JMBookParse: NSObject {
 }
 
 extension JMBookParse: JMReadProtocol {
+    public func menuControlView<T>() -> T where T : JMBookControlProtocol {
+        return JMBookControlView() as! T
+    }
+    
     public func currentReadVC(_ after: Bool) -> UIViewController? {
         return delegate?.midReadPageVC(after)
     }

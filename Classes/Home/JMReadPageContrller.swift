@@ -10,7 +10,7 @@ import ZJMKit
 import SnapKit
 
 public class JMReadPageContrller: JMBaseController {
-    public weak var delegate: JMReadProtocol?
+    public var delegate: JMReadProtocol?
     // 数据源
     private var dataSource = [JMReadController(), JMReadController()]
     let bookModel: JMBookModel

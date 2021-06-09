@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-public class JMBookControlView: JMBaseView {
+public class JMBookControlView: JMBaseView, JMBookControlProtocol {
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
     
