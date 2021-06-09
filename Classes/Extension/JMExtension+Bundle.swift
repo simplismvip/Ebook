@@ -10,7 +10,7 @@ import Foundation
 extension Bundle {
     /// 当前项目bundle
     static var bundle: Bundle {
-        return Bundle(for: JMReadPageContrller.self)
+        return Bundle(for: JMBookContrller.self)
     }
     
     /// 获取bundle中文件路径

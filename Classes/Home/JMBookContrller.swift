@@ -9,10 +9,9 @@ import UIKit
 import ZJMKit
 import SnapKit
 
-public class JMReadPageContrller: JMBaseController {
+public class JMBookContrller: JMBaseController {
     public weak var delegate: JMReadProtocol?
     // 数据源
-    private var dataSource = [JMReadController(), JMReadController()]
     let bookModel: JMBookModel
     let topLeft = JMReadItemView()
     let topRight = JMReadItemView()
@@ -87,8 +86,8 @@ public class JMReadPageContrller: JMBaseController {
     }
     
     private func setupFristPageView() {
-        if let page = bookModel.currPage(),
-           let pageView = useingPageView() {
+        if let page = bookModel.currPage() {
+            let pageView = useingPageView()
             pageView.loadPage(page)
             flipPage(pageView, direction: .reverse)
             initdatas()
@@ -98,13 +97,10 @@ public class JMReadPageContrller: JMBaseController {
     }
     
     // 点击自动处理翻页，上一页，下一页
-    private func nextPageView(_ isNext: Bool) -> JMReadController? {
+    private func nextPageView(_ isNext: Bool) -> JMPageController? {
         if let page = isNext ? bookModel.nextPage() : bookModel.prevPage() {
             let pageView = useingPageView()
-            pageView?.loadPage(page)
-            if pageView == nil {
-                print("😀😀😀 pageView为空")
-            }
+            pageView.loadPage(page)
             return pageView
         }else {
             print("😀😀😀After 字符长度为空")
@@ -113,13 +109,11 @@ public class JMReadPageContrller: JMBaseController {
     }
     
     // 查找正在使用的View
-    private func useingPageView(_ using: Bool = false) -> JMReadController? {
-        for pageView in dataSource {
-            if (pageVC?.viewControllers?.contains(pageView) ?? false) == using {
-                return pageView
-            }
-        }
-        return nil
+    private func useingPageView() -> JMPageController {
+        let pageViwe = JMPageController()
+        let color = bookModel.config.config.bkgColor
+        pageViwe.view.backgroundColor = UIColor.jmHexColor(color.rawValue)
+        return pageViwe
     }
 
     private func setupPageVC() {
@@ -149,7 +143,7 @@ public class JMReadPageContrller: JMBaseController {
     }
     
     // 翻页
-    private func flipPage(_ pageView: JMReadController, direction: UIPageViewController.NavigationDirection) {
+    private func flipPage(_ pageView: JMPageController, direction: UIPageViewController.NavigationDirection) {
         pageVC?.setViewControllers([pageView], direction: direction, animated: true, completion: nil)
         initdatas()
     }
@@ -162,9 +156,8 @@ public class JMReadPageContrller: JMBaseController {
             let text = String(targetPage.prefix(10))
             // 当前位置
             let cLoc = bookModel.currLocation(target: text)
-            if let page = bookModel.newPageLoc(location: cLoc, text: text),
-               let pageView = useingPageView(true) {
-                pageView.loadPage(page)
+            if let page = bookModel.newPageLoc(location: cLoc, text: text) {
+                useingPageView().loadPage(page)
             }
         }
     }
@@ -187,6 +180,7 @@ public class JMReadPageContrller: JMBaseController {
         // 保存当前进度
         JMBookDataBase.insertData(isTag: false, book: bookModel)
         bookModel.config.codeConfig()
+        speech.stop()
     }
     
     required init?(coder: NSCoder) {
@@ -199,7 +193,7 @@ public class JMReadPageContrller: JMBaseController {
 }
 
 // TODO: -- PageView Delegate --
-extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+extension JMBookContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let vc = delegate?.currentReadVC(false) {
@@ -236,7 +230,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
 }
 
 // TODO: -- Register Event --
-extension JMReadPageContrller {
+extension JMBookContrller {
     func registerMenuEvent() {
         jmRegisterEvent(eventName: kEventNameMenuActionTapAction, block: { [weak self](_) in
             if self?.currType == .ViewType_NONE {
@@ -333,9 +327,8 @@ extension JMReadPageContrller {
             } else if let charpterTag = value as? JMChapterTag {
                 // 当前位置
                 let cLoc = self?.bookModel.currLocation(target: charpterTag.text) ?? charpterTag.location
-                if let page = self?.bookModel.newPageLoc(location: cLoc, text: charpterTag.text),
-                   let pageView = self?.useingPageView(true) {
-                    pageView.loadPage(page)
+                if let page = self?.bookModel.newPageLoc(location: cLoc, text: charpterTag.text) {
+                    self?.useingPageView().loadPage(page)
                 }
             }
         }, next: false)
@@ -371,12 +364,11 @@ extension JMReadPageContrller {
             if let color = (item as? JMReadMenuItem)?.identify {
                 self?.bookModel.config.config.bkgColor = color
                 self?.reCalculationPage()
-                if let controllers = self?.dataSource {
-                    for vc in controllers {
-                        vc.view.backgroundColor = UIColor.jmHexColor(color.rawValue)
+                if let childVCS = self?.pageVC?.childViewControllers {
+                    for childVc in childVCS {
+                        childVc.view.backgroundColor = UIColor.jmHexColor(color.rawValue)
                     }
                 }
-                
                 if let config = self?.bookModel.config {
                     self?.updateAllItemsBkg(config: config)
                 }
@@ -426,10 +418,10 @@ extension JMReadPageContrller {
             if let speech = self?.speech {
                 if speech.play {
                     self?.speech.pause()
-                }else {
+                } else {
                     if speech.synthesizer.isPaused {
                         self?.speech.resume()
-                    }else {
+                    } else {
                         if let page = self?.bookModel.currPage() {
                             self?.speech.readImmediately(page, clear: false)
                         }
@@ -462,9 +454,9 @@ extension JMReadPageContrller {
         
         // 听书实时返回range刷新文字
         jmReciverMsg(msgName: kMsgNamePlayBookRefashText) { [weak self](msg) -> MsgObjc? in
-            if let characterRange = msg as? NSRange, let usePage = self?.useingPageView(true) {
+            if let characterRange = msg as? NSRange {
                 print(characterRange)
-                usePage.pageView.refreshText(range: characterRange)
+                self?.useingPageView().refresh(characterRange)
             }
             return nil
         }
@@ -472,12 +464,13 @@ extension JMReadPageContrller {
 }
 
 // MARK: -- 手动处理翻页，上一章/页，下一章/页。 --
-extension JMReadPageContrller {
+extension JMBookContrller {
     // 下一章节
     @discardableResult
     private func nextCharpter() -> Bool {
         hideWithType()
-        if let page = bookModel.nextCharpter(), let pageView = useingPageView() {
+        if let page = bookModel.nextCharpter() {
+            let pageView = useingPageView()
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
@@ -491,7 +484,8 @@ extension JMReadPageContrller {
     @discardableResult
     private func prevCharpter() -> Bool {
         hideWithType()
-        if let page = bookModel.prevCharpter(), let pageView = useingPageView() {
+        if let page = bookModel.prevCharpter() {
+            let pageView = useingPageView()
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
@@ -504,7 +498,8 @@ extension JMReadPageContrller {
     // 下一页
     @discardableResult
     private func nextPage() -> Bool {
-        if let page = bookModel.nextPage(), let pageView = useingPageView() {
+        if let page = bookModel.nextPage() {
+            let pageView = useingPageView()
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
@@ -517,7 +512,8 @@ extension JMReadPageContrller {
     // 上一页
     @discardableResult
     private func prevPage() -> Bool {
-        if let page = bookModel.prevPage(), let pageView = useingPageView() {
+        if let page = bookModel.prevPage() {
+            let pageView = useingPageView()
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true

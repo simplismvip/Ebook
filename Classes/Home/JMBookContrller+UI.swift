@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: -- Private Method, Setup views
-extension JMReadPageContrller {
+extension JMBookContrller {
     func loadDats() {
         let bottomItems: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
         let top_left: [JMReadMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
@@ -208,7 +208,7 @@ extension JMReadPageContrller {
     }
 }
 
-extension JMReadPageContrller {
+extension JMBookContrller {
     /// 展示
     func showWithType(type: JMMenuViewType) {
         self.currType = type
@@ -315,7 +315,7 @@ extension JMReadPageContrller {
     }
 }
 
-extension JMReadPageContrller {
+extension JMBookContrller {
     /// 通过style获取目标Item模型
     public func findItem(_ menuStyle: JMMenuStyle) -> JMReadMenuItem? {
         return [set.allItems(),light.allItems(),play.allItems(),bottom.models,topRight.models]

@@ -8,11 +8,11 @@
 import UIKit
 import ZJMKit
 
-final public class JMReadController: JMBaseController {
-    public var currPage: JMBookPage?
-    let pageView = JMReadView(frame: CGRect.zero)
+final class JMPageController: JMBaseController {
+    private var currPage: JMBookPage?
+    private let pageView = JMReadView(frame: CGRect.zero)
     
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         view.addSubview(pageView)
@@ -44,9 +44,14 @@ final public class JMReadController: JMBaseController {
         pageView.reDrewText(content: page.attribute)
         currPage = page
     }
+    
+    /// 设置当前页
+    public func refresh(_ range: NSRange) {
+        pageView.refreshText(range: range)
+    }
 }
 
-extension JMReadController: UIGestureRecognizerDelegate {
+extension JMPageController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let point = gestureRecognizer.location(in: gestureRecognizer.view)
         let s_width = UIScreen.main.bounds.size.width

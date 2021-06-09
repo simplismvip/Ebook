@@ -66,7 +66,7 @@ public extension UIView {
     }
 }
 
-public extension JMReadPageContrller {
+public extension JMBookContrller {
     func showLoading() {
         
     }

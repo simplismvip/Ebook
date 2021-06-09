@@ -15,7 +15,7 @@ public class JMBookParse: NSObject {
     public let pathUrl: URL // 图书URL
     public let bookType: JMBookType // 图书类型
     public let config: JMBookConfig // 配置
-    private var parserCallback: ((JMReadPageContrller)->())?
+    private var parserCallback: ((JMBookContrller)->())?
     
     public init(_ path: String, config: JMBookConfig? = nil) {
         self.path = path
@@ -41,7 +41,7 @@ public class JMBookParse: NSObject {
     }
     
     /// 开始读书
-    public func startRead(parser: @escaping (JMReadPageContrller)->()) {
+    public func startRead(parser: @escaping (JMBookContrller)->()) {
         self.parserCallback = parser
         delegate?.startOpeningBook("正在打开图书loading")
         DispatchQueue.global().async {
@@ -61,7 +61,7 @@ public class JMBookParse: NSObject {
             let epub = try JMEpubParser().parse(documentAt: pathUrl)
             let bookModel = JMBookModel(epub: epub, config: config)
             DispatchQueue.main.async {
-                let pageView = JMReadPageContrller(bookModel)
+                let pageView = JMBookContrller(bookModel)
                 pageView.delegate = self
                 self.parserCallback?(pageView)
             }
@@ -78,7 +78,7 @@ public class JMBookParse: NSObject {
             let txt = try JMTxtParser().parser(url: pathUrl)
             let bookModel = JMBookModel(txt: txt, config: config)
             DispatchQueue.main.async {
-                let pageView = JMReadPageContrller(bookModel)
+                let pageView = JMBookContrller(bookModel)
                 pageView.delegate = self
                 self.parserCallback?(pageView)
             }

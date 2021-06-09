@@ -32,8 +32,10 @@ class ViewController: UIViewController {
 
 extension ViewController: JMBookParserProtocol {
     func midReadPageVC(_ after: Bool) -> UIViewController? {
-        flipCount = after ? (flipCount + 1) : (flipCount - 1)
-        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
+        return nil
+        
+//        flipCount = after ? (flipCount + 1) : (flipCount - 1)
+//        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
     }
     
     func startOpeningBook(_ desc: String) {
