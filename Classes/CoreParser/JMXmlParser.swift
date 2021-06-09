@@ -22,7 +22,7 @@ public class JMXmlNode {
     }
 }
 
-public class JMXMLParser {
+public class JMXmlParser {
     public var xmlNodes = [JMXmlNode]()
     private var options = AEXMLOptions()
     private var baseHref: URL?

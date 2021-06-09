@@ -300,7 +300,7 @@ public class JMBookCharpter {
     /// 当前章节分页
     public var pages: [JMBookPage]?
     /// 解析器
-    public let parser = JMXMLParser()
+    public let parser = JMXmlParser()
     /// 当前章节
     public let location: JMBookIndex
     /// 配置文件
