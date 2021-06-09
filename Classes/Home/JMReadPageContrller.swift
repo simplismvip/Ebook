@@ -102,6 +102,9 @@ public class JMReadPageContrller: JMBaseController {
         if let page = isNext ? bookModel.nextPage() : bookModel.prevPage() {
             let pageView = useingPageView()
             pageView?.loadPage(page)
+            if pageView == nil {
+                print("😀😀😀 pageView为空")
+            }
             return pageView
         }else {
             print("😀😀😀After 字符长度为空")
@@ -171,7 +174,6 @@ public class JMReadPageContrller: JMBaseController {
         let router = JMRouter()
         jmSetAssociatedMsgRouter(router: router)
         speech.jmSetAssociatedMsgRouter(router: router)
-        
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -202,7 +204,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let vc = delegate?.currentReadVC(false) {
             return vc
-        }else {
+        } else {
             print("😀😀😀Before")
             return nextPageView(false)
         }
@@ -222,7 +224,7 @@ extension JMReadPageContrller: UIPageViewControllerDelegate, UIPageViewControlle
         if completed {
             print("😀😀😀completed")
             initdatas()
-        }else {
+        } else {
             hideWithType()
             print("😀😀😀completed none")
         }

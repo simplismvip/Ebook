@@ -7,7 +7,7 @@
 
 import ZJMKit
 
-class JMBookBaseView: JMBaseView {
+public class JMBookBaseView: JMBaseView {
     func changeBkgColor(config: JMBookConfig) {
         backgroundColor = config.subViewBkgColor()
     }

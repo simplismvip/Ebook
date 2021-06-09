@@ -27,3 +27,13 @@ import Foundation
     
 }
 
+/// Menu 控制层View
+public protocol JMBookControlProtocol {
+    func updateProgress(curr: Float, max: Float)
+    func updateItemStatus(config: JMBookConfig)
+    func updateAllItemsBkg(config: JMBookConfig)
+    func showWithType(type: JMMenuViewType)
+    func hideWithType()
+    func findItem(_ menuStyle: JMMenuStyle) -> JMReadMenuItem?
+    func showChapter(items: [JMBookCharpter], title: String, currCharter: Int, bookId: String)
+}
