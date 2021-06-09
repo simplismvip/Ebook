@@ -338,7 +338,7 @@ extension JMBookContrller {
     func tapActionSwitchMenu(_ x: CGFloat) {
         if x < s_width/4 {
             if currType == .ViewType_NONE {
-                print("点击左侧1/4翻页")
+                Logger.debug("点击左侧1/4翻页")
             }else {
                 hideWithType()
             }
@@ -351,7 +351,7 @@ extension JMBookContrller {
             setNeedsStatusBarAppearanceUpdate()
         }else {
             if currType == .ViewType_NONE {
-                print("点击右侧1/4翻页")
+                Logger.debug("点击右侧1/4翻页")
             }else {
                 hideWithType()
             }

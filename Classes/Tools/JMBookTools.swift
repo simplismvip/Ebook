@@ -68,3 +68,35 @@ public struct JMBookWapper<T: NSObject> {
         self.ident = ident
     }
 }
+
+typealias Logger = JMBookLogger
+public struct JMBookLogger {
+    enum Level: String {
+        case debug = "🐝🐝🐝 "
+        case info = "ℹ️ℹ️ℹ️ "
+        case warning = "⚠️⚠️⚠️ "
+        case error = "🆘🆘🆘 "
+    }
+    
+    static func debug(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+        JMBookLogger.eBookPrint(items, separator: separator, terminator: terminator, level: .debug)
+    }
+    
+    static func info(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+        JMBookLogger.eBookPrint(items, separator: separator, terminator: terminator, level: .info)
+    }
+    
+    static func warning(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+        JMBookLogger.eBookPrint(items, separator: separator, terminator: terminator, level: .warning)
+    }
+    
+    static func error(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+        JMBookLogger.eBookPrint(items, separator: separator, terminator: terminator, level: .error)
+    }
+    
+    private static func eBookPrint(_ items: Any..., separator: String = " ", terminator: String = "\n", level: Level){
+        #if DEBUG
+        print("\(level.rawValue)：\(items)", separator: separator, terminator: terminator)
+        #endif
+    }
+}

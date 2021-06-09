@@ -102,7 +102,7 @@ extension JMPageParse {
                 // 获取点在line行中的位置
                 let relativePoint = CGPoint(x: atPoint.x - rect.minX, y: atPoint.y - rect.maxY)
                 let idx = CTLineGetStringIndexForPosition(line, relativePoint);
-                print(idx)
+                Logger.debug(idx)
             }
         }
         return

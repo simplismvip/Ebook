@@ -210,7 +210,7 @@ extension JMBookModel {
             indexPath.page = 0
             return currPage()
         } else {
-            print("😀😀😀已读到最后一章节")
+            Logger.debug("😀😀😀已读到最后一章节")
             return nil
         }
         
@@ -223,7 +223,7 @@ extension JMBookModel {
             indexPath.page = 0
             return currPage()
         } else {
-            print("😀😀😀已回到第一章节")
+            Logger.debug("😀😀😀已回到第一章节")
             return nil
         }
     }
@@ -232,7 +232,7 @@ extension JMBookModel {
     func nextPage() -> JMBookPage? {
         if indexPath.chapter == contents.count - 1
             && indexPath.page == pageCount() - 1 {
-            print("😀😀😀已读到最后一页")
+            Logger.debug("😀😀😀已读到最后一页")
             return nil
         }else {
             if contents[indexPath.chapter].pages == nil {
@@ -255,7 +255,7 @@ extension JMBookModel {
     func prevPage() -> JMBookPage? {
         if indexPath.chapter == 0
             && indexPath.page == 0  {
-            print("😀😀😀已回到第一页")
+            Logger.debug("😀😀😀已回到第一页")
             return nil
         }else {
             if indexPath.page == 0 {
@@ -272,9 +272,9 @@ extension JMBookModel {
     
     subscript(indexPath: JMBookIndex) -> JMBookPage? {
         get {
-            print("😀😀😀: ------------------")
-            print(indexPath.descrtion())
-            print("😀😀😀: ------------------")
+            Logger.debug("😀😀😀: ------------------")
+            Logger.debug(indexPath.descrtion())
+            Logger.debug("😀😀😀: ------------------")
             if contents[indexPath.chapter].pages == nil {
                 contents[indexPath.chapter].countPages()
             }
@@ -395,7 +395,7 @@ public class JMBookIndex {
     }
     
     func descrtion() {
-        print("chapter:\(chapter) page:\(page)")
+        Logger.debug("chapter:\(chapter) page:\(page)")
     }
 }
 

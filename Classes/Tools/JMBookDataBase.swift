@@ -36,10 +36,10 @@ struct JMBookDataBase {
                 "text varchar(300))"
                 try db.executeUpdate(bookRate, values: nil)
             } catch {
-                print(db.lastErrorMessage())
+                Logger.error(db.lastErrorMessage())
             }
         } else {
-            print("🆘🆘🆘打开DB失败！")
+            Logger.error("🆘🆘🆘打开DB失败！")
         }
     }
     
@@ -56,7 +56,7 @@ struct JMBookDataBase {
                     JMBookDataBase.share.update(tableName: "bookRate", bookid: book.bookId, updateFieldName: "text", updateField: text)
                     let location = book.currLocation(target: text)
                     JMBookDataBase.share.update(tableName: "bookRate", bookid: book.bookId, updateFieldName: "location", updateField: location)
-                    print("⚠️⚠️⚠️更新表 bookRate")
+                    Logger.debug("⚠️⚠️⚠️更新表 bookRate")
                 } else {
                     let location = book.currLocation(target: text)
                     JMBookDataBase.share.insertData(isTag: isTag, name: book.title, bookid: book.bookId, charter: book.indexPath.chapter, location: location, text: text)
@@ -69,12 +69,12 @@ struct JMBookDataBase {
     func insertData(isTag: Bool, name: String, bookid: String, charter: Int, location: Int, text: String) {
         if isTag {
             if isFieldExistsForTag(text: text) {
-                print("⚠️⚠️⚠️表bookCharterTag已经存在")
+                Logger.debug("⚠️⚠️⚠️表bookCharterTag已经存在")
                 return
             }
         }else {
             if isFieldExistsForRate(bookid) {
-                print("⚠️⚠️⚠️表bookRate已经存在")
+                Logger.debug("⚠️⚠️⚠️表bookRate已经存在")
                 return
             }
         }
@@ -86,7 +86,7 @@ struct JMBookDataBase {
             let values = [name, bookid, charter, location, text, timeStr] as [Any]
             try db.executeUpdate(insetSql, values: values)
         }catch {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
         }
     }
     
@@ -104,7 +104,7 @@ struct JMBookDataBase {
                 }
             }
         } catch {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
         }
         return tempArray
     }
@@ -122,7 +122,7 @@ struct JMBookDataBase {
                 }
             }
         } catch {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
         }
         
         return nil
@@ -134,7 +134,7 @@ struct JMBookDataBase {
         if let set = try? db.executeQuery(sql, values: nil), set.next() {
             return true
         } else {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
             return false
         }
     }
@@ -145,7 +145,7 @@ struct JMBookDataBase {
         if let set = try? db.executeQuery(sql, values: nil), set.next() {
             return true
         } else {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
             return false
         }
     }
@@ -156,7 +156,7 @@ struct JMBookDataBase {
             let deleteSql = "DELETE FROM \(tableName) WHERE bookid = ?"
             try db.executeUpdate(deleteSql, values: [bookid])
         } catch {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
         }
     }
     
@@ -165,7 +165,7 @@ struct JMBookDataBase {
         do{
             try db.executeUpdate("UPDATE \(tableName) SET \(updateFieldName) = ? where bookid = ?", values: [updateField, bookid])
         } catch {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
         }
     }
 
@@ -174,7 +174,7 @@ struct JMBookDataBase {
         do{
             try db.executeUpdate("truncate table localEpubInfo", values: nil)
         } catch {
-            print(db.lastErrorMessage())
+            Logger.debug(db.lastErrorMessage())
         }
     }
 }

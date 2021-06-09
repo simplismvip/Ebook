@@ -61,9 +61,8 @@ final class JMMenuItemView: JMBookBaseView {
         case .CharterTag:
             btn.setTitleColor(model.isSelect ? config.selectColor() : config.textColor(), for: .normal)
             btn.titleLabel?.font = model.isSelect ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
-
         default:
-            print("")
+            Logger.debug("")
         }
     }
     
@@ -127,7 +126,7 @@ final class JMMenuItemView: JMBookBaseView {
                 btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
             }
         default:
-            print("")
+            Logger.debug("")
         }
     }
     

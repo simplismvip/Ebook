@@ -20,7 +20,7 @@ public class JMBookStore {
                 let data = try PropertyListEncoder().encode(object)
                 NSKeyedArchiver.archiveRootObject(data, toFile: cachePath)
             }catch let error {
-                print("data cache \(error.localizedDescription)!!!⚽️⚽️⚽️")
+                Logger.debug("data cache \(error.localizedDescription)!!!⚽️⚽️⚽️")
             }
         }
     }
@@ -37,7 +37,7 @@ public class JMBookStore {
                 let object = try PropertyListDecoder().decode(T.self, from: data)
                 DispatchQueue.main.async { complate(object) }
             }catch let error {
-                print("data cache \(error.localizedDescription)!!!⚽️⚽️⚽️")
+                Logger.debug("data cache \(error.localizedDescription)!!!⚽️⚽️⚽️")
             }
         }
     }

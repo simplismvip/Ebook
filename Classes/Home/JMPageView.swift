@@ -38,7 +38,7 @@ class JMPageView: JMBookBaseView {
         }
         
         contentL.highlightTapAction = { view, text, range, rect in
-            print(text.string)
+            Logger.debug(text.string)
         }
         gadView.backgroundColor = UIColor.jmRandColor
     }

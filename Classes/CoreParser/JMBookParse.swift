@@ -51,7 +51,7 @@ public class JMBookParse: NSObject {
             } else if self.bookType == .Txt {
                 self.parseTxtBook()
             } else {
-                print("❗️❗️❗️暂不支持格式")
+                Logger.error("❗️❗️❗️暂不支持格式")
             }
         }
     }

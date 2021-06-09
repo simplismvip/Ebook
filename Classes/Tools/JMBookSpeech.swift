@@ -54,7 +54,7 @@ final public class JMBookSpeech: NSObject {
         do {
             try audioSession.setActive(true)
         } catch  {
-            print("error")
+            Logger.error("error")
         }
     }
     
@@ -66,7 +66,7 @@ final public class JMBookSpeech: NSObject {
             synthesizer.speak(utterance)
         } else {
             play = false
-            print("播放完成")
+            Logger.error("播放完成")
         }
     }
     
@@ -100,13 +100,13 @@ extension JMBookSpeech: AVSpeechSynthesizerDelegate {
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
 //        jmSendMsg(msgName: kMsgNamePlayBookRefashText, info: characterRange as MsgObjc)
         let rangeStr = utterance.attributedSpeechString.attributedSubstring(from: characterRange)
-//        print(utterance.attributedSpeechString)
-//        print(characterRange)
-        print(rangeStr)
+//        Logger.debug(utterance.attributedSpeechString)
+//        Logger.debug(characterRange)
+        Logger.debug(rangeStr)
     }
     
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
-        print("didStart")
+        Logger.debug("didStart")
         play = true
     }
     

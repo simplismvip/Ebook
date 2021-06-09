@@ -41,7 +41,7 @@ public class JMXmlParser {
                 parserXml(child: child)
             }
         } catch {
-            print("🆘🆘🆘 解析XML出错\(error)")
+            Logger.error("解析XML出错\(error)")
         }
     }
 
@@ -53,7 +53,7 @@ public class JMXmlParser {
             }
         }else {
             if let value = child.value, value.count > 0 {
-                // print(child.name, value)
+                // Logger.debug(child.name, value)
                 // 如果上一段落是文本没必要新建模型，直接拼接到上一个模型上去
                 // 因为某些文本文件有大量短段落，每段都生成属性字符串时会导致内存问题
                 if let prevNode = xmlNodes.last, prevNode.tag != "img", !prevNode.media {
@@ -64,10 +64,10 @@ public class JMXmlParser {
             }else {
                 if child.name == "img", let src = child.attributes["src"] {
                     xmlNodes.append(JMXmlNode("img",src))
-                    // print(child.name,src)
+                    // Logger.debug(child.name,src)
                 }else if child.name == "image", let src = child.attributes["xlink:href"] {
                     xmlNodes.append(JMXmlNode("img", src))
-                    // print(child.attributes)
+                    // Logger.debug(child.attributes)
                 }
             }
         }
