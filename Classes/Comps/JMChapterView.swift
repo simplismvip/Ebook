@@ -80,7 +80,7 @@ extension JMChapterView: UITableViewDelegate, UITableViewDataSource  {
         var cell = tableView.dequeueReusableCell(withIdentifier: "kReuseCellIdentifier")
         if cell == nil { cell = JMBookChapterCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMBookChapterCell
-        newCell.setup(dataSource[indexPath.row], currCharter, config: config)
+        newCell.setup(dataSource[indexPath.row], currCharter)
         return newCell
     }
     
@@ -101,14 +101,15 @@ class JMBookChapterCell: JMBaseTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor.menuBkg
+        
         selectionStyle = .none
         index.lineBreakMode = .byWordWrapping
         index.numberOfLines = 0
         index.translatesAutoresizingMaskIntoConstraints = false
-        index.textColor = UIColor.charterTextColor
+        
         index.font = UIFont.jmAvenir(15)
-        lock.jmConfigLabel(alig: .right, font: .jmAvenir(12), color: .gray)
+        lock.font = UIFont.jmAvenir(12)
+        lock.textAlignment = .right
         
         contentView.addSubview(index)
         contentView.addSubview(lock)
@@ -127,17 +128,19 @@ class JMBookChapterCell: JMBaseTableViewCell {
         }
     }
 
-    func setup(_ item: JMBookCharpter, _ currCharter: Int, config: JMBookConfig?) {
+    func setup(_ item: JMBookCharpter, _ currCharter: Int) {
         index.text = item.charpTitle
         lock.text = "免费"
-        if item.location.chapter == currCharter {
-            index.textColor = config?.selectColor()
-        }else {
-            index.textColor = config?.textColor()
-        }
         
-        lock.textColor = config?.textColor()
-        backgroundColor = config?.subViewColor()
+        let config = JMBookCache.config()
+        lock.textColor = config.textColor()
+        backgroundColor = config.subViewColor()
+        
+        if item.location.chapter == currCharter {
+            index.textColor = config.selectColor()
+        }else {
+            index.textColor = config.textColor()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }

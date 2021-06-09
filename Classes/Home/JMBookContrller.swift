@@ -481,7 +481,7 @@ extension JMBookContrller {
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
-        }else {
+        } else {
             JMTextToast.share.jmShowString(text: "已经是最后一章", seconds: 1)
             return false
         }
@@ -496,7 +496,7 @@ extension JMBookContrller {
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
-        }else {
+        } else {
             JMTextToast.share.jmShowString(text: "已经是第一章", seconds: 1)
             return false
         }
@@ -510,7 +510,7 @@ extension JMBookContrller {
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
-        }else {
+        } else {
             JMTextToast.share.jmShowString(text: "已经是最后一页", seconds: 1)
             return false
         }
@@ -524,7 +524,7 @@ extension JMBookContrller {
             pageView.loadPage(page)
             flipPage(pageView, direction: .forward)
             return true
-        }else {
+        } else {
             JMTextToast.share.jmShowString(text: "已经是最后一页", seconds: 1)
             return false
         }

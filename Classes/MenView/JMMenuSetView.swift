@@ -10,9 +10,9 @@ import ZJMKit
 import SnapKit
 
 final class JMMenuSetView: JMBookBaseView {
-    let fontSize = FontSizeView()
-    let pageFlip = PageFlipView()
-    let fontType = FontTypeView()
+    internal let fontSize = FontSizeView()
+    private let pageFlip = PageFlipView()
+    private let fontType = FontTypeView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

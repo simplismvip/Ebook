@@ -76,7 +76,7 @@ extension JMChapterTagView: UITableViewDelegate, UITableViewDataSource  {
         var cell = tableView.dequeueReusableCell(withIdentifier: "kReuseCellIdentifier")
         if cell == nil { cell = JMChapterTagCell(style: .default, reuseIdentifier: "kReuseCellIdentifier") }
         let newCell = cell as! JMChapterTagCell
-        newCell.setup(dataSource[indexPath.row], config: config)
+        newCell.setup(dataSource[indexPath.row])
         return newCell
     }
     
@@ -95,10 +95,12 @@ class JMChapterTagCell: JMBaseTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
+        
         textL.numberOfLines = 0
-        textL.jmConfigLabel(font: .jmAvenir(15), color: UIColor.charterTextColor)
-        timeL.jmConfigLabel(alig: .right, font: .jmAvenir(12), color: .gray)
-        charter.jmConfigLabel(font: .jmAvenir(12), color: .gray)
+        timeL.textAlignment = .right
+        textL.font = UIFont.jmAvenir(15)
+        timeL.font = UIFont.jmAvenir(12)
+        charter.font = UIFont.jmAvenir(12)
         
         contentView.addSubview(charter)
         contentView.addSubview(textL)
@@ -124,15 +126,16 @@ class JMChapterTagCell: JMBaseTableViewCell {
         }
     }
 
-    func setup(_ item: JMChapterTag, config: JMBookConfig?) {
+    func setup(_ item: JMChapterTag) {
+        let config = JMBookCache.config()
         textL.text = item.text
         timeL.text = item.timeStr.jmFormatTspString("yyyy/MM/dd HH:mm:ss")
         charter.text = "第\(item.charter)章"
         
-        textL.textColor = config?.textColor()
-        timeL.textColor = config?.textColor()
-        charter.textColor = config?.textColor()
-        backgroundColor = config?.subViewColor()
+        textL.textColor = config.textColor()
+        timeL.textColor = config.textColor()
+        charter.textColor = config.textColor()
+        backgroundColor = config.subViewColor()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️") }
