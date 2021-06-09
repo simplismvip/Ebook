@@ -6,7 +6,7 @@
 
 ## 项目截图
 
-## ![001](/Users/jl/Desktop/EPUB/JMEpubReader/Images/001.png)
+## ![001](./Images/001.png)
 
 ## 支持特性
 
