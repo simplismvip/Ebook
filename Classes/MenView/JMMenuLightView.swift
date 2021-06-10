@@ -18,13 +18,11 @@ final class JMMenuLightView: JMBookBaseView {
         slider.thumbTintColor = .white
         slider.minimumValue = 0
         slider.maximumValue = 1
-        slider.value = Float(UIScreen.main.brightness)
         return slider
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.menuBkg
         addSubview(leftBtn)
         addSubview(rightBtn)
         addSubview(slider)
@@ -32,31 +30,34 @@ final class JMMenuLightView: JMBookBaseView {
         addSubview(bkgColor)
         layoutViews()
         
+        slider.value = Float(JMBookCache.config().brightness())
         leftBtn.setImage("epub_light-null".image, for: .normal)
         rightBtn.setImage("epub_light-full".image, for: .normal)
-        leftBtn.tintColor = UIColor.menuTintColor
-        rightBtn.tintColor = UIColor.menuTintColor
         
         bkgView.margin = 50
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
         bkgColor.margin = 0
         bkgColor.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
         
-        slider.addTarget(self, action: #selector(startSlider(_:)), for: .touchUpInside)
+        slider.addTarget(self, action: #selector(startSlider(_:)), for: .valueChanged)
+        slider.addTarget(self, action: #selector(startSliderEnd(_:)), for: .touchUpInside)
         
         jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](_) in
-            UIScreen.main.brightness = 0.5
-            self?.slider.value = 0.5
-        }, next: false)
+            self?.slider.value = 1.0
+        }, next: true)
         
         jmRegisterEvent(eventName: kEventNameMenuBrightnessCareEye, block: { [weak self](_) in
-            UIScreen.main.brightness = 0.3
-            self?.slider.value = 0.3
-        }, next: false)
+            self?.slider.value = 0.7
+        }, next: true)
     }
     
     @objc func startSlider(_ slider: UISlider) {
-        UIScreen.main.brightness = CGFloat(slider.value)
+        let brightness = CGFloat(slider.value)
+        jmRouterEvent(eventName: kEventNameMenuActionBrightSliderValue, info: brightness as MsgObjc)
+    }
+    
+    @objc func startSliderEnd(_ slider: UISlider) {
+        jmRouterEvent(eventName: kEventNameMenuActionBrightSliderEnd, info: nil)
     }
     
     /// 获取所有显示的Items
@@ -97,15 +98,6 @@ final class JMMenuLightView: JMBookBaseView {
             make.top.equalTo(bkgColor.snp.bottom).offset(20)
         }
     }
-    
-    override func changeBkgColor(config: JMBookConfig) {
-        super.changeBkgColor(config: config)
-        bkgView.refreshViews()
-        leftBtn.tintColor = config.tintColor()
-        rightBtn.tintColor = config.tintColor()
-        slider.minimumTrackTintColor = config.selectColor()
-        slider.maximumTrackTintColor = config.textColor()
-    }
-    
+
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }

@@ -11,7 +11,6 @@ import ZJMKit
 final class JMPageController: JMBaseController {
     private var currPage: JMBookPage?
     private let pageView = JMPageView(frame: CGRect.zero)
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -63,5 +62,3 @@ extension JMPageController: UIGestureRecognizerDelegate {
         }
     }
 }
-
-

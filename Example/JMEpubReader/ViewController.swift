@@ -114,6 +114,6 @@ class JMEpubViewController: UIViewController {
 
 struct Toast {
     static func toast(_ text: String) {
-        JMTextToast.share.jmShowString(text: text, seconds: 2)
+        JMBookToast.toast(text)
     }
 }

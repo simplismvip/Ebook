@@ -53,12 +53,6 @@ final class JMMeunPlayVIew: JMBookBaseView {
         playRate.updateViews(JMJsonParse.parseJson(name: "menu_playrate"))
     }
     
-    override func changeBkgColor(config: JMBookConfig) {
-        super.changeBkgColor(config: config)
-        playControl.refreshViews()
-        playRate.refreshViews()
-    }
-    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 
 }

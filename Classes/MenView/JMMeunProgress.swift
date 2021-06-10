@@ -44,11 +44,8 @@ class JMMeunProgress: JMBookBaseView {
             make.centerY.equalTo(rightBtn.snp.centerY)
         }
         
-        backgroundColor = UIColor.menuBkg
         leftBtn.setImage("book_progress_left".image, for: .normal)
         rightBtn.setImage("book_progress_right".image, for: .normal)
-        leftBtn.tintColor = UIColor.menuTintColor
-        rightBtn.tintColor = UIColor.menuTintColor
         slider.addTarget(self, action: #selector(touchSliderStart(_:)), for: .valueChanged)
         slider.addTarget(self, action: #selector(touchSliderEnd(_:)), for: .touchUpInside)
         
@@ -81,5 +78,6 @@ class JMMeunProgress: JMBookBaseView {
             slider.maximumValue = max
         }
     }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }

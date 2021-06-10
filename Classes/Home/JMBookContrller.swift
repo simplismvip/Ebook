@@ -24,10 +24,9 @@ public class JMBookContrller: JMBaseController {
     let topContainer = UIView() // 亮度
     let bottomContainer = UIView() // 亮度
     let chapter = JMChapterContainer() // 左侧目录
-    
+    let maskView = JMBookMaskView()
     let bookTitle = JMBookTitleView() // 标题
     let battery = JMBatteryView() // 电池
-    let toast = JMMenuToastView() // toast
     let margin: CGFloat = 10
     let s_width = UIScreen.main.bounds.size.width
     
@@ -68,10 +67,16 @@ public class JMBookContrller: JMBaseController {
         setupFristPageView()
         registerMenuEvent()
         registerSubMenuEvent()
+        registerLightMenuEvent()
         registerEventPlay()
         registerJumpEvent()
         updateProgress()
         updateItemStatus()
+        maskView.brightness(bookModel.config.brightness())
+        view.addSubview(maskView)
+        maskView.snp.makeConstraints { (make) in
+            make.edges.equalTo(view)
+        }
     }
     
     private func initdatas() {
@@ -269,9 +274,7 @@ extension JMBookContrller {
         
         jmRegisterEvent(eventName: kEventNameMenuActionAddTag, block: { [weak self](_) in
             if let book = self?.bookModel {
-                self?.toast.updateToast("添加书签成功")
-                self?.toast.isHidden = false
-                self?.toast.remove()
+                JMBookToast.toast("添加书签成功",delay: 1)
                 JMBookDataBase.insertData(isTag: true, book: book)
             }
         }, next: false)
@@ -305,7 +308,7 @@ extension JMBookContrller {
         
         // 滑动滑杆修改字体
         jmRegisterEvent(eventName: kEventNameMenuFontSizeSlider, block: { [weak self](value) in
-            self?.toast.isHidden = true
+            JMBookToast.hide()
             self?.reCalculationPage()
         }, next: false)
         
@@ -352,7 +355,7 @@ extension JMBookContrller {
         
         // 滑动滑杆跳到指定页数
         jmRegisterEvent(eventName: kEventNameMenuActionTargetCharpter, block: { [weak self](value) in
-            self?.toast.isHidden = true
+            JMBookToast.hide()
             if let pageIndex = value as? Int {
                 self?.hideWithType()
                 self?.bookModel.indexPath.page = pageIndex
@@ -360,6 +363,32 @@ extension JMBookContrller {
                    let pageView = self?.useingPageView() {
                     pageView.loadPage(page)
                     self?.flipPage(pageView, direction: .forward)
+                }
+            }
+        }, next: false)
+    }
+    
+    func registerLightMenuEvent() {
+        jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](_) in
+            self?.maskView.brightness(1.0)
+        }, next: false)
+        
+        jmRegisterEvent(eventName: kEventNameMenuBrightnessCareEye, block: { [weak self](_) in
+            self?.maskView.brightness(0.7)
+        }, next: false)
+        
+        jmRegisterEvent(eventName: kEventNameMenuActionBrightSliderValue, block: { [weak self](value) in
+            if let brightness = value as? CGFloat {
+                self?.maskView.brightness(brightness)
+            }
+        }, next: false)
+        
+        jmRegisterEvent(eventName: kEventNameMenuActionBrightSliderEnd, block: { [weak self](_) in
+            if let items = self?.light.allItems() {
+                for item in items {
+                    if item.identify == .PLightSys || item.identify == .PLightCus {
+                        item.isSelect = false
+                    }
                 }
             }
         }, next: false)
@@ -399,12 +428,10 @@ extension JMBookContrller {
         // 修改字体大小
         jmRegisterEvent(eventName: kEventNameMenuSliderValueChange, block: { [weak self](value) in
             if let fontSize = value as? CGFloat {
-                self?.toast.updateToast(("字体大小\(Int(fontSize))"))
-                self?.toast.isHidden = false
+                JMBookToast.toast(("字体大小\(Int(fontSize))"))
                 self?.bookModel.config.config.fontSize = fontSize
             } else if let toastText = value as? String {
-                self?.toast.updateToast(toastText)
-                self?.toast.isHidden = false
+                JMBookToast.toast(toastText)
             }
         }, next: false)
         
@@ -453,9 +480,9 @@ extension JMBookContrller {
         
         // 播放下一页（发送msg）
         jmReciverMsg(msgName: kMsgNamePlayBookEnd) { [weak self](_) -> MsgObjc? in
-            if let next = self?.nextPage(), next, let page = self?.bookModel.currPage() {
-                self?.speech.readImmediately(page, clear: false)
-            }
+//            if let next = self?.nextPage(), next, let page = self?.bookModel.currPage() {
+//                self?.speech.readImmediately(page, clear: false)
+//            }
             return nil
         }
         

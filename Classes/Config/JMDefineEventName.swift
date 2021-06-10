@@ -53,6 +53,8 @@ public let kEventNameMenuBrightnessSystem = "kEventNameMenuBrightnessSystem"
 public let kEventNameMenuBrightnessCareEye = "kEventNameMenuBrightnessCareEye"
 /// 亮度滑杆
 public let kEventNameMenuActionBrightSliderValue = "kEventNameMenuActionBrightSliderValue"
+/// 亮度滑杆结束
+public let kEventNameMenuActionBrightSliderEnd = "kEventNameMenuActionBrightSliderEnd"
 /// 设置更多
 public let kEventNameMenuActionSettingMore = "kEventNameMenuActionSettingMore"
 

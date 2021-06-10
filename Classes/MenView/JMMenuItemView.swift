@@ -8,7 +8,7 @@
 import UIKit
 import ZJMKit
 
-final class JMMenuItemView: JMBookBaseView {
+final class JMMenuItemView: JMBaseView {
     public var margin: CGFloat = 5
     public var models = [JMMenuItem]()
     
@@ -74,7 +74,7 @@ final class JMMenuItemView: JMBookBaseView {
             btn.layer.cornerRadius = 15
             btn.backgroundColor = UIColor(rgba: colorStr)
             model.didSelectAction = { select in
-                btn.layer.borderWidth = select ? 1 : 0
+                btn.layer.borderWidth = select ? 2 : 0
                 btn.layer.borderColor = UIColor.menuTintColor.cgColor
             }
             
@@ -83,11 +83,9 @@ final class JMMenuItemView: JMBookBaseView {
             btn.setTitleColor(config.textColor(), for: .normal)
             btn.titleLabel?.font = UIFont.jmRegular(10)
             btn.setImage(model.image?.image, for: .normal)
-//            btn.tintColor = config.tintColor()
             
         case .TopLeft, .TopRight:
             btn.setImage(model.image?.image, for: .normal)
-//            btn.tintColor = config.tintColor()
             
         case .PageFont, .PageFlip, .PlayRate, .PlayStyle:
             btn.setTitleColor(config.textColor(), for: .normal)
@@ -109,7 +107,6 @@ final class JMMenuItemView: JMBookBaseView {
             }
             
         case .PlayOrPause:
-//            btn.tintColor = config.tintColor()
             btn.setImage(model.image?.image, for: .normal)
             if model.identify == .PlayOrPause {
                 model.didSelectAction = { select in

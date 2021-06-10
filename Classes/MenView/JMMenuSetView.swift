@@ -84,12 +84,6 @@ final class BkgColorView: JMBookBaseView {
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
     }
     
-    override func changeBkgColor(config: JMBookConfig) {
-        super.changeBkgColor(config: config)
-        name.textColor = config.textColor()
-        bkgView.refreshViews()
-    }
-    
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
@@ -147,12 +141,6 @@ final class FontSizeView: JMBookBaseView {
         }
     }
     
-    override func changeBkgColor(config: JMBookConfig) {
-        super.changeBkgColor(config: config)
-        name.textColor = config.textColor()
-        slider.minimumTrackTintColor = config.selectColor()
-        slider.maximumTrackTintColor = config.textColor()
-    }
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
 }
 
@@ -184,12 +172,6 @@ final class PageFlipView: JMBookBaseView {
         }
         bkgView.margin = 10
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_flip_type"))
-    }
-    
-    override func changeBkgColor(config: JMBookConfig) {
-        super.changeBkgColor(config: config)
-        name.textColor = config.textColor()
-        bkgView.refreshViews()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -224,12 +206,6 @@ final class FontTypeView: JMBookBaseView {
         }
         bkgView.margin = 10
         bkgView.updateViews(JMJsonParse.parseJson(name: "menu_font_type"))
-    }
-
-    override func changeBkgColor(config: JMBookConfig) {
-        super.changeBkgColor(config: config)
-        name.textColor = config.textColor()
-        bkgView.refreshViews()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }

@@ -44,7 +44,7 @@ extension JMBookContrller {
     func setupviews() {
         set.fontSize.updateFontValue(value: Float(bookModel.config.fontSize()))
         chapter.isHidden = true
-        toast.isHidden = true
+        JMBookToast.hide()
         view.addSubview(bookTitle)
         bookTitle.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
@@ -98,7 +98,6 @@ extension JMBookContrller {
         view.addSubview(set)
         view.addSubview(light)
         view.addSubview(play)
-        view.addSubview(toast)
         
         chapter.snp.makeConstraints { (make) in
             make.edges.equalTo(view)
@@ -140,13 +139,6 @@ extension JMBookContrller {
             make.height.equalTo(94)
             make.bottom.equalTo(view.snp.bottom).offset(94)
         }
-        
-        toast.snp.makeConstraints { (make) in
-            make.width.equalTo(260)
-            make.height.equalTo(54)
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
-        }
     }
     
     /// 更新阅读进度
@@ -176,6 +168,14 @@ extension JMBookContrller {
                 item.isSelect = true
                 jmRouterEvent(eventName: kEventNameMenuPageBkgColor, info: item)
             }
+            
+            if (config.brightness() == 0.7) && (item.identify == .PLightCus) {
+                item.isSelect = true
+            }
+            
+            if (config.brightness() == 1.0) && (item.identify == .PLightSys) {
+                item.isSelect = true
+            }
         }
         
         for item in play.allItems() {
@@ -193,10 +193,6 @@ extension JMBookContrller {
         topContainer.backgroundColor = config.subViewColor()
         bottomContainer.backgroundColor = config.subViewColor()
         
-        bottom.changeBkgColor(config: config)
-        topLeft.changeBkgColor(config: config)
-        topRight.changeBkgColor(config: config)
-        
         play.changeBkgColor(config: config)
         light.changeBkgColor(config: config)
         
@@ -204,6 +200,7 @@ extension JMBookContrller {
         chapter.changeBkgColor(config: config)
         bookTitle.changeBkgColor(config: config)
         battery.changeBkgColor(config: config)
+        progress.changeBkgColor(config: config)
         
         bottom.refreshViews()
         topLeft.refreshViews()
