@@ -93,18 +93,24 @@ public class JMBookConfig {
     func codeConfig() {
         if let path = JMTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
-            JMBookStore.share.encodeObject(config, cachePath: fullpath)
+            JMBookStore.encodeObject(config, cachePath: fullpath)
         }
     }
     
     func deCodeConfig() {
+        Logger.debug("++++++++ start Decode")
         if let path = JMTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
-            JMBookStore.share.decodeObject(cachePath: fullpath) { (config: JMConfig?) in
+            JMBookStore.decodeMain(cachePath: fullpath) { (config: JMConfig?) in
                 if let config = config {
+                    Logger.debug("++++++++ Decoding")
                     self.config = config
+                } else {
+                    Logger.debug("++++++++ Decode Error")
                 }
             }
+        } else {
+            Logger.debug("++++++++ Decode Error")
         }
     }
 }
@@ -185,7 +191,11 @@ class JMConfig: Codable {
     /// 翻页类型
     var flipType: JMMenuStyle
     /// 亮度
-    var brightness: CGFloat
+    var brightness: CGFloat {
+        willSet {
+            Logger.debug("++++++++ =======\(newValue)")
+        }
+    }
     /// 播放状态
     var playStatus: JMMenuStyle
     /// 播放速率
@@ -202,6 +212,6 @@ class JMConfig: Codable {
         self.playStatus = .nonetype
         self.playRate = .PlayRate1
         self.width = UIScreen.main.bounds.size.width - 40
-        self.brightness = UIScreen.main.brightness
+        self.brightness = 1.0
     }
 }

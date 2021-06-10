@@ -272,9 +272,7 @@ extension JMBookModel {
     
     subscript(indexPath: JMBookIndex) -> JMBookPage? {
         get {
-            Logger.debug("😀😀😀: ------------------")
-            Logger.debug(indexPath.descrtion())
-            Logger.debug("😀😀😀: ------------------")
+            indexPath.descrtion()
             if contents[indexPath.chapter].pages == nil {
                 contents[indexPath.chapter].countPages()
             }

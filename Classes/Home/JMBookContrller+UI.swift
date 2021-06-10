@@ -144,8 +144,8 @@ extension JMBookContrller {
     /// 更新阅读进度
     func updateProgress() {
         if let pages = bookModel.currCharpter()?.pages {
-            let max = Float(pages.count)
-            let curr = Float(bookModel.indexPath.page + 1)
+            let max = Float(pages.count - 1)
+            let curr = Float(bookModel.indexPath.page)
             progress.setSlider(max: max, curr: curr)
         }
     }

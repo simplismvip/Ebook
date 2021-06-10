@@ -44,15 +44,21 @@ final class JMMenuLightView: JMBookBaseView {
         
         jmRegisterEvent(eventName: kEventNameMenuBrightnessSystem, block: { [weak self](_) in
             self?.slider.value = 1.0
+            JMBookCache.config().config.brightness = 1.0
+            Logger.debug("++++++++ 1.0")
         }, next: true)
         
         jmRegisterEvent(eventName: kEventNameMenuBrightnessCareEye, block: { [weak self](_) in
             self?.slider.value = 0.7
+            JMBookCache.config().config.brightness = 0.7
+            Logger.debug("++++++++ 0.7")
         }, next: true)
     }
     
     @objc func startSlider(_ slider: UISlider) {
         let brightness = CGFloat(slider.value)
+        JMBookCache.config().config.brightness = brightness
+        Logger.debug("++++++++ \(brightness)")
         jmRouterEvent(eventName: kEventNameMenuActionBrightSliderValue, info: brightness as MsgObjc)
     }
     

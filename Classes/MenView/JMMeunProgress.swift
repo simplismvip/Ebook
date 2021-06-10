@@ -15,7 +15,6 @@ class JMMeunProgress: JMBookBaseView {
         let slider = UISlider()
         slider.thumbTintColor = .white
         slider.minimumValue = 0
-        slider.value = Float(UIScreen.main.brightness)
         slider.minimumTrackTintColor = UIColor.jmRGB(174, 119, 255)
         return slider
     }()
