@@ -8,11 +8,11 @@
 import UIKit
 import ZJMKit
 
-struct JMChapterTag {
-    var text: String
-    var timeStr: String
-    var charter: Int = 0
-    var location: Int = 0
+public struct JMChapterTag {
+    public var text: String
+    public var timeStr: String
+    public var charter: Int = 0
+    public var location: Int = 0
 }
 
 final class JMChapterTagView: JMBookBaseView {

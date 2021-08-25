@@ -15,7 +15,7 @@ public class JMBookParse: NSObject {
     public let pathUrl: URL // 图书URL
     public let bookType: JMBookType // 图书类型
     public let config: JMBookConfig // 配置
-    private var parserCallback: ((JMBookContrller)->())?
+    private var parserCallback: ((JMBookContrller) -> ())?
     
     public init(_ path: String, config: JMBookConfig? = nil) {
         self.path = path

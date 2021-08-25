@@ -10,7 +10,7 @@ import ZJMKit
 
 // MARK: -- 书本📖模型
 final public class JMBookModel {
-    public var bookId: String
+    public var bookId: String // 目前使用文件名作为唯一ID，因为发现有的电子书没有唯一ID
     public var title: String
     public var author: String
     public let directory: URL
@@ -27,7 +27,7 @@ final public class JMBookModel {
     
     init(epub: JMEpubBook, config: JMBookConfig) {
         self.title = epub.title
-        self.bookId = epub.bookId
+        self.bookId = epub.directory.lastPathComponent // epub.bookId
         self.author = epub.author
         self.coverImg = epub.cover
         self.config = config
@@ -38,7 +38,7 @@ final public class JMBookModel {
         self.charterFromEpub(epub: epub)
         
         // 初始化章节完成后转跳到相应页
-        if let bookTag = JMBookDataBase.share.fetchRate(bookid: bookId) {
+        if let bookTag = JMBookDataBase.fetchRate(bookid: bookId) {
             lastTime = bookTag.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
             indexPath.chapter = bookTag.charter
             contents[indexPath.chapter].countPages()
@@ -60,7 +60,7 @@ final public class JMBookModel {
         self.charterFromTxt(txt: txt)
         
         // 初始化章节完成后转跳到相应页
-        if let bookTag = JMBookDataBase.share.fetchRate(bookid: bookId) {
+        if let bookTag = JMBookDataBase.fetchRate(bookid: bookId) {
             lastTime = bookTag.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
             indexPath.chapter = bookTag.charter
             contents[indexPath.chapter].countPages()

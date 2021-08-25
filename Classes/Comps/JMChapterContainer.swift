@@ -48,7 +48,7 @@ final class JMChapterContainer: JMBookBaseView {
     
     /// 更新目录数据
     public func updateTags(_ bookid: String) {
-        chapterTag.updateChartper(JMBookDataBase.share.fetchTag(bookid: bookid))
+        chapterTag.updateChartper(JMBookDataBase.fetchTag(bookid: bookid))
     }
     
     private func regiEvent() {
@@ -92,6 +92,7 @@ final class JMChapterContainer: JMBookBaseView {
         titleLabel.snp.makeConstraints { (make) in
             make.height.equalTo(44)
             make.left.equalTo(bkgView).offset(15)
+            make.right.equalTo(bkgView.snp.right).offset(-15)
             if #available(iOS 11.0, *) {
                 make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(10)
             } else {

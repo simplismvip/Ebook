@@ -41,7 +41,7 @@ final public class JMBookSpeech: NSObject {
                     try audioSession.setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
                 }
             } catch {
-                print("error")
+                Logger.error("error")
             }
         }
     }

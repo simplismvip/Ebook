@@ -59,11 +59,23 @@ public extension UIView {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    /// pop
+    func pop() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     /// present
     func present(_ vc: UIViewController, style: UIModalPresentationStyle = .fullScreen) {
         vc.modalPresentationStyle = style
         present(vc, animated: true, completion: nil)
     }
+    
+    /// dismiss
+    func dismiss() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
 }
 
 public extension JMBookContrller {
