@@ -46,6 +46,7 @@ extension JMBookContrller {
         chapter.isHidden = true
         JMBookToast.hide()
         view.addSubview(bookTitle)
+        view.addSubview(comment)
         bookTitle.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
             make.height.equalTo(20)
@@ -54,6 +55,14 @@ extension JMBookContrller {
             } else {
                 make.top.equalTo(view.snp.top)
             }
+        }
+        
+        comment.setImage("epub_comment".image, for: .normal)
+        comment.snp.makeConstraints { (make) in
+            make.width.equalTo(50)
+            make.height.equalTo(30)
+            make.right.equalTo(bookTitle.snp.right).offset(-14)
+            make.centerY.equalTo(bookTitle.snp.centerY)
         }
         
         // 底部是否有广告View
@@ -71,7 +80,7 @@ extension JMBookContrller {
                 make.height.equalTo(20)
                 make.bottom.equalTo(bottomAdView.snp.top).offset(-2)
             }
-        }else {
+        } else {
             view.addSubview(battery)
             battery.snp.makeConstraints { (make) in
                 make.left.width.equalTo(view)
@@ -192,7 +201,7 @@ extension JMBookContrller {
     func updateAllItemsBkg(config: JMBookConfig) {
         topContainer.backgroundColor = config.subViewColor()
         bottomContainer.backgroundColor = config.subViewColor()
-        
+        comment.tintColor = config.tintColor()
         play.changeBkgColor(config: config)
         light.changeBkgColor(config: config)
         

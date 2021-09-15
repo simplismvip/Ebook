@@ -9,16 +9,18 @@ import UIKit
 import ZJMKit
 
 final class JMBookTitleView: JMBookBaseView {
-    var title = UILabel()
+    let title = UILabel()
     private let back = UIButton(type: .system)
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(title)
         addSubview(back)
+        
         back.setImage("ebook_back".image, for: .normal)
         back.jmAddAction { [weak self](_) in
             self?.jmRouterEvent(eventName: kEventNameMenuActionBack, info: nil)
         }
+        
         back.snp.makeConstraints { (make) in
             make.width.equalTo(16)
             make.height.equalTo(self)

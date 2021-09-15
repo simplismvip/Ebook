@@ -11,18 +11,18 @@ import YYText
 
 class JMPageView: JMBookBaseView {
     let contentL = YYLabel()
-    let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
-    let selectView = YYTextSelectionView()
+//    let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
+//    let selectView = YYTextSelectionView()
     let gadView = UIView()
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
-        magnifier.pageView = self
-        magnifier.isHidden = true
-        addSubview(magnifier)
+//        magnifier.pageView = self
+//        magnifier.isHidden = true
+//        addSubview(magnifier)
         addSubview(contentL)
-        addSubview(selectView)
+//        addSubview(selectView)
         addSubview(gadView)
         
         contentL.isUserInteractionEnabled = true
@@ -33,9 +33,9 @@ class JMPageView: JMBookBaseView {
             make.edges.equalTo(self)
         }
         
-        selectView.snp.makeConstraints { (make) in
-            make.edges.equalTo(contentL)
-        }
+//        selectView.snp.makeConstraints { (make) in
+//            make.edges.equalTo(contentL)
+//        }
         
         contentL.highlightTapAction = { view, text, range, rect in
             Logger.debug(text.string)

@@ -21,6 +21,8 @@ import Foundation
     func openBookSuccess(_ bottomView: UIView)
     /// 打开失败
     func openBookFailed(_ desc: String)
+    /// 评论图书
+    func commentBook(_ bookid: String)
 }
 
 @objc public protocol JMBookProtocol {

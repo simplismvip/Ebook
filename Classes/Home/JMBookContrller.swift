@@ -26,6 +26,7 @@ public class JMBookContrller: JMBaseController {
     let chapter = JMChapterContainer() // 左侧目录
     let maskView = JMBookMaskView()
     let bookTitle = JMBookTitleView() // 标题
+    let comment = UIButton(type: .system)
     let battery = JMBatteryView() // 电池
     let s_width = UIScreen.main.bounds.size.width
     private var starttime: TimeInterval = 0 // 阅读时长
@@ -74,10 +75,15 @@ public class JMBookContrller: JMBaseController {
         updateItemStatus()
         maskView.brightness(bookModel.config.brightness())
         starttime = Date.jmCurrentTime
-        view.addSubview(maskView)
-        maskView.snp.makeConstraints { (make) in
-            make.edges.equalTo(view)
+        
+        comment.jmAddAction { [weak self](_) in
+            self?.jmRouterEvent(eventName: kEventNameMenuActionBack, info: nil)
         }
+        
+//        view.addSubview(maskView)
+//        maskView.snp.makeConstraints { (make) in
+//            make.edges.equalTo(view)
+//        }
     }
     
     private func initdatas() {
@@ -283,7 +289,7 @@ extension JMBookContrller {
         }, next: false)
            
         jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { [weak self](_) in
-            self?.jmShareImageToFriends(shareID: "分享图书📖到", handler: { (_, _) in
+            self?.jmShareImageToFriends(shareID: "分享图书📖到", image: nil, completionHandler: { _, _ in
                 Logger.debug("分享成功")
             })
         }, next: false)

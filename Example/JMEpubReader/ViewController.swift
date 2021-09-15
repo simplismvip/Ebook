@@ -31,6 +31,10 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: JMBookParserProtocol {
+    func commentBook(_ bookid: String) {
+    
+    }
+    
     func midReadPageVC(_ after: Bool) -> UIViewController? {
         return nil
         
