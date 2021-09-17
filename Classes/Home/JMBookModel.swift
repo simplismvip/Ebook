@@ -3,12 +3,11 @@
 //  JMEpubReader
 //
 //  Created by JunMing on 2021/4/10.
-//
+//  书本📖模型，一个模型代表一本书
 
 import UIKit
 import ZJMKit
 
-// MARK: -- 书本📖模型
 final public class JMBookModel {
     public var bookId: String // 目前使用文件名作为唯一ID，因为发现有的电子书没有唯一ID
     public var title: String
@@ -41,7 +40,7 @@ final public class JMBookModel {
         if let bookTag = JMBookDataBase.fetchRate(bookid: bookId) {
             lastTime = bookTag.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
             indexPath.chapter = bookTag.charter
-            contents[indexPath.chapter].countPages()
+            contents[safe: indexPath.chapter]?.countPages()
             // 查找阅读到的Page
             if let targetPage = newPageLoc(location: bookTag.location, text: bookTag.text) {
                 indexPath.page = targetPage.page
@@ -63,12 +62,23 @@ final public class JMBookModel {
         if let bookTag = JMBookDataBase.fetchRate(bookid: bookId) {
             lastTime = bookTag.timeStr.jmFormatTspString("yyyy-MM-dd HH:mm:ss")
             indexPath.chapter = bookTag.charter
-            contents[indexPath.chapter].countPages()
+            contents[safe: indexPath.chapter]?.countPages()
             // 查找阅读到的Page
             if let targetPage = newPageLoc(location: bookTag.location, text: bookTag.text) {
                 indexPath.page = targetPage.page
             }
         }
+    }
+    
+    // 失败的情况调用
+    init(_ desc: String) {
+        self.title = desc
+        self.bookId = ""
+        self.author = ""
+        self.config = JMBookConfig()
+        self.directory = URL(fileURLWithPath: "")
+        self.contentDirectory = URL(fileURLWithPath: "")
+        self.indexPath = JMBookIndex(0, 0)
     }
     
     /// 本书所有文字数
@@ -78,7 +88,7 @@ final public class JMBookModel {
     
     /// 当前页数
     public func readRate() -> String? {
-        if let page = contents[indexPath.chapter].pages?.count {
+        if let page = contents[safe: indexPath.chapter]?.pages?.count {
             return "第\(indexPath.page + 1)/\(page)页"
         }else {
             return "第\(indexPath.page + 1))页"
@@ -87,21 +97,21 @@ final public class JMBookModel {
     
     /// 当前小节标题
     public func currTitle() -> String {
-        return contents[indexPath.chapter].charpTitle ?? title
+        return contents[safe: indexPath.chapter]?.charpTitle ?? title
     }
     
     /// 更新字体大小等后重新计算已读章节
     public func reCountCharpter() {
         if indexPath.chapter < contents.count {
             // 重新计算当前章页数
-            contents[indexPath.chapter].countPages()
+            contents[safe: indexPath.chapter]?.countPages()
         }
     }
     
     /// 获取重新计算分页后的目标页
     public func newPageLoc(location: Int, text: String) -> JMBookPage? {
         reCountCharpter() // 重新修改字体，计算页数
-        if let pages = contents[indexPath.chapter].pages {
+        if let pages = contents[safe: indexPath.chapter].pages {
             if let page = pages.filter({ $0.attribute.string.contains(text) }).first {
                 return page
             } else {
@@ -130,7 +140,7 @@ final public class JMBookModel {
     /// 当前章节
     public func currCharpter() -> JMBookCharpter? {
         if indexPath.chapter < contents.count {
-            return contents[indexPath.chapter]
+            return contents[safe: indexPath.chapter]
         }
         return nil
     }
@@ -165,11 +175,11 @@ final public class JMBookModel {
     
     // 当前章节页数
     private func pageCount() -> Int {
-        if let pages = contents[indexPath.chapter].pages {
+        if let pages = contents[safe: indexPath.chapter]?.pages {
             return pages.count
         }else {
-            contents[indexPath.chapter].countPages()
-            return contents[indexPath.chapter].pages?.count ?? 0
+            contents[safe: indexPath.chapter]?.countPages()
+            return contents[safe: indexPath.chapter]?.pages?.count ?? 0
         }
     }
     
@@ -213,7 +223,6 @@ extension JMBookModel {
             Logger.debug("😀😀😀已读到最后一章节")
             return nil
         }
-        
     }
     
     /// 上一章节
@@ -235,8 +244,8 @@ extension JMBookModel {
             Logger.debug("😀😀😀已读到最后一页")
             return nil
         }else {
-            if contents[indexPath.chapter].pages == nil {
-                contents[indexPath.chapter].countPages()
+            if contents[safe: indexPath.chapter]?.pages == nil {
+                contents[safe: indexPath.chapter]?.countPages()
             }
             
             // 如果当前小节是本章最后，且当前页是当前小节最后一页，此时才需要更新章节
@@ -273,134 +282,14 @@ extension JMBookModel {
     subscript(indexPath: JMBookIndex) -> JMBookPage? {
         get {
             indexPath.descrtion()
-            if contents[indexPath.chapter].pages == nil {
-                contents[indexPath.chapter].countPages()
+            if contents[safe: indexPath.chapter]?.pages == nil {
+                contents[safe: indexPath.chapter]?.countPages()
             }
             
-            if let page = contents[indexPath.chapter].pages?[indexPath.page] {
+            if let page = contents[safe: indexPath.chapter]?.pages?[safe: indexPath.page] {
                 return page
             }
             return nil
         }
     }
-}
-
-// MARK: -- 章节模型 --
-public class JMBookCharpter {
-    /// 章节标题
-    public var charpTitle: String?
-    /// 地址
-    public let idref: String
-    /// 是否隐藏
-    public let linear: Bool
-    /// 章节地址URL
-    public let fullHref: URL
-    /// 当前章节分页
-    public var pages: [JMBookPage]?
-    /// 解析器
-    public let parser = JMXmlParser()
-    /// 当前章节
-    public let location: JMBookIndex
-    /// 配置文件
-    public let config: JMBookConfig
-    /// 文件类型
-    public let booktype: JMBookType
-    
-    /// Epub格式初始化
-    init(spine: JMEpubSpineItem, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
-        self.idref = spine.idref
-        self.linear = spine.linear
-        self.fullHref = fullHref
-        self.location = loc
-        self.config = config
-        self.booktype = .Epub
-    }
-    
-    /// Txt格式初始化
-    init(charpter: JMTxtChapter, fullHref: URL, loc: JMBookIndex, config: JMBookConfig) {
-        self.idref = charpter.path
-        self.linear = false
-        self.fullHref = fullHref
-        self.location = loc
-        self.config = config
-        self.booktype = .Txt
-    }
-        
-    /// 读取本章节，计算页数
-    public func countPages() {
-        if booktype == .Epub {
-            if parser.xmlNodes.isEmpty {
-                parser.content(fullHref)
-            }
-            let attr = parser.attributeStr(config)
-            pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: config.bounds())
-        } else if booktype == .Txt {
-            if let attr = JMTxtParser.attributeStr(fullHref: fullHref, config: config) {
-                pages = JMPageParse.pageContent(content: attr, title: charpTitle ?? "", bounds: config.bounds())
-            }
-        }
-    }
-    
-    /// 本章多少字：=小节总字数
-    public func word() -> Int {
-        return pages?.reduce(0, { $0 + $1.word }) ?? 0
-    }
-}
-
-// MARK: -- 文本页模型 ---
-public struct JMBookPage {
-    /// 本页标题
-    public let title: String
-    /// 本页字数
-    public let word: Int
-    /// 当前第几页
-    public let page: Int
-    /// 本页内容
-    public let attribute: NSAttributedString
-    /// 本页内容
-    public var string: String {
-        return attribute.string
-    }
-    /// 文本类型
-    init(_ attribute: NSAttributedString, title: String, page: Int) {
-        self.attribute = attribute
-        self.word = attribute.string.count
-        self.page = page
-        self.title = title
-        
-//        var uth_string = attribute.string
-//        uth_string = uth_string.trimmingCharacters(in: NSCharacterSet.whitespaces);
-//        uth_string = uth_string.trimmingCharacters(in: NSCharacterSet.newlines);
-//        self.word = uth_string.count
-    }
-}
-
-// MARK: -- 索引模型 ---
-public class JMBookIndex {
-    // 章
-    var chapter: Int = 0
-    // 页
-    var page: Int = 0
-    // 页中第几个字符
-    var loc: Int = 0
-    var indexPath: IndexPath {
-        return IndexPath(row: page, section: chapter)
-    }
-    
-    init(_ chapter: Int, _ page: Int) {
-        self.chapter = chapter
-        self.page = page
-    }
-    
-    func descrtion() {
-        Logger.debug("chapter:\(chapter) page:\(page)")
-    }
-}
-
-// MARK: -- 分享模型 --
-public struct JMBookShareItem {
-    public var title: String?
-    public var url: String?
-    public var img: String?
-    public var desc: String?
 }

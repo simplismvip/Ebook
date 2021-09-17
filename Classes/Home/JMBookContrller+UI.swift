@@ -148,6 +148,11 @@ extension JMBookContrller {
             make.height.equalTo(94)
             make.bottom.equalTo(view.snp.bottom).offset(94)
         }
+        
+        view.addSubview(maskView)
+        maskView.snp.makeConstraints { (make) in
+            make.edges.equalTo(view)
+        }
     }
     
     /// 更新阅读进度

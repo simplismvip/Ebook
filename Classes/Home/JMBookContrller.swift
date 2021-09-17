@@ -10,7 +10,8 @@ import ZJMKit
 import SnapKit
 
 public class JMBookContrller: JMBaseController {
-    public weak var delegate: JMReadProtocol?
+    // 代理
+    weak var delegate: JMBookProtocol?
     // 数据源
     let bookModel: JMBookModel
     let topLeft = JMMenuItemView()
@@ -37,31 +38,27 @@ public class JMBookContrller: JMBaseController {
     private let speech: JMBookSpeech
     /// 状态
     var currType = JMMenuViewType.ViewType_NONE
-    
     /// 状态栏
     public override var prefersStatusBarHidden: Bool {
         return currType == .ViewType_NONE
     }
-    
     /// 状态栏
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return (bookModel.config.bkgColor == .BkgWhite) ? .default : .lightContent
     }
-    
     // 翻页控制器
     private var pageVC: UIPageViewController?
-    
     // 调用初始化
     public init (_ bookModel: JMBookModel) {
         self.bookModel = bookModel
         let speechModel = JMSpeechModel()
         self.speech = JMBookSpeech(speechModel)
         super.init(nibName: nil, bundle: nil)
+        self.associatRouter()
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        associatRouter()
         setupPageVC()
         setupviews()
         loadDats()
@@ -73,17 +70,9 @@ public class JMBookContrller: JMBaseController {
         registerJumpEvent()
         updateProgress()
         updateItemStatus()
+        registerEvent()
         maskView.brightness(bookModel.config.brightness())
         starttime = Date.jmCurrentTime
-        
-        comment.jmAddAction { [weak self](_) in
-            self?.jmRouterEvent(eventName: kEventNameMenuActionBack, info: nil)
-        }
-        
-//        view.addSubview(maskView)
-//        maskView.snp.makeConstraints { (make) in
-//            make.edges.equalTo(view)
-//        }
     }
     
     private func initdatas() {
@@ -95,6 +84,19 @@ public class JMBookContrller: JMBaseController {
             let time = (word / 10).jmCurrentTime
             battery.title.text = "本章共\(word)字，读完约\(time)"
         }
+    }
+    
+    private func registerEvent() {
+        comment.jmAddAction { [weak self](_) in
+            if let title = self?.bookModel.title,
+               let vc = self?.delegate?.commentBook(title) {
+                self?.push(vc)
+            }
+        }
+    }
+    
+    private func getGADView(_ after: Bool) -> UIViewController? {
+        return delegate?.showGADView(after)
     }
     
     private func setupFristPageView() {
@@ -215,7 +217,7 @@ public class JMBookContrller: JMBaseController {
 extension JMBookContrller: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     // 往回翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC(false) {
+        if let vc = getGADView(false) {
             return vc
         } else {
             Logger.debug("😀😀😀Before")
@@ -225,9 +227,9 @@ extension JMBookContrller: UIPageViewControllerDelegate, UIPageViewControllerDat
     
     // 往后翻页时触发
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let vc = delegate?.currentReadVC(true) {
+        if let vc = getGADView(true) {
             return vc
-        }else {
+        } else {
             Logger.debug("😀😀😀After")
             return nextPageView(true)
         }
@@ -289,9 +291,9 @@ extension JMBookContrller {
         }, next: false)
            
         jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { [weak self](_) in
-            self?.jmShareImageToFriends(shareID: "分享图书📖到", image: nil, completionHandler: { _, _ in
-                Logger.debug("分享成功")
-            })
+//            self?.jmShareImageToFriends(shareID: "分享图书📖到", image: nil, handler: { _, _ in
+//                Logger.debug("分享成功")
+//            })
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { [weak self](model) in

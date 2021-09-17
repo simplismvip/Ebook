@@ -20,7 +20,7 @@ public extension UIView {
 }
 
 @objc public extension UIImage {
-    class func bundleImage(name:String) -> UIImage? {
+    class func bundleImage(name: String) -> UIImage? {
         func findBundle(_ bundleName:String,_ podName:String) -> Bundle? {
             if var bundleUrl = Bundle.main.url(forResource: "Frameworks", withExtension: nil) {
                 bundleUrl = bundleUrl.appendingPathComponent(podName)
@@ -222,7 +222,7 @@ extension UIColor {
     
     /// 菜单选中颜色
     public static var menuSelColor: UIColor {
-        return UIColor(rgba: "#66B3FF")
+        return UIColor(rgba: "#FF655F")
     }
 
     convenience init(rgba: String, grad: CGFloat = 0.0) {

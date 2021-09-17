@@ -51,21 +51,21 @@ public class JMXmlParser {
             for subChild in child.children {
                 parserXml(child: subChild)
             }
-        }else {
+        } else {
             if let value = child.value, value.count > 0 {
                 // Logger.debug(child.name, value)
                 // 如果上一段落是文本没必要新建模型，直接拼接到上一个模型上去
                 // 因为某些文本文件有大量短段落，每段都生成属性字符串时会导致内存问题
                 if let prevNode = xmlNodes.last, prevNode.tag != "img", !prevNode.media {
                     prevNode.content += ("\n"+value)
-                }else {
+                } else {
                     xmlNodes.append(JMXmlNode(child.name,value))
                 }
-            }else {
+            } else {
                 if child.name == "img", let src = child.attributes["src"] {
                     xmlNodes.append(JMXmlNode("img",src))
                     // Logger.debug(child.name,src)
-                }else if child.name == "image", let src = child.attributes["xlink:href"] {
+                } else if child.name == "image", let src = child.attributes["xlink:href"] {
                     xmlNodes.append(JMXmlNode("img", src))
                     // Logger.debug(child.attributes)
                 }

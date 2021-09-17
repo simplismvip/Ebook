@@ -113,3 +113,15 @@ public let kMsgNamePlayBookStarting = "kMsgNamePlayBookStarting"
 public let kMsgNamePlayBookEnd = "kMsgNamePlayBookEnd"
 /// 听书下一页
 public let kMsgNamePlayBookNextPage = "kMsgNamePlayBookNextPage"
+
+/////////////////////////////// kEvent Msg /////////////////////////////////////////////////
+/// 打开图书失败
+public let kMsgNameOpenBookFailed = "kMsgNameOpenBookFailed"
+/// 点击评论
+public let kMsgNameCommentBook = "kMsgNameCommentBook"
+/// 点击评论
+public let kMsgNameRequestGADView = "kMsgNameRequestGADView"
+/// 下一页
+public let kMsgNameReadBookNextPage = "kMsgNameReadBookNextPage"
+/// 上一页
+public let kMsgNameReadBookPrevPage = "kMsgNameReadBookPrevPage"

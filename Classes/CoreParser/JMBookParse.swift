@@ -6,16 +6,13 @@
 //
 
 import UIKit
-import ZJMKit
 
-// MARK: -- 解析图书类，这个类允许重写覆盖
-public class JMBookParse: NSObject {
-    public weak var delegate: JMBookParserProtocol?
+public class JMBookParse {
     public let path: String // 图书路径
     public let pathUrl: URL // 图书URL
     public let bookType: JMBookType // 图书类型
     public let config: JMBookConfig // 配置
-    private var parserCallback: ((JMBookContrller) -> ())?
+    private var parserCallback: ((JMBookContrller, Bool) -> ())?
     
     public init(_ path: String, config: JMBookConfig? = nil) {
         self.path = path
@@ -23,34 +20,51 @@ public class JMBookParse: NSObject {
         self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
         self.config = (config == nil) ? JMBookConfig() : config!
         JMBookCache.setObjc(key: "jmBookConfig", obj: self.config)
-        super.init()
         let _ = JMBookDataBase.share
     }
     
     // parsent 控制器
     public func presentReader(parentVC: UIViewController) {
-        startRead { (pagevc) in
-            parentVC.present(pagevc)
+        startRead { (pagevc, status) in
+            if status {
+                pagevc.delegate = parentVC as? JMBookProtocol
+                pagevc.delegate?.openSuccess("打开图书成功")
+                parentVC.present(pagevc)
+            } else {
+                pagevc.delegate = parentVC as? JMBookProtocol
+                pagevc.delegate?.openFailed("🆘🆘🆘打开失败\(pagevc.bookModel.title)" )
+            }
         }
     }
     
     /// push 控制器
     public func pushReader(pushVC: UIViewController) {
-        startRead { (pagevc) in
-            pushVC.push(pagevc)
+        startRead { (pagevc, status) in
+            if status {
+                pagevc.delegate = pushVC as? JMBookProtocol
+                pagevc.delegate?.openSuccess("打开图书成功")
+                pushVC.push(pagevc)
+            } else {
+                pagevc.delegate = pushVC as? JMBookProtocol
+                pagevc.delegate?.openFailed("🆘🆘🆘打开失败:\(pagevc.bookModel.title)" )
+            }
         }
     }
     
     /// 开始读书
-    public func startRead(parser: @escaping (JMBookContrller)->()) {
+    private func startRead(parser: @escaping (JMBookContrller, Bool) -> ()) {
         self.parserCallback = parser
-        delegate?.startOpeningBook("正在打开图书loading")
         DispatchQueue.global().async {
-            if self.bookType == .Epub {
+            switch self.bookType {
+            case .Epub:
                 self.parseEpubBook()
-            } else if self.bookType == .Txt {
+            case .Txt:
                 self.parseTxtBook()
-            } else {
+            case .Mobi:
+                Logger.error("❗️❗️❗️暂不支持格式")
+            case .Pdf:
+                Logger.error("❗️❗️❗️暂不支持格式")
+            case .NoneType:
                 Logger.error("❗️❗️❗️暂不支持格式")
             }
         }
@@ -58,17 +72,18 @@ public class JMBookParse: NSObject {
     
     // Epub, 读取目录
     private func parseEpubBook() {
-        do{
+        do {
             let epub = try JMEpubParser().parse(documentAt: pathUrl)
             let bookModel = JMBookModel(epub: epub, config: config)
             DispatchQueue.main.async {
                 let pageView = JMBookContrller(bookModel)
-                pageView.delegate = self
-                self.parserCallback?(pageView)
+                self.parserCallback?(pageView, true)
             }
-        }catch {
+        } catch let error as NSError {
             DispatchQueue.main.async {
-                self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
+                let bookModel = JMBookModel(error.description)
+                let pageView = JMBookContrller(bookModel)
+                self.parserCallback?(pageView, false)
             }
         }
     }
@@ -80,25 +95,17 @@ public class JMBookParse: NSObject {
             let bookModel = JMBookModel(txt: txt, config: config)
             DispatchQueue.main.async {
                 let pageView = JMBookContrller(bookModel)
-                pageView.delegate = self
-                self.parserCallback?(pageView)
+                self.parserCallback?(pageView, true)
             }
         } catch let error as NSError {
             DispatchQueue.main.async {
-                self.parseTxtBook()
-                // self.delegate?.openBookFailed("🆘🆘🆘打开 \(error.localizedDescription)失败" )
+                let bookModel = JMBookModel(error.description)
+                let pageView = JMBookContrller(bookModel)
+                self.parserCallback?(pageView, false)
             }
         }
     }
-}
-
-extension JMBookParse: JMReadProtocol {
-    public func currentReadVC(_ after: Bool) -> UIViewController? {
-        return delegate?.midReadPageVC(after)
-    }
-}
-
-extension JMBookParse {
+    
     // Pdf
     private func parsePdfBook() {
         
@@ -107,5 +114,9 @@ extension JMBookParse {
     // Mobi
     private func parseMobiBook() {
         
+    }
+    
+    deinit {
+        print("⚠️⚠️⚠️类 JMBookParse 已经释放")
     }
 }

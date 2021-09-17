@@ -6,8 +6,8 @@
 //
 
 #import "NSString+CoreParser.h"
-#import "YYText.h"
 #import <CoreText/CoreText.h>
+#import "YYText.h"
 
 @implementation NSString (CoreParser)
 

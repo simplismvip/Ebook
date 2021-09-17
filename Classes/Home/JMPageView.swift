@@ -11,36 +11,26 @@ import YYText
 
 class JMPageView: JMBookBaseView {
     let contentL = YYLabel()
-//    let magnifier = JMTextMagnifierView(frame: CGRect.Rect(0, 0, 80, 80))
-//    let selectView = YYTextSelectionView()
     let gadView = UIView()
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
-//        magnifier.pageView = self
-//        magnifier.isHidden = true
-//        addSubview(magnifier)
         addSubview(contentL)
-//        addSubview(selectView)
         addSubview(gadView)
+        gadView.backgroundColor = UIColor.jmRandColor
         
         contentL.isUserInteractionEnabled = true
         contentL.numberOfLines = 0;
-        contentL.displaysAsynchronously = true
+        contentL.displaysAsynchronously = false
         contentL.textVerticalAlignment = .top;
         contentL.snp.makeConstraints { (make) in
             make.edges.equalTo(self)
         }
         
-//        selectView.snp.makeConstraints { (make) in
-//            make.edges.equalTo(contentL)
-//        }
-        
         contentL.highlightTapAction = { view, text, range, rect in
             Logger.debug(text.string)
         }
-        gadView.backgroundColor = UIColor.jmRandColor
     }
     
     /// 将文本画到View上
@@ -53,10 +43,10 @@ class JMPageView: JMBookBaseView {
                 if maxH > 64 {
                     gadView.isHidden = false
                     gadView.frame = CGRect.Rect(0, maxY, jmWidth, maxH)
-                }else {
+                } else {
                     gadView.isHidden = true
                 }
-            }else {
+            } else {
                 gadView.isHidden = true
             }
         }
@@ -64,7 +54,7 @@ class JMPageView: JMBookBaseView {
     
     /// 刷新文字样式
     func refreshText(range: NSRange) {
-        let range = YYTextRange(range: range)
+//        let range = YYTextRange(range: range)
 //        if let attri = contentL.attributedText {
 //            let mutabAttri = NSMutableAttributedString(attributedString: attri)
 //            mutabAttri.yy_setStroke(UIColor.menuSelColor, range: range)

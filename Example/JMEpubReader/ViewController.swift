@@ -31,15 +31,15 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: JMBookParserProtocol {
-    func commentBook(_ bookid: String) {
-    
+    func commentBook(_ bookid: String) -> UIViewController? {
+        return UIViewController()
     }
     
     func midReadPageVC(_ after: Bool) -> UIViewController? {
-        return nil
+//        return nil
         
-//        flipCount = after ? (flipCount + 1) : (flipCount - 1)
-//        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
+        flipCount = after ? (flipCount + 1) : (flipCount - 1)
+        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
     }
     
     func startOpeningBook(_ desc: String) {

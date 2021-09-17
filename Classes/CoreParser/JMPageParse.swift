@@ -9,7 +9,7 @@ import UIKit
 
 struct JMPageParse {
     /// 文本内容分页 Page
-    static public func pageContent(content: NSMutableAttributedString, title: String, bounds: CGRect) -> [JMBookPage]{
+    static public func pageContent(content: NSMutableAttributedString, title: String, bounds: CGRect) -> [JMBookPage] {
         var pageArray = [JMBookPage]()
         let cfPath = CGPath(rect: bounds, transform: nil);
         let ctFrameSetter = CTFramesetterCreateWithAttributedString(content as CFAttributedString)
