@@ -38,7 +38,8 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'JMEpubReader'
+    # pod 'JMEpubReader'
+    pod 'JMEpubReader', :path=>'~/你的路径/JMEpubReader'
 end
 ```
 
