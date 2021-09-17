@@ -90,7 +90,7 @@ final public class JMBookModel {
     public func readRate() -> String? {
         if let page = contents[safe: indexPath.chapter]?.pages?.count {
             return "第\(indexPath.page + 1)/\(page)页"
-        }else {
+        } else {
             return "第\(indexPath.page + 1))页"
         }
     }
@@ -111,14 +111,16 @@ final public class JMBookModel {
     /// 获取重新计算分页后的目标页
     public func newPageLoc(location: Int, text: String) -> JMBookPage? {
         reCountCharpter() // 重新修改字体，计算页数
-        if let pages = contents[safe: indexPath.chapter].pages {
-            if let page = pages.filter({ $0.attribute.string.contains(text) }).first {
-                return page
+        if let pages = contents[safe: indexPath.chapter]?.pages {
+            if let pageIndex = pages.jmIndex({ $0.attribute.string.contains(text) }) {
+                indexPath.page = pageIndex // 重新计算后页数可能会改变，所以重新赋值页数
+                return pages[safe: pageIndex]
             } else {
                 var loc = 0
-                for page in pages {
+                for (pageIndex, page) in pages.enumerated() {
                     loc += page.word
                     if location <= loc {
+                        indexPath.page = pageIndex
                         return page
                     } else {
                         return nil
@@ -133,14 +135,6 @@ final public class JMBookModel {
     public func currPage() -> JMBookPage? {
         if let page = self[indexPath] {
             return page
-        }
-        return nil
-    }
-    
-    /// 当前章节
-    public func currCharpter() -> JMBookCharpter? {
-        if indexPath.chapter < contents.count {
-            return contents[safe: indexPath.chapter]
         }
         return nil
     }
@@ -162,6 +156,14 @@ final public class JMBookModel {
         return location
     }
     
+    /// 当前章节
+    public func currCharpter() -> JMBookCharpter? {
+        if indexPath.chapter < contents.count {
+            return contents[safe: indexPath.chapter]
+        }
+        return nil
+    }
+    
     /// 本章节未读页
     public func unreadPage() -> [JMBookPage] {
         var unreadPages = [JMBookPage]()
@@ -177,7 +179,7 @@ final public class JMBookModel {
     private func pageCount() -> Int {
         if let pages = contents[safe: indexPath.chapter]?.pages {
             return pages.count
-        }else {
+        } else {
             contents[safe: indexPath.chapter]?.countPages()
             return contents[safe: indexPath.chapter]?.pages?.count ?? 0
         }
@@ -192,7 +194,7 @@ final public class JMBookModel {
                 // 先使用spine的ID去mainfrist查找path，再用path去toc中查找title
                 if let path = epub.manifest.items[spine.idref]?.path {
                     charpter.charpTitle = epub.findTarget(target: path)?.label
-                }else {
+                } else {
                     charpter.charpTitle = title
                 }
                 self.contents.append(charpter)
@@ -243,11 +245,7 @@ extension JMBookModel {
             && indexPath.page == pageCount() - 1 {
             Logger.debug("😀😀😀已读到最后一页")
             return nil
-        }else {
-            if contents[safe: indexPath.chapter]?.pages == nil {
-                contents[safe: indexPath.chapter]?.countPages()
-            }
-            
+        } else {
             // 如果当前小节是本章最后，且当前页是当前小节最后一页，此时才需要更新章节
             if indexPath.page == pageCount() - 1 {
                 indexPath.page = 0
@@ -266,13 +264,13 @@ extension JMBookModel {
             && indexPath.page == 0  {
             Logger.debug("😀😀😀已回到第一页")
             return nil
-        }else {
+        } else {
             if indexPath.page == 0 {
                 // 到这里说明更新章
                 indexPath.chapter -= 1
                 indexPath.page = pageCount() - 1
                 return self[indexPath]
-            }else {
+            } else {
                 indexPath.page -= 1
                 return self[indexPath]
             }
@@ -282,14 +280,7 @@ extension JMBookModel {
     subscript(indexPath: JMBookIndex) -> JMBookPage? {
         get {
             indexPath.descrtion()
-            if contents[safe: indexPath.chapter]?.pages == nil {
-                contents[safe: indexPath.chapter]?.countPages()
-            }
-            
-            if let page = contents[safe: indexPath.chapter]?.pages?[safe: indexPath.page] {
-                return page
-            }
-            return nil
+            return contents[safe: indexPath.chapter]?[indexPath.page]
         }
     }
 }

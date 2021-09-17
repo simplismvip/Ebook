@@ -66,4 +66,14 @@ public class JMBookCharpter {
     public func word() -> Int {
         return pages?.reduce(0, { $0 + $1.word }) ?? 0
     }
+    
+    // 获取页数
+    subscript(pageIndex: Int) -> JMBookPage? {
+        get {
+            if pages == nil {
+                countPages()
+            }
+            return pages?[safe: pageIndex]
+        }
+    }
 }
