@@ -13,7 +13,7 @@ public class JMXmlNode {
     var tag: String
     var content: String
     var media: Bool {
-        return ["h1","h2","h3","h4","h5","h6"].contains(tag)
+        return ["h1", "h2", "h3", "h4", "h5", "h6"].contains(tag)
     }
     
     init(_ tag: String, _ content: String) {
