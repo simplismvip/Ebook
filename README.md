@@ -27,6 +27,26 @@ let book = JMBookParse(path)
 book.pushReader(pushVC: self)
 ```
 
+遵循协议
+```swift
+extension XXXXXX-Class: JMBookProtocol {    
+    func showGADView(_ after: Bool) -> UIViewController? {
+        return nil
+    }
+    
+    func bottomGADView(_ size: CGSize) -> UIView? {
+        return UIView(frame: CGRect.Rect(size.width, size.height))
+    }
+    
+    func openSuccess(_ desc: String) {
+        SRToast.toast("😀😀😀打开 \(desc)成功")
+    }
+    
+    func openFailed(_ desc: String) {
+        SRToast.toast(desc)
+    }
+}
+```
 ## 安装
 
 ### Cocoapods（⚠️⚠️⚠️项目并没有完成✅现在只是本地Pods使用）
