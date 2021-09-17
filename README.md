@@ -24,7 +24,6 @@
 
 ```swift
 let book = JMBookParse(path)
-book.delegate = self
 book.pushReader(pushVC: self)
 ```
 
