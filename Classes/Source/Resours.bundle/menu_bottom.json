@@ -5,19 +5,22 @@
         "border":false,
         "type":"bottom",
         "identify":"bookCatalog"
-    },{
+    },
+    {
         "image":"epub_progress",
         "event":"kEventNameMenuActionProgress",
         "border":false,
         "type":"bottom",
         "identify":"dayornight"
-    },{
+    },
+    {
         "image":"epub_bkg",
         "event":"kEventNameMenuActionBrightness",
         "border":false,
         "type":"bottom",
         "identify":"brightness"
-    },{
+    },
+    {
         "image":"epub_set",
         "event":"kEventNameMenuActionSettingMore",
         "border":false,

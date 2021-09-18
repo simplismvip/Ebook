@@ -5,19 +5,22 @@
         "showTitie":false,
         "type":"pagefont",
         "identify":"PingFangSC-Regular"
-    },{
+    },
+    {
         "title":"楷体",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
         "identify":"kaitiGB2312.ttf"
-    },{
+    },
+    {
         "title":"妹子体",
         "event":"kEventNameMenuFontType",
         "showTitie":false,
         "type":"pagefont",
         "identify":"HYChenMeiZiJ.ttf"
-    },{
+    },
+    {
         "title":"悠然体",
         "event":"kEventNameMenuFontType",
         "showTitie":false,

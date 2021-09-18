@@ -8,6 +8,12 @@
 import Foundation
 import HandyJSON
 
+@objc public enum JMBookActionType: Int {
+    case Comment // 评论
+    case Reward // 打赏
+    case Share // 分享
+}
+
 public enum JMEpubStatus {
     case Opening(_ text: String) // 正在打开
     case OpenSuccess(_ text: String) // 打开成功

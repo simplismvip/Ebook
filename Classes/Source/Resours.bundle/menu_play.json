@@ -5,13 +5,15 @@
         "showTitie":false,
         "type":"playpause",
         "identify":"prev"
-    },{
+    },
+    {
         "image":"epub_play_p",
         "event":"kEventNameMenuPlayBookPlay",
         "showTitie":false,
         "type":"playpause",
         "identify":"curr"
-    },{
+    },
+    {
         "image":"epub_play_next",
         "event":"kEventNameMenuPlayBookNext",
         "showTitie":false,

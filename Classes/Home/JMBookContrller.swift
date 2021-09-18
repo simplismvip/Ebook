@@ -89,14 +89,14 @@ public class JMBookContrller: JMBaseController {
     private func registerEvent() {
         comment.jmAddAction { [weak self](_) in
             if let title = self?.bookModel.title,
-               let vc = self?.delegate?.commentBook(title) {
+               let vc = self?.delegate?.actionsBook(title, type: .Comment) {
                 self?.push(vc)
             }
         }
     }
     
     private func getGADView(_ after: Bool) -> UIViewController? {
-        return delegate?.showGADView(after)
+        return delegate?.flipPageView(after)
     }
     
     private func setupFristPageView() {
@@ -285,15 +285,16 @@ extension JMBookContrller {
         
         jmRegisterEvent(eventName: kEventNameMenuActionAddTag, block: { [weak self](_) in
             if let book = self?.bookModel {
-                JMBookToast.toast("添加书签成功",delay: 1)
+                JMBookToast.toast("添加书签成功", delay: 1)
                 JMBookDataBase.insertData(isTag: true, book: book)
             }
         }, next: false)
            
         jmRegisterEvent(eventName: kEventNameMenuActionShare, block: { [weak self](_) in
-//            self?.jmShareImageToFriends(shareID: "分享图书📖到", image: nil, handler: { _, _ in
-//                Logger.debug("分享成功")
-//            })
+            if let title = self?.bookModel.title,
+               let vc = self?.delegate?.actionsBook(title, type: .Share) {
+                self?.present(vc)
+            }
         }, next: false)
         
         jmRegisterEvent(eventName: kEventNameMenuActionDayOrNight, block: { [weak self](model) in
@@ -328,6 +329,22 @@ extension JMBookContrller {
             if let tocItems = self?.bookModel.contents {
                 self?.hideWithType()
                 self?.showChapter(items: tocItems.filter { ($0.charpTitle?.count ?? 0) > 0 })
+            }
+        }, next: false)
+        
+        // 点击评论
+        jmRegisterEvent(eventName: kMsgNameCommentBook, block: { [weak self](_) in
+            if let title = self?.bookModel.title,
+               let vc = self?.delegate?.actionsBook(title, type: .Comment) {
+                self?.push(vc)
+            }
+        }, next: false)
+        
+        // 点击打赏
+        jmRegisterEvent(eventName: kMsgNameRewardBook, block: { [weak self](_) in
+            if let title = self?.bookModel.title,
+               let vc = self?.delegate?.actionsBook(title, type: .Reward) {
+                self?.push(vc)
             }
         }, next: false)
     }

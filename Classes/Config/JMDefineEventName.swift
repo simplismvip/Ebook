@@ -119,6 +119,8 @@ public let kMsgNamePlayBookNextPage = "kMsgNamePlayBookNextPage"
 public let kMsgNameOpenBookFailed = "kMsgNameOpenBookFailed"
 /// 点击评论
 public let kMsgNameCommentBook = "kMsgNameCommentBook"
+/// 点击打赏
+public let kMsgNameRewardBook = "kMsgNameRewardBook"
 /// 点击评论
 public let kMsgNameRequestGADView = "kMsgNameRequestGADView"
 /// 下一页

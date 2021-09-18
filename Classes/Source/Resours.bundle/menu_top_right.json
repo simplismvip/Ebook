@@ -1,15 +1,11 @@
 [
     {
-        "image":"epub_listen",
-        "type":"topright",
-        "event":"kEventNameMenuActionListenBook",
-        "identify":"listenBook"
-    },{
         "image":"epub_tag",
         "event":"kEventNameMenuActionAddTag",
         "type":"topright",
         "identify":"tagbook"
-    },{
+    },
+    {
         "image":"epub_share",
         "event":"kEventNameMenuActionShare",
         "type":"topright",

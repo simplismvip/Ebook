@@ -6,14 +6,16 @@
         "showTitie":false,
         "type":"pageflip",
         "identify":"horiScroll"
-    },{
+    },
+    {
         "title":"翻页",
         "image":"",
         "event":"kEventNameMenuPageFlipType",
         "showTitie":false,
         "type":"pageflip",
         "identify":"horiCurl"
-    },{
+    },
+    {
         "title":"竖直",
         "image":"",
         "event":"kEventNameMenuPageFlipType",

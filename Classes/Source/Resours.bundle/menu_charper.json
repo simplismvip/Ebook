@@ -5,7 +5,8 @@
         "isSelect":true,
         "type":"charterTag",
         "identify":"charter"
-    },{
+    },
+    {
         "title":"书签",
         "event":"kEventNameMenuShowCharterTag",
         "isSelect":false,

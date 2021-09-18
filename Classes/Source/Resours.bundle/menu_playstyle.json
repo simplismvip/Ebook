@@ -5,13 +5,15 @@
         "showTitie":false,
         "type":"playstyle",
         "identify":"style1"
-    },{
+    },
+    {
         "title":"风格2",
         "event":"kEventNameMenuPlayBookStyle",
         "showTitie":false,
         "type":"playstyle",
         "identify":"style2"
-    },{
+    },
+    {
         "title":"风格3",
         "event":"kEventNameMenuPlayBookStyle",
         "showTitie":false,

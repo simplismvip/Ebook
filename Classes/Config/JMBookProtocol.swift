@@ -12,26 +12,12 @@ import Foundation
     func openSuccess(_ desc: String)
     /// 打开失败
     func openFailed(_ desc: String)
-    /// 显示广告内容
-    func showGADView(_ after: Bool) -> UIViewController?
+    /// 翻页回调，可提供一个控制器显示，比如显示广告内容
+    func flipPageView(_ after: Bool) -> UIViewController?
     /// 文字不满一页
     func bottomGADView(_ size: CGSize) -> UIView?
     /// 评论图书
-    func commentBook(_ bookid: String) -> UIViewController?
-}
-
-extension JMBookProtocol {
-    func showGADView(_ after: Bool) -> UIViewController? {
-        return nil
-    }
-    
-    func bottomGADView(_ size: CGSize) -> UIView? {
-        return nil
-    }
-    
-    func commentBook(_ bookid: String) -> UIViewController? {
-        return nil
-    }
+    func actionsBook(_ bookid: String, type: JMBookActionType) -> UIViewController?
 }
 
 /// Menu 控制层View
