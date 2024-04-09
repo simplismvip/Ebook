@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import HandyJSON
 
 @objc public enum JMBookActionType: Int {
     case Comment // 评论
@@ -97,7 +96,7 @@ public enum JMMenuViewType {
 }
 
 /// 按钮类型
-public enum JMMenuType: String, HandyJSONEnum {
+public enum JMMenuType: String, Codable {
     case BkgColor = "color" // 背景色
     case MainBottom = "bottom" // 主页底部
     case TopLeft = "topleft"// 主页顶部左侧
@@ -113,7 +112,7 @@ public enum JMMenuType: String, HandyJSONEnum {
 }
 
 /// 按钮类型
-public enum JMMenuStyle: String, Codable, HandyJSONEnum {
+public enum JMMenuStyle: String, Codable {
     case BkgBlack = "#000000" // 黑色
     case BkgGray = "#696969" // 灰色
     case BkgBrown = "#A0522D" // 棕色🏾

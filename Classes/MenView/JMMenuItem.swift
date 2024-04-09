@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import HandyJSON
 
-public class JMMenuItem: HandyJSON {
+public class JMMenuItem: Codable {
     var title: String?
     var image: String?
     
@@ -19,14 +18,15 @@ public class JMMenuItem: HandyJSON {
     /// 是否是设置背景模型
     var borderWidth: CGFloat?
     var cornerRadius: CGFloat?
-    var borderColor: UIColor?
-    var titleColor: UIColor?
+//    var borderColor: UIColor?
+//    var titleColor: UIColor?
     var identify: JMMenuStyle = .nonetype 
-    var isSelect: Bool = false {
-        willSet { didSelectAction?(newValue) }
-    }
-    var didSelectAction: ((Bool)->())?
-    required public init () { }
+    
+    var isSelect: Bool = false 
+//    {
+//        willSet { didSelectAction?(newValue) }
+//    }
+//    var didSelectAction: ((Bool)->())?
 }
 
 

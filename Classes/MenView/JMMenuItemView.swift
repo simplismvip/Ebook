@@ -72,10 +72,10 @@ final class JMMenuItemView: JMBaseView {
             let colorStr = model.identify.rawValue
             btn.layer.cornerRadius = 15
             btn.backgroundColor = UIColor(rgba: colorStr)
-            model.didSelectAction = { select in
-                btn.layer.borderWidth = select ? 2 : 0
-                btn.layer.borderColor = UIColor.menuTintColor.cgColor
-            }
+//            model.didSelectAction = { select in
+//                btn.layer.borderWidth = select ? 2 : 0
+//                btn.layer.borderColor = UIColor.menuTintColor.cgColor
+//            }
             
         case .MainBottom:
             btn.setTitle(model.title, for: .normal)
@@ -89,10 +89,10 @@ final class JMMenuItemView: JMBaseView {
         case .PageFont, .PageFlip, .PlayRate, .PlayStyle:
             btn.setTitleColor(config.textColor(), for: .normal)
             btn.setTitle(model.title, for: .normal)
-            model.didSelectAction = { select in
-                btn.setTitleColor(select ? config.selectColor() : config.textColor(), for: .normal)
-                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
-            }
+//            model.didSelectAction = { select in
+//                btn.setTitleColor(select ? config.selectColor() : config.textColor(), for: .normal)
+//                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
+//            }
             
         case .PageLight:
             btn.layer.cornerRadius = 10
@@ -100,27 +100,27 @@ final class JMMenuItemView: JMBaseView {
             btn.layer.borderColor = UIColor.menuTextColor.cgColor
             btn.setTitleColor(config.textColor(), for: .normal)
             btn.setTitle(model.title, for: .normal)
-            model.didSelectAction = { select in
-                btn.setTitleColor(select ? config.selectColor() : config.textColor(), for: .normal)
-                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
-            }
+//            model.didSelectAction = { select in
+//                btn.setTitleColor(select ? config.selectColor() : config.textColor(), for: .normal)
+//                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
+//            }
             
         case .PlayOrPause:
             btn.setImage(model.image?.image, for: .normal)
             if model.identify == .PlayOrPause {
-                model.didSelectAction = { select in
-                    let imageStr = select ? "epub_pause" : "epub_play_p"
-                    btn.setImage(imageStr.image, for: .normal)
-                }
+//                model.didSelectAction = { select in
+//                    let imageStr = select ? "epub_pause" : "epub_play_p"
+//                    btn.setImage(imageStr.image, for: .normal)
+//                }
             }
         case .CharterTag:
             btn.setTitle(model.title, for: .normal)
             btn.setTitleColor(model.isSelect ? config.selectColor() : config.textColor(), for: .normal)
             btn.titleLabel?.font = model.isSelect ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
-            model.didSelectAction = { select in
-                btn.setTitleColor(select ? config.selectColor() : config.textColor(), for: .normal)
-                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
-            }
+//            model.didSelectAction = { select in
+//                btn.setTitleColor(select ? config.selectColor() : config.textColor(), for: .normal)
+//                btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
+//            }
         default:
             Logger.debug("")
         }

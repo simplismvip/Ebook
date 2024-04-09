@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final public class JMBookToast: JMBaseView {
     public static let share: JMBookToast = { return JMBookToast() }()

@@ -59,10 +59,7 @@ Pod::Spec.new do |s|
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Zip'
   s.dependency 'AEXML'
-#  s.dependency 'FMDB'
   s.dependency 'SnapKit'
-#  s.dependency 'ZJMKit'
-  s.dependency 'HandyJSON'
   s.dependency 'YYText'
   
 end
