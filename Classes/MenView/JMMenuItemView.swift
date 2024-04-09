@@ -61,7 +61,7 @@ final class JMMenuItemView: JMBaseView {
             btn.setTitleColor(model.isSelect ? config.selectColor() : config.textColor(), for: .normal)
             btn.titleLabel?.font = model.isSelect ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
         default:
-            Logger.debug("")
+            JMLogger.debug("")
         }
     }
     
@@ -122,7 +122,7 @@ final class JMMenuItemView: JMBaseView {
                 btn.titleLabel?.font = select ? UIFont.jmMedium(20) : UIFont.jmRegular(17)
             }
         default:
-            Logger.debug("")
+            JMLogger.debug("")
         }
     }
     

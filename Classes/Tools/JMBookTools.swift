@@ -69,7 +69,7 @@ public struct JMBookWapper<T: NSObject> {
     }
 }
 
-typealias Logger = JMBookLogger
+typealias JMLogger = JMBookLogger
 public struct JMBookLogger {
     enum Level: String {
         case debug = "🐝🐝🐝 "

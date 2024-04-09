@@ -107,16 +107,16 @@ extension JMMenuItem {
     
 //    menu_light_type
     static var lights: [JMMenuItem] {
-        let item1 = JMMenuItem(title: "目录",
-                              event: "kEventNameMenuShowCharter",
-                              type: .CharterTag,
-                              identify: .Charter,
+        let item1 = JMMenuItem(title: "系统亮度",
+                              event: "kEventNameMenuBrightnessSystem",
+                              type: .PageLight,
+                              identify: .PLightSys,
                                isSelect: true)
         
-        let item2 = JMMenuItem(title: "书签",
-                              event: "kEventNameMenuShowCharterTag",
-                              type: .CharterTag,
-                              identify: .CharterTag,
+        let item2 = JMMenuItem(title: "护眼模式",
+                              event: "kEventNameMenuBrightnessCareEye",
+                              type: .PageFlip,
+                              identify: .PLightCus,
                                isSelect: true)
         return [item1, item2]
     }

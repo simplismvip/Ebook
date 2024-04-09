@@ -40,7 +40,7 @@ final public class JMBookSpeech: NSObject {
                     try audioSession.setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
                 }
             } catch {
-                Logger.error("error")
+                JMLogger.error("error")
             }
         }
     }
@@ -53,7 +53,7 @@ final public class JMBookSpeech: NSObject {
         do {
             try audioSession.setActive(true)
         } catch  {
-            Logger.error("error")
+            JMLogger.error("error")
         }
     }
     
@@ -65,7 +65,7 @@ final public class JMBookSpeech: NSObject {
             synthesizer.speak(utterance)
         } else {
             play = false
-            Logger.error("播放完成")
+            JMLogger.error("播放完成")
         }
     }
     
@@ -99,13 +99,13 @@ extension JMBookSpeech: AVSpeechSynthesizerDelegate {
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance) {
 //        jmSendMsg(msgName: kMsgNamePlayBookRefashText, info: characterRange as MsgObjc)
         let rangeStr = utterance.attributedSpeechString.attributedSubstring(from: characterRange)
-//        Logger.debug(utterance.attributedSpeechString)
-//        Logger.debug(characterRange)
-        Logger.debug(rangeStr)
+//        JMLogger.debug(utterance.attributedSpeechString)
+//        JMLogger.debug(characterRange)
+        JMLogger.debug(rangeStr)
     }
     
     public func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
-        Logger.debug("didStart")
+        JMLogger.debug("didStart")
         play = true
     }
     

@@ -253,14 +253,14 @@ extension UIColor {
                     alpha = CGFloat(hexValue & 0x000000FF)         / 255.0
                     break
                 default:
-                    Logger.error("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8", terminator: "")
+                    JMLogger.error("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8", terminator: "")
                     break
                 }
             } else {
-                Logger.error("Scan hex error")
+                JMLogger.error("Scan hex error")
             }
         } else {
-            Logger.error("Invalid RGB string, missing '#' as prefix", terminator: "")
+            JMLogger.error("Invalid RGB string, missing '#' as prefix", terminator: "")
         }
         let gradF = grad / 255.0
         

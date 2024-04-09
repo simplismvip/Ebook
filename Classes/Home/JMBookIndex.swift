@@ -25,7 +25,7 @@ public class JMBookIndex {
     }
     
     func descrtion() {
-        Logger.debug("chapter:\(chapter) page:\(page)")
+        JMLogger.debug("chapter:\(chapter) page:\(page)")
     }
 }
 

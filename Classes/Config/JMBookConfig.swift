@@ -97,19 +97,19 @@ public class JMBookConfig {
     }
     
     func deCodeConfig() {
-        Logger.debug("++++++++ start Decode")
+        JMLogger.debug("++++++++ start Decode")
         if let path = JMFileTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
             JMBookStore.decodeMain(cachePath: fullpath) { (config: JMConfig?) in
                 if let config = config {
-                    Logger.debug("++++++++ Decoding")
+                    JMLogger.debug("++++++++ Decoding")
                     self.config = config
                 } else {
-                    Logger.debug("++++++++ Decode Error")
+                    JMLogger.debug("++++++++ Decode Error")
                 }
             }
         } else {
-            Logger.debug("++++++++ Decode Error")
+            JMLogger.debug("++++++++ Decode Error")
         }
     }
 }
@@ -192,7 +192,7 @@ class JMConfig: Codable {
     /// 亮度
     var brightness: CGFloat {
         willSet {
-            Logger.debug("++++++++ =======\(newValue)")
+            JMLogger.debug("++++++++ =======\(newValue)")
         }
     }
     /// 播放状态

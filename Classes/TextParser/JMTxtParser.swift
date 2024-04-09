@@ -98,7 +98,7 @@ public struct JMTxtParser {
                 writeChapters.append(charpter)
             }
         } catch {
-            Logger.error("error")
+            JMLogger.error("error")
         }
         
         // 写入xml
@@ -156,7 +156,7 @@ public struct JMTxtParser {
             do {
                 try data?.write(to: URL(fileURLWithPath: textPath))
             } catch {
-                Logger.error("error")
+                JMLogger.error("error")
             }
         }
     }

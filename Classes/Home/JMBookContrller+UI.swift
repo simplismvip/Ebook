@@ -43,7 +43,7 @@ extension JMBookContrller {
     }
     
     func setupviews() {
-        set.fontSize.updateFontValue(value: Float(bookModel.config.fontSize()))
+        setView.fontSize.updateFontValue(value: Float(bookModel.config.fontSize()))
         chapter.isHidden = true
         JMBookToast.hide()
         view.addSubview(bookTitle)
@@ -105,7 +105,7 @@ extension JMBookContrller {
         
         view.addSubview(progress)
         view.addSubview(chapter)
-        view.addSubview(set)
+        view.addSubview(setView)
         view.addSubview(light)
         view.addSubview(play)
         
@@ -125,7 +125,7 @@ extension JMBookContrller {
             make.bottom.equalTo(view.snp.bottom).offset(94)
         }
         
-        set.snp.makeConstraints { (make) in
+        setView.snp.makeConstraints { (make) in
             make.left.width.equalTo(view)
             make.height.equalTo(236)
             make.bottom.equalTo(view.snp.bottom).offset(236)
@@ -168,7 +168,7 @@ extension JMBookContrller {
     /// 更新按钮状态
     func updateItemStatus() {
         let config = bookModel.config
-        for item in set.allItems() {
+        for item in setView.allItems() {
             if item.identify == config.fontName() {
                 item.isSelect = true
             }
@@ -211,7 +211,7 @@ extension JMBookContrller {
         play.changeBkgColor(config: config)
         light.changeBkgColor(config: config)
         
-        set.changeBkgColor(config: config)
+        setView.changeBkgColor(config: config)
         chapter.changeBkgColor(config: config)
         bookTitle.changeBkgColor(config: config)
         battery.changeBkgColor(config: config)
@@ -243,10 +243,10 @@ extension JMBookContrller {
             }
             layoutIfNeeded([light], ishide: false)
         }else if type == .ViewType_SET {
-            set.snp.updateConstraints { (make) in
+            setView.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom)
             }
-            layoutIfNeeded([set], ishide: false)
+            layoutIfNeeded([setView], ishide: false)
         }else if type == .ViewType_CHAPTER {
             chapter.snp.updateConstraints { (make) in
                 make.left.equalTo(view)
@@ -285,10 +285,10 @@ extension JMBookContrller {
             }
             layoutIfNeeded([light], ishide: true)
         }else if currType == .ViewType_SET {
-            set.snp.updateConstraints { (make) in
+            setView.snp.updateConstraints { (make) in
                 make.bottom.equalTo(view.snp.bottom).offset(320)
             }
-            layoutIfNeeded([set], ishide: true)
+            layoutIfNeeded([setView], ishide: true)
         }else if currType == .ViewType_CHAPTER {
             chapter.snp.updateConstraints { (make) in
                 make.left.equalTo(view).offset(-view.bounds.size.width)
@@ -334,7 +334,7 @@ extension JMBookContrller {
 extension JMBookContrller {
     /// 通过style获取目标Item模型
     public func findItem(_ menuStyle: JMMenuStyle) -> JMMenuItem? {
-        return [set.allItems(),light.allItems(),play.allItems(),bottom.models,topRight.models]
+        return [setView.allItems(),light.allItems(),play.allItems(),bottom.models,topRight.models]
             .flatMap { $0 }
             .filter({ $0.identify == menuStyle })
             .first
@@ -350,7 +350,7 @@ extension JMBookContrller {
     func tapActionSwitchMenu(_ x: CGFloat) {
         if x < s_width/4 {
             if currType == .ViewType_NONE {
-                Logger.debug("点击左侧1/4翻页")
+                JMLogger.debug("点击左侧1/4翻页")
             }else {
                 hideWithType()
             }
@@ -363,7 +363,7 @@ extension JMBookContrller {
             setNeedsStatusBarAppearanceUpdate()
         } else {
             if currType == .ViewType_NONE {
-                Logger.debug("点击右侧1/4翻页")
+                JMLogger.debug("点击右侧1/4翻页")
             }else {
                 hideWithType()
             }

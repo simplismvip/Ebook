@@ -17,7 +17,7 @@ public class JMBookContrller: JMBaseController {
     let topRight = JMMenuItemView()
     let bottom = JMMenuItemView()
     
-    let set = JMMenuSetView() // 设置
+    let setView = JMMenuSetView() // 设置
     let light = JMMenuLightView() // 亮度
     let play = JMMeunPlayVIew() // 播放
     let progress = JMMeunProgress() // 进度
@@ -105,7 +105,7 @@ public class JMBookContrller: JMBaseController {
             flipPage(pageView, direction: .reverse)
             initdatas()
         } else {
-            Logger.error("❌❌❌❌发生严重错误")
+            JMLogger.error("❌❌❌❌发生严重错误")
         }
     }
     
@@ -116,7 +116,7 @@ public class JMBookContrller: JMBaseController {
             pageView.loadPage(page)
             return pageView
         }else {
-            Logger.debug("😀😀😀After 字符长度为空")
+            JMLogger.debug("😀😀😀After 字符长度为空")
             return nil
         }
     }
@@ -219,7 +219,7 @@ extension JMBookContrller: UIPageViewControllerDelegate, UIPageViewControllerDat
         if let vc = getGADView(false) {
             return vc
         } else {
-            Logger.debug("😀😀😀Before")
+            JMLogger.debug("😀😀😀Before")
             return nextPageView(false)
         }
     }
@@ -229,25 +229,25 @@ extension JMBookContrller: UIPageViewControllerDelegate, UIPageViewControllerDat
         if let vc = getGADView(true) {
             return vc
         } else {
-            Logger.debug("😀😀😀After")
+            JMLogger.debug("😀😀😀After")
             return nextPageView(true)
         }
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
-            Logger.debug("😀😀😀completed")
+            JMLogger.debug("😀😀😀completed")
             // 保存当前进度
             JMBookDataBase.insertData(isTag: false, book: bookModel)
             initdatas()
         } else {
             hideWithType()
-            Logger.debug("😀😀😀completed none")
+            JMLogger.debug("😀😀😀completed none")
         }
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-//        Logger.debug("😀😀😀will")
+//        JMLogger.debug("😀😀😀will")
     }
 }
 
@@ -265,7 +265,7 @@ extension JMBookContrller {
         
         jmRegisterEvent(eventName: kEventNameMenuActionTapLeft, block: { [weak self](_) in
             if self?.currType == .ViewType_NONE {
-                Logger.debug("点击左侧1/4翻页")
+                JMLogger.debug("点击左侧1/4翻页")
             }else {
                 self?.hideWithType()
             }
@@ -516,7 +516,7 @@ extension JMBookContrller {
         // 听书实时返回range刷新文字
         jmReciverMsg(msgName: kMsgNamePlayBookRefashText) { [weak self](msg) -> MsgObjc? in
             if let characterRange = msg as? NSRange {
-                Logger.debug(characterRange)
+                JMLogger.debug(characterRange)
                 self?.useingPageView(true).refresh(characterRange)
             }
             return nil

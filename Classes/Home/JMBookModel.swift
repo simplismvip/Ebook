@@ -221,7 +221,7 @@ extension JMBookModel {
             indexPath.page = 0
             return currPage()
         } else {
-            Logger.debug("😀😀😀已读到最后一章节")
+            JMLogger.debug("😀😀😀已读到最后一章节")
             return nil
         }
     }
@@ -233,7 +233,7 @@ extension JMBookModel {
             indexPath.page = 0
             return currPage()
         } else {
-            Logger.debug("😀😀😀已回到第一章节")
+            JMLogger.debug("😀😀😀已回到第一章节")
             return nil
         }
     }
@@ -242,7 +242,7 @@ extension JMBookModel {
     func nextPage() -> JMBookPage? {
         if indexPath.chapter == contents.count - 1
             && indexPath.page == pageCount() - 1 {
-            Logger.debug("😀😀😀已读到最后一页")
+            JMLogger.debug("😀😀😀已读到最后一页")
             return nil
         } else {
             // 如果当前小节是本章最后，且当前页是当前小节最后一页，此时才需要更新章节
@@ -261,7 +261,7 @@ extension JMBookModel {
     func prevPage() -> JMBookPage? {
         if indexPath.chapter == 0
             && indexPath.page == 0  {
-            Logger.debug("😀😀😀已回到第一页")
+            JMLogger.debug("😀😀😀已回到第一页")
             return nil
         } else {
             if indexPath.page == 0 {

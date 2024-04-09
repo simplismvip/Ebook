@@ -47,10 +47,10 @@ public struct JMBookDataBase {
 //                    "time integer)"
 //                try db.executeUpdate(readTime, values: nil)
 //            } catch {
-//                Logger.error(db.lastErrorMessage())
+//                JMLogger.error(db.lastErrorMessage())
 //            }
 //        } else {
-//            Logger.error("🆘🆘🆘打开DB失败！")
+//            JMLogger.error("🆘🆘🆘打开DB失败！")
 //        }
 //    }
     
@@ -60,7 +60,7 @@ public struct JMBookDataBase {
 //            let deleteSql = "DELETE FROM \(tableName) WHERE bookid = ?"
 //            try db.executeUpdate(deleteSql, values: [bookid])
 //        } catch {
-//            Logger.debug(db.lastErrorMessage())
+//            JMLogger.debug(db.lastErrorMessage())
 //        }
     }
     
@@ -68,12 +68,12 @@ public struct JMBookDataBase {
     private func insertData(isTag: Bool, name: String, bookid: String, charter: Int, location: Int, text: String) {
 //        if isTag {
 //            if isFieldExistsForTag(text: text) {
-//                Logger.debug("⚠️⚠️⚠️表bookCharterTag已经存在")
+//                JMLogger.debug("⚠️⚠️⚠️表bookCharterTag已经存在")
 //                return
 //            }
 //        } else {
 //            if isFieldExistsForRate(bookid) {
-//                Logger.debug("⚠️⚠️⚠️表bookRate已经存在")
+//                JMLogger.debug("⚠️⚠️⚠️表bookRate已经存在")
 //                return
 //            }
 //        }
@@ -85,7 +85,7 @@ public struct JMBookDataBase {
 //            let values = [name, bookid, charter, location, text, timeStr] as [Any]
 //            try db.executeUpdate(insetSql, values: values)
 //        } catch {
-//            Logger.debug(db.lastErrorMessage())
+//            JMLogger.debug(db.lastErrorMessage())
 //        }
     }
     
@@ -94,7 +94,7 @@ public struct JMBookDataBase {
 //        do {
 //            try db.executeUpdate("UPDATE \(tableName) SET \(updateFieldName) = ? where bookid = ?", values: [updateField, bookid])
 //        } catch {
-//            Logger.debug(db.lastErrorMessage())
+//            JMLogger.debug(db.lastErrorMessage())
 //        }
     }
 }
@@ -122,7 +122,7 @@ extension JMBookDataBase {
 //                
 //                let timeStr = String(Date.jmCurrentTime).components(separatedBy: ".")[0]
 //                JMBookDataBase.share.update(tableName: "bookRate", bookid: book.bookId, updateFieldName: "timeStr", updateField: timeStr)
-//                Logger.debug("⚠️⚠️⚠️更新表 bookRate")
+//                JMLogger.debug("⚠️⚠️⚠️更新表 bookRate")
 //            } else {
 //                let location = book.currLocation(target: text)
 //                JMBookDataBase.share.insertData(isTag: isTag, name: book.title, bookid: book.bookId, charter: book.indexPath.chapter, location: location, text: text)
@@ -146,7 +146,7 @@ extension JMBookDataBase {
 //                }
 //            }
 //        } catch {
-//            Logger.debug(JMBookDataBase.share.db.lastErrorMessage())
+//            JMLogger.debug(JMBookDataBase.share.db.lastErrorMessage())
 //        }
         
         return nil
@@ -158,7 +158,7 @@ extension JMBookDataBase {
 //        if let set = try? db.executeQuery(sql, values: nil), set.next() {
 //            return true
 //        } else {
-//            Logger.debug(db.lastErrorMessage())
+//            JMLogger.debug(db.lastErrorMessage())
 //            return false
 //        }
         return true
@@ -173,7 +173,7 @@ extension JMBookDataBase {
 //        if let set = try? db.executeQuery(sql, values: nil), set.next() {
 //            return true
 //        } else {
-//            Logger.debug(db.lastErrorMessage())
+//            JMLogger.debug(db.lastErrorMessage())
 //            return false
 //        }
         return true
@@ -193,7 +193,7 @@ extension JMBookDataBase {
 //                }
 //            }
 //        } catch {
-//            Logger.debug(JMBookDataBase.share.db.lastErrorMessage())
+//            JMLogger.debug(JMBookDataBase.share.db.lastErrorMessage())
 //        }
         return tempArray
     }
@@ -230,7 +230,7 @@ extension JMBookDataBase {
 //            }
 //            return totalTime
 //        } catch {
-//            Logger.debug(JMBookDataBase.share.db.lastErrorMessage())
+//            JMLogger.debug(JMBookDataBase.share.db.lastErrorMessage())
 //        }
         return 0
     }
@@ -246,7 +246,7 @@ extension JMBookDataBase {
 //            }
 //            return totalTime
 //        } catch {
-//            Logger.debug(JMBookDataBase.share.db.lastErrorMessage())
+//            JMLogger.debug(JMBookDataBase.share.db.lastErrorMessage())
 //        }
         return 0
     }
@@ -257,7 +257,7 @@ extension JMBookDataBase {
 //            do {
 //                try JMBookDataBase.share.db.executeUpdate("UPDATE readTime SET time=time+? WHERE bookid = ?", values: [time, bookid])
 //            } catch {
-//                Logger.debug(JMBookDataBase.share.db.lastErrorMessage())
+//                JMLogger.debug(JMBookDataBase.share.db.lastErrorMessage())
 //            }
 //        } else {
 //            do {
@@ -265,7 +265,7 @@ extension JMBookDataBase {
 //                let insetSql = "INSERT INTO readTime(bookid, dateT, time)values(?,?,?)"
 //                try JMBookDataBase.share.db.executeUpdate(insetSql, values: [bookid, dataT, time])
 //            } catch {
-//                Logger.debug(JMBookDataBase.share.db.lastErrorMessage())
+//                JMLogger.debug(JMBookDataBase.share.db.lastErrorMessage())
 //            }
 //        }
     }

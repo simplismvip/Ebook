@@ -61,11 +61,11 @@ public class JMBookParse {
             case .Txt:
                 self.parseTxtBook()
             case .Mobi:
-                Logger.error("❗️❗️❗️暂不支持格式")
+                JMLogger.error("❗️❗️❗️暂不支持格式")
             case .Pdf:
-                Logger.error("❗️❗️❗️暂不支持格式")
+                JMLogger.error("❗️❗️❗️暂不支持格式")
             case .NoneType:
-                Logger.error("❗️❗️❗️暂不支持格式")
+                JMLogger.error("❗️❗️❗️暂不支持格式")
             }
         }
     }
