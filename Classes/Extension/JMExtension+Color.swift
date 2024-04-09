@@ -9,8 +9,8 @@
 import Foundation
 
 extension UIColor {
-    convenience init(hexString: String) {
-        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+    convenience init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int = UInt32()
         Scanner(string: hex).scanHexInt32(&int)
         let a, r, g, b: UInt32
@@ -42,7 +42,7 @@ extension UIColor {
     
     /// 字符串生成颜色
     public class func jmHexColor(_ hexStr: String ) -> UIColor{
-        return UIColor(hexString: hexStr)
+        return UIColor(hex: hexStr)
     }
     
     /// 32位数字生成颜色 0xffff
