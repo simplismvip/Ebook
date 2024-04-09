@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class JMMenuLightView: JMBookBaseView {
     private let leftBtn = UIButton(type: .system)
@@ -34,9 +35,9 @@ final class JMMenuLightView: JMBookBaseView {
         rightBtn.setImage("epub_light-full".image, for: .normal)
         
         bkgView.margin = 50
-        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_light_type"))
+        bkgView.updateViews(JMMenuItem.lights)
         bkgColor.margin = 0
-        bkgColor.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
+        bkgColor.updateViews(JMMenuItem.bkgs)
         
         slider.addTarget(self, action: #selector(startSlider(_:)), for: .valueChanged)
         slider.addTarget(self, action: #selector(startSliderEnd(_:)), for: .touchUpInside)

@@ -80,7 +80,7 @@ final class BkgColorView: JMBookBaseView {
             make.centerY.equalTo(snp.centerY)
         }
         bkgView.margin = 10
-        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_bkgcolor"))
+        bkgView.updateViews(JMMenuItem.bkgs)
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -170,7 +170,7 @@ final class PageFlipView: JMBookBaseView {
             make.centerY.equalTo(snp.centerY)
         }
         bkgView.margin = 10
-        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_flip_type"))
+        bkgView.updateViews(JMMenuItem.flips)
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }
@@ -204,7 +204,7 @@ final class FontTypeView: JMBookBaseView {
             make.top.equalTo(name)
         }
         bkgView.margin = 10
-        bkgView.updateViews(JMJsonParse.parseJson(name: "menu_font_type"))
+        bkgView.updateViews(JMMenuItem.fonts)
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }

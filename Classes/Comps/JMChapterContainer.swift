@@ -36,7 +36,7 @@ final class JMChapterContainer: JMBookBaseView {
         titleLabel.font = UIFont.jmMedium(20)
         chapterCount.font = UIFont.jmRegular(14)
         switchView.margin = 50
-        switchView.updateViews(JMJsonParse.parseJson(name: "menu_charper"))
+        switchView.updateViews(JMMenuItem.charters)
     }
     
     /// 更新目录数据

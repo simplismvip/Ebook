@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class JMMeunPlayVIew: JMBookBaseView {
     private let playControl = JMMenuItemView()
@@ -47,9 +48,9 @@ final class JMMeunPlayVIew: JMBookBaseView {
     
     func loadDatas() {
         playControl.margin = 15
-        playControl.updateViews(JMJsonParse.parseJson(name: "menu_play"))
+        playControl.updateViews(JMMenuItem.plays)
         playRate.margin = 15
-        playRate.updateViews(JMJsonParse.parseJson(name: "menu_playrate"))
+        playRate.updateViews(JMMenuItem.playrates)
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("⚠️⚠️⚠️ Error") }

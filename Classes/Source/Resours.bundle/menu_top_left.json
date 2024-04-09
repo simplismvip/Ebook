@@ -1,9 +1,0 @@
-[
-    {
-        "image":"ebook_back",
-        "event":"kEventNameMenuActionBack",
-        "border":false,
-        "type":"topleft",
-        "identify":"back"
-    }
-]

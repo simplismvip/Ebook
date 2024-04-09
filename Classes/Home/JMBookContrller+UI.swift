@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import SnapKit
 
 // MARK: -- Private Method, Setup views
 extension JMBookContrller {
     func loadDats() {
-        let bottomItems: [JMMenuItem] = JMJsonParse.parseJson(name: "menu_bottom")
-        let top_left: [JMMenuItem] = JMJsonParse.parseJson(name: "menu_top_left")
-        let top_right: [JMMenuItem] = JMJsonParse.parseJson(name: "menu_top_right")
+        let bottomItems: [JMMenuItem] = JMMenuItem.bottom
+        let top_left: [JMMenuItem] = JMMenuItem.topLeft
+        let top_right: [JMMenuItem] = JMMenuItem.topRight
         
         bottom.updateViews(bottomItems)
         topLeft.updateViews(top_left)
@@ -353,14 +354,14 @@ extension JMBookContrller {
             }else {
                 hideWithType()
             }
-        }else if x > s_width/4 && x < s_width/4*3 {
+        } else if x > s_width/4 && x < s_width/4*3 {
             if currType == .ViewType_NONE {
                 showWithType(type: .ViewType_TOP_BOTTOM)
             }else {
                 hideWithType()
             }
             setNeedsStatusBarAppearanceUpdate()
-        }else {
+        } else {
             if currType == .ViewType_NONE {
                 Logger.debug("点击右侧1/4翻页")
             }else {
