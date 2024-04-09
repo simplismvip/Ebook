@@ -20,7 +20,7 @@ public class JMBookParse {
         self.bookType = JMBookType.bookType(pathUrl.pathExtension.lowercased())
         self.config = (config == nil) ? JMBookConfig() : config!
         JMBookCache.setObjc(key: "jmBookConfig", obj: self.config)
-        let _ = JMBookDataBase.share
+//        let _ = JMBookDataBase.share
     }
     
     // parsent 控制器

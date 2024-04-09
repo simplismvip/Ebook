@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final class JMBatteryView: JMBookBaseView {
     private let b_width: CGFloat = 20

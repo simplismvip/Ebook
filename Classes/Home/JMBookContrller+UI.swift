@@ -290,7 +290,7 @@ extension JMBookContrller {
             layoutIfNeeded([set], ishide: true)
         }else if currType == .ViewType_CHAPTER {
             chapter.snp.updateConstraints { (make) in
-                make.left.equalTo(view).offset(-view.jmWidth)
+                make.left.equalTo(view).offset(-view.bounds.size.width)
             }
             layoutIfNeeded([chapter], ishide: true)
         }else if currType == .ViewType_PLAY {

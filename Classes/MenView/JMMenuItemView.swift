@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final class JMMenuItemView: JMBaseView {
     public var margin: CGFloat = 5
@@ -131,15 +130,15 @@ final class JMMenuItemView: JMBaseView {
         super.layoutSubviews()
         let count = CGFloat(self.subviews.count)
         if margin <= 0 && models.count > 0 { // margin 设置小于0认为宽高44
-            let margin = (self.jmWidth - CGFloat(models.count * 30)) / CGFloat(models.count)
-            let width = (self.jmWidth - (count+1) * margin) / count
+            let margin = (self.bounds.size.width - CGFloat(models.count * 30)) / CGFloat(models.count)
+            let width = (self.bounds.size.width - (count+1) * margin) / count
             for (index, view) in self.subviews.enumerated() {
-                view.frame = CGRect.Rect(margin + (margin + width) * CGFloat(index), jmHeight/2-15, 30, 30)
+                view.frame = CGRect.Rect(margin + (margin + width) * CGFloat(index), self.bounds.size.height/2-15, 30, 30)
             }
         } else {
             let width = (self.bounds.size.width - (count+1) * margin) / count
             for (index, view) in self.subviews.enumerated() {
-                view.frame = CGRect.Rect( margin + (margin + width) * CGFloat(index), 0, width, self.jmHeight)
+                view.frame = CGRect.Rect( margin + (margin + width) * CGFloat(index), 0, width, self.bounds.size.height)
             }
         }
     }

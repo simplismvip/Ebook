@@ -9,13 +9,12 @@
 
 import Foundation
 import AEXML
-import ZJMKit
 
 public struct JMTxtParser {
     /// 解析txt文本文件
     public func parser(url: URL) throws -> JMTxtBook {
         let filename = url.lastPathComponent.deletingPathExtension
-        if let folderPath = JMTools.jmDocuPath()?.appendingPathComponent(filename) {
+        if let folderPath = JMFileTools.jmDocuPath()?.appendingPathComponent(filename) {
             if FileManager.default.fileExists(atPath: folderPath) {
                 // 解析
                 if let book = parserOpf(folderPath: folderPath) {

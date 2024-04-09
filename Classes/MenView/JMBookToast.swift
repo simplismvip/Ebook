@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final public class JMBookToast: JMBaseView {
     public static let share: JMBookToast = { return JMBookToast() }()

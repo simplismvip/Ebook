@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final class JMChapterView: JMBookBaseView {
     private let s_width = UIScreen.main.bounds.size.width - 60

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 class JMMeunProgress: JMBookBaseView {
     private let leftBtn = UIButton(type: .system)

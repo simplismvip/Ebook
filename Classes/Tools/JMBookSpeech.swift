@@ -7,7 +7,6 @@
 
 import Foundation
 import AVFoundation
-import ZJMKit
 
 public class JMSpeechModel {
     public var preDelay: TimeInterval = 0.0

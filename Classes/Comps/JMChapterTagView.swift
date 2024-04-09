@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 public struct JMChapterTag {
     public var text: String

@@ -6,7 +6,6 @@
 //  书本📖模型，一个模型代表一本书
 
 import UIKit
-import ZJMKit
 
 final public class JMBookModel {
     public var bookId: String // 目前使用文件名作为唯一ID，因为发现有的电子书没有唯一ID

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final class JMMeunPlayVIew: JMBookBaseView {
     private let playControl = JMMenuItemView()

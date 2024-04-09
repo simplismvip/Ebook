@@ -9,7 +9,6 @@
 import UIKit
 import JMEpubReader
 import SnapKit
-import ZJMKit
 
 class ViewController: UIViewController {
     
@@ -29,31 +28,31 @@ class ViewController: UIViewController {
         adView.backgroundColor = UIColor.red
     }
 }
-
-extension ViewController: JMBookParserProtocol {
-    func commentBook(_ bookid: String) -> UIViewController? {
-        return UIViewController()
-    }
-    
-    func midReadPageVC(_ after: Bool) -> UIViewController? {
-//        return nil
-        
-        flipCount = after ? (flipCount + 1) : (flipCount - 1)
-        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
-    }
-    
-    func startOpeningBook(_ desc: String) {
-        Toast.toast(desc)
-    }
-    
-    func openBookSuccess(_ bottomView: UIView) {
-        Toast.toast("😀😀😀打开 \(bottomView.description)成功")
-    }
-    
-    func openBookFailed(_ desc: String) {
-        Toast.toast(desc)
-    }
-}
+//
+//extension ViewController: JMBookParserProtocol {
+//    func commentBook(_ bookid: String) -> UIViewController? {
+//        return UIViewController()
+//    }
+//    
+//    func midReadPageVC(_ after: Bool) -> UIViewController? {
+////        return nil
+//        
+//        flipCount = after ? (flipCount + 1) : (flipCount - 1)
+//        return (flipCount % 5 == 0) ? JMEpubViewController() : nil
+//    }
+//    
+//    func startOpeningBook(_ desc: String) {
+//        Toast.toast(desc)
+//    }
+//    
+//    func openBookSuccess(_ bottomView: UIView) {
+//        Toast.toast("😀😀😀打开 \(bottomView.description)成功")
+//    }
+//    
+//    func openBookFailed(_ desc: String) {
+//        Toast.toast(desc)
+//    }
+//}
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,7 +72,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let view = UIView()
             view.backgroundColor = UIColor.red
             bookModel = JMBookParse(path)
-            bookModel?.delegate = self
+//            bookModel?.delegate = self
             bookModel?.pushReader(pushVC: self)
         }
     }
@@ -99,7 +98,7 @@ class JMEpubViewController: UIViewController {
         view.addSubview(tips)
         view.backgroundColor = UIColor.white
         imagev.snp.makeConstraints { (make) in
-            make.width.height.equalTo(self.view.jmWidth)
+            make.width.height.equalTo(self.view.bounds.size.width)
             make.centerX.equalTo(self.view.snp.centerX)
             make.centerY.equalTo(self.view.snp.centerY)
         }

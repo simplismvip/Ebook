@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final class JMBookTitleView: JMBookBaseView {
     let title = UILabel()

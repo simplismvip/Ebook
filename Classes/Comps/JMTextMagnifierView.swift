@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 final class JMTextMagnifierView: JMBookBaseView {
     var pageView: JMPageView?

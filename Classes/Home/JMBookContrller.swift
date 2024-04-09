@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 import SnapKit
 
 public class JMBookContrller: JMBaseController {

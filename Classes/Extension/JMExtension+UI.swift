@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 import SnapKit
 
 public extension UIView {
@@ -16,6 +15,16 @@ public extension UIView {
         line.backgroundColor = color
         addSubview(line)
         line.snp.makeConstraints { closure($0)}
+    }
+}
+
+extension UILabel {
+    /// 配置字符串
+    public func jmConfigLabel(alig: NSTextAlignment = .left,font:UIFont?,color:UIColor = UIColor.gray) {
+        self.numberOfLines = 0
+        self.textColor = color
+        self.font = font
+        self.textAlignment = alig
     }
 }
 

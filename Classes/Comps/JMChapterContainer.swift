@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ZJMKit
+import SnapKit
 
 final class JMChapterContainer: JMBookBaseView {
     private let titleLabel = UILabel()
@@ -67,9 +67,9 @@ final class JMChapterContainer: JMBookBaseView {
             self?.chapter.reverse()
         }
         
-        jmAddblock { [weak self] in
-            self?.jmRouterEvent(eventName: kEventNameDidSelectChapter, info: nil)
-        }
+//        jmAddblock { [weak self] in
+//            self?.jmRouterEvent(eventName: kEventNameDidSelectChapter, info: nil)
+//        }
     }
     
     private func setupViews() {
@@ -143,7 +143,7 @@ final class JMChapterContainer: JMBookBaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        scrollView.contentSize = CGSize(width: s_width * 2, height: scrollView.jmHeight)
+        scrollView.contentSize = CGSize(width: s_width * 2, height: scrollView.bounds.size.height)
     }
     
     required init?(coder: NSCoder) {

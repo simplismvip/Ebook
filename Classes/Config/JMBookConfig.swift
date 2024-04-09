@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 // MARK: -- 配置信息类
 public class JMBookConfig {
@@ -91,7 +90,7 @@ public class JMBookConfig {
     }
     
     func codeConfig() {
-        if let path = JMTools.jmDocuPath() {
+        if let path = JMFileTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
             JMBookStore.encodeObject(config, cachePath: fullpath)
         }
@@ -99,7 +98,7 @@ public class JMBookConfig {
     
     func deCodeConfig() {
         Logger.debug("++++++++ start Decode")
-        if let path = JMTools.jmDocuPath() {
+        if let path = JMFileTools.jmDocuPath() {
             let fullpath = path.appendingPathComponent(".bookconfig")
             JMBookStore.decodeMain(cachePath: fullpath) { (config: JMConfig?) in
                 if let config = config {

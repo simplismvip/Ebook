@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 
 class JMBookListenContrller: JMBaseController {
 

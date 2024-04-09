@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZJMKit
 import YYText
 
 class JMPageView: JMBookBaseView {
@@ -91,10 +90,10 @@ class JMPageView: JMBookBaseView {
         super.layoutSubviews()
         if let textsize = contentL.textLayout?.textBoundingSize {
             let maxY = textsize.height + 20
-            let maxH = jmHeight - maxY - 50
+            let maxH = self.bounds.size.height - maxY - 50
             if maxH > 64 {
                 gadView.isHidden = false
-                gadView.frame = CGRect.Rect(0, maxY, jmWidth, maxH)
+                gadView.frame = CGRect.Rect(0, maxY, self.bounds.size.width, maxH)
             } else {
                 gadView.isHidden = true
             }
