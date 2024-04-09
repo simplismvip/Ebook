@@ -83,24 +83,7 @@ extension UILabel {
     func dismiss() {
         self.dismiss(animated: true, completion: nil)
     }
-    
-    
 }
-
-public extension JMBookContrller {
-    func showLoading() {
-        
-    }
-    
-    func hideLoading() {
-        
-    }
-    
-    func showToast(text: String) {
-        JMTextToast.share.jmShowString(text: text, seconds: 1)
-    }
-}
-
 
 public extension Dictionary {
     /// JSON字符串转字典

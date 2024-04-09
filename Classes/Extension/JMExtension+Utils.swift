@@ -52,19 +52,7 @@ extension Int {
         let delta = UInt32(to + 1 - from)
         return from + Int(arc4random_uniform(delta))
     }
-}
-
-extension CGRect {
-    public static func Rect(_ x: CGFloat,_ y: CGFloat,_ width: CGFloat,_ height: CGFloat) -> CGRect {
-        return CGRect(x: x, y: y, width: width, height: height)
-    }
     
-    public static func Rect(_ width: CGFloat,_ height: CGFloat) -> CGRect {
-        return CGRect(x: 0, y: 0, width: width, height: height)
-    }
-}
-
-extension Int {
     /// 数字转时间
     public var jmCurrentTime: String {
         if self > 3600 {
@@ -79,6 +67,16 @@ extension Int {
             return "\(self)秒"
         }
         return ""
+    }
+}
+
+extension CGRect {
+    public static func Rect(_ x: CGFloat,_ y: CGFloat,_ width: CGFloat,_ height: CGFloat) -> CGRect {
+        return CGRect(x: x, y: y, width: width, height: height)
+    }
+    
+    public static func Rect(_ width: CGFloat,_ height: CGFloat) -> CGRect {
+        return CGRect(x: 0, y: 0, width: width, height: height)
     }
 }
 
@@ -103,49 +101,4 @@ extension Date {
     public func jmIsToday() -> Bool {
         return Calendar.current.isDateInToday(self)
     }
-    
-    /// 是否是同一天
-    public func jmIsSameDay() -> Bool {
-        let calendar = Calendar.current
-        let unit: Set<Calendar.Component> = [.day,.month,.year]
-        let nowComps = calendar.dateComponents(unit, from: Date())
-        let selfCmps = calendar.dateComponents(unit, from: self)
-        return (selfCmps.year == nowComps.year) &&
-            (selfCmps.month == nowComps.month) &&
-            (selfCmps.day == nowComps.day)
-    }
-    
-    /// 是否是昨天
-    public func jmIsYesterday() -> Bool {
-        let calendar = Calendar.current
-        let unit:Set<Calendar.Component> = [.day,.month,.year]
-        let nowComps = calendar.dateComponents(unit, from: Date())
-        let selfCmps = calendar.dateComponents(unit, from: self)
-        let count = nowComps.day! - selfCmps.day!
-        return (selfCmps.year == nowComps.year) &&
-            (selfCmps.month == nowComps.month) &&
-            (count == 1)
-    }
-    
-    /// 是否是同一年
-    public func jmIsSameYear() -> Bool {
-        let calendar = Calendar.current
-        let nowComps = calendar.component(.year, from: Date())
-        let selfComps = calendar.component(.year, from: self)
-        return (nowComps == selfComps)
-    }
-    
-//    /// 当前日期n月后的时间
-//    public func jmNextDate(mounth: Int) -> String {
-//        let cDate = Date()
-//        let calendar = Calendar.current
-//        var dateComps = DateComponents()
-//        dateComps.setValue(mounth, for: .month)
-//        let calculatedate = calendar.date(byAdding: dateComps, to: cDate)
-//        let format = DateFormatter()
-//        format.dateFormat = "yyyy-MM-dd hh:mm:ss"
-//        
-//        
-//        return 
-//    }
 }
